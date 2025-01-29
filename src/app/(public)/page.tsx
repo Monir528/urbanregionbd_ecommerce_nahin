@@ -47,7 +47,7 @@ const bars = [
     {
         style: "text-[#cc8119] bg-[#fcf4e9]",
         heading: "NEW ARRIVAL",
-        text: "",
+        text: "zfdgh",
     },
     {
         style: "text-[#009688] bg-[#ccf7f1]",
@@ -68,38 +68,41 @@ const HomePage = () => {
     const { data, isSuccess, isLoading } = useGetProductsQuery();
 
     return (
-        <div>
-            <RightCart></RightCart>
-            <Hero />
-            <Notice></Notice>
-            <Bars item={bars[0]}></Bars>
-            <NewCategory></NewCategory>
-            <CategoryItem />
-            <CategoryItem2 />
-            <CategoryItem3/>
-            <Services />
-            <Bars item={bars[1]} id="top rated"></Bars>
-            {/* top rated  */}
-            {
-                isLoading && <ProductListSkeleton/>
-            }
-            {
-                !isLoading && isSuccess && data && <SampleProduct data={data}></SampleProduct>
-            }
-            <Banner data={BannerData} />
-            <Bars item={bars[2]} id="flash deals"></Bars>
-            {/* // flash deals   */}
-            {
-                !isLoading && isSuccess && data && <Products data={data}></Products>
-            }
-            <Banner data={BannerData2} />
-            <Blogs />
+        <main>
+            <div>
+                <RightCart></RightCart>
+                <Hero />
+                <Notice></Notice>
+                <Bars item={bars[0]}></Bars>
+                <NewCategory></NewCategory>
+                {/*<CategoryItem />*/}
+                <CategoryItem2 />
+                <CategoryItem3/>
+                <Services />
+                <Bars item={bars[1]} id="top rated"></Bars>
+                {/* top rated  */}
+                {
+                    isLoading && <ProductListSkeleton/>
+                }
+                {
+                    !isLoading && isSuccess && data && <SampleProduct data={data}></SampleProduct>
+                }
+                <Banner data={BannerData} />
+                <Bars item={bars[2]} id="flash deals"></Bars>
+                {/* // flash deals   */}
+                {
+                    !isLoading && isSuccess && data && <Products data={data}></Products>
+                }
+                <Banner data={BannerData2} />
+                <Blogs />
 
-            {/* <AppStore></AppStore> */}
-            <FooterBanner></FooterBanner>
-            <ShoppingCartForm></ShoppingCartForm>
-            <Popup />
-        </div>
+                {/* <AppStore></AppStore> */}
+                <FooterBanner></FooterBanner>
+                <ShoppingCartForm></ShoppingCartForm>
+                <Popup />
+            </div>
+        </main>
+
     );
 };
 

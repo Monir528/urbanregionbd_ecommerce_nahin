@@ -27,7 +27,9 @@ const CategoryItem3 = () => {
               </div>
             </div>
             <Image
-              src={"./assets/formalpants.png"}
+              src={"/assets/formalpants.png"}
+              width={246}
+              height={320}
               alt=""
               className="w-[246px] absolute bottom-0 right-[-5%]"
             />
@@ -53,8 +55,10 @@ const CategoryItem3 = () => {
               </div>
             </div>
             <Image
-              src={"./assets/polo-shirt.png"}
+              src={"/assets/polo-shirt.png"}
               alt=""
+              width={320}
+              height={44}
               className="w-[320px] absolute bottom-0 right-[-3rem]"
             />
           </div>

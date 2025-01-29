@@ -1,5 +1,5 @@
 'use client';
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 /**
  * @typedef {Object} AppContext
@@ -11,8 +11,8 @@ import React, { createContext, useContext, useState } from 'react';
 /** @type {React.Context<AppContext|null>} */
 const AppContexts = createContext(null);
 
-// Fix 1: Properly destructure children from props
-export function NavBarProvider( children ) {  // Changed this line
+// Fix 1: Properly destructure children from propst
+export function NavBarProvider( { children }: { children: React.ReactNode } ) {  // Changed this line
     const [productCategory, setProductCategory] = useState("");
 
     const AppContext = {

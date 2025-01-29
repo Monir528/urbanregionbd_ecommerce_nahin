@@ -1,7 +1,7 @@
 "use client";
 
 import { configureStore } from '@reduxjs/toolkit'
-import {apiSlice} from "@/components/api/apiSlice"
+import {apiSlice} from '@/components/api/userApi'
 import {usersApi} from "@/components/api/userApi"
 import orderProductSlice from '@/components/api/orderProductSlice'
 import cartHandler from '@/components/cartHandler'

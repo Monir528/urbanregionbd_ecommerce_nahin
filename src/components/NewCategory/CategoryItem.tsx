@@ -2,6 +2,7 @@
 /* eslint-disable react/prop-types */
 import Link from "next/link";
 import { resizeName } from "@/utils/sizes";
+import Image from "next/image";
 
 const CategoryItem = ({ item }) => {
   const { description, images } = item || {};
@@ -16,7 +17,7 @@ const CategoryItem = ({ item }) => {
       href={`/productDetails/${item?._id}`}
       className="flex flex-col items-center bg-white border border-gray-200 shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
     >
-      <img
+      <Image
         className="object-cover w-full  h-56 md:h-52 md:w-48"
         src={`${process.env.VITE_ROOT_API}/Images/${images[0]?.filename}`}
         alt=""

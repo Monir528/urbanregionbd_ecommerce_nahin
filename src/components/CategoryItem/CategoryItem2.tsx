@@ -25,8 +25,10 @@ const CategoryItem2 = () => {
               </div>
             </div>
             <Image
-              src={"./assets/cargo.png"}
+              src={"/assets/cargo.png"}
               alt=""
+              width={144}
+              height={44}
               className="w-[144px] mr-12 absolute top-1/2 -translate-y-1/2 -right-0"
             />
           </div>
@@ -45,7 +47,7 @@ const CategoryItem2 = () => {
                 >Browse</button></Link>
               </div>
             </div>
-            <Image src={"./tshirt.png"} alt="" className="w-[320px] absolute bottom-0 ml-12" />
+            <Image src={"/tshirt.png"} width={320} height={44} alt="" className="w-[320px] absolute bottom-0 ml-12" />
           </div>
           {/* Third col */}
           
@@ -70,6 +72,8 @@ const CategoryItem2 = () => {
             </div>
             <Image
               src={"/hoodie1.png"}
+              width={210}
+              height={44}
               alt=""
               className="w-[210px] absolute bottom-0 right-[0rem]"
             />
