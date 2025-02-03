@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
+"use client";
 import Link from "next/link";
 import { resizeName } from "@/utils/sizes";
 import Image from "next/image";
@@ -19,7 +18,10 @@ const CategoryItem = ({ item }) => {
     >
       <Image
         className="object-cover w-full  h-56 md:h-52 md:w-48"
-        src={`${process.env.VITE_ROOT_API}/Images/${images[0]?.filename}`}
+        width={48}
+        height={56}
+        src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${images[0]?.filename}`}
+        unoptimized
         alt=""
       />
       <div className="flex flex-col justify-between p-2 leading-normal">

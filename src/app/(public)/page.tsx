@@ -67,6 +67,8 @@ const HomePage = () => {
 
     const { data, isSuccess, isLoading } = useGetProductsQuery();
 
+    console.log("fetched products", data);
+
     return (
         <main>
             <div>

@@ -1,6 +1,6 @@
 "use client";
-import {store} from "@/components/store/store";
-import { Provider, useSelector } from "react-redux";
+import {store} from "@/reduxToolKit/store";
+import { Provider } from "react-redux";
 
 export function ReduxProvider({ children }: { children: React.ReactNode }){
 

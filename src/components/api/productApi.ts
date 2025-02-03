@@ -1,21 +1,15 @@
-// src/api/productApi.js
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-// Define the base query with the base URL
+// ✅ Ensure the correct environment variable
 const baseQuery = fetchBaseQuery({
-  baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL, // Use environment variable for the base URL
+  baseUrl: process.env.NEXT_PUBLIC_ROOT_API, // 🔥 Make sure NEXT_PUBLIC_ is used
 });
 
-// Create the API slice
-export const apiSlice = createApi({
-  reducerPath: "api",
+// ✅ Fix: Create a separate `productApi` slice instead of using `injectEndpoints`
+export const productApi = createApi({
+  reducerPath: "productApi",
   baseQuery,
   tagTypes: ["Products", "Product"],
-  endpoints: (builder) => ({}),
-});
-
-// Inject product-specific endpoints into the API slice
-export const productApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // Fetch all products
     getProducts: builder.query({
@@ -26,7 +20,8 @@ export const productApi = apiSlice.injectEndpoints({
     // Fetch a single product by ID
     getSingleProduct: builder.query({
       query: (id) => `/getProduct/${id}`,
-      providesTags: (result, error, arg) => [{ type: "Product", id: arg }],
+      providesTags: (result, error, arg) =>
+          result ? [{ type: "Product", id: arg }] : [],
     }),
 
     // Fetch selected products (using POST for filtering)
@@ -80,7 +75,7 @@ export const productApi = apiSlice.injectEndpoints({
   }),
 });
 
-// Export hooks for usage in components
+// ✅ Export API Hooks for components
 export const {
   useGetProductsQuery,
   useGetSingleProductQuery,
