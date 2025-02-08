@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-
+import Image from "next/image";
 import Link from "next/link";
 import { resizeName } from "@/utils/sizes";
 
@@ -17,9 +17,12 @@ export default function SampleProduct({ data }) {
               .map((product) => (
                 <Link href={`/productDetails/${product?._id}`} key={product?._id}>
                   <div className="relative flex flex-col items-center hover:opacity-80 duration-75">
-                    <img
-                      src={`${process.env.VITE_ROOT_API}/Images/${product?.images?.[0].filename}`}
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${product?.images?.[0].filename}`}
                       alt=""
+                      height={220}
+                      width={284.6}
+                      unoptimized
                       className="cursor-pointer h-[180px] sm:h-[220px] w-full object-cover "
                     />
                     <p className="absolute top-0 left-0 bg-red-500 px-2 py-[2px] text-sm font-semibold text-gray-100">

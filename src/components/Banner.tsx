@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
 
+import Image from "next/image";
+
 const Banner = ({ data }) => {
   return (
     <div className="min-h-[450px] flex justify-center items-center py-12">
@@ -26,8 +28,9 @@ const Banner = ({ data }) => {
           </div>
           {/* second col */}
           <div data-aos="zoom-in" className="h-full flex items-center">
-            <img
+            <Image
               src={data.image}
+              unoptimized={true}
               alt=""
               className="scale-155 w-[250px] md:w-[280px] mx-auto drop-shadow-[-10px_10px_12px_rgba(0,0,0,.6)] object-cover"
             />

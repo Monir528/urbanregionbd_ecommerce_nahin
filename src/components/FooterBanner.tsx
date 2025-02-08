@@ -79,6 +79,7 @@ import { IoLockClosedSharp } from "react-icons/io5";
 import Partners from "@/components/Partners"
 import { HiOutlineEmojiHappy } from "react-icons/hi";
 import { FaTruck } from "react-icons/fa6";
+import Image from "next/image";
 
 
 const FooterBanner = () => {
@@ -91,7 +92,7 @@ const FooterBanner = () => {
         <div className="flex flex-col items-center flex-1">
           <IoLockClosedSharp className="text-3xl"></IoLockClosedSharp>
           <p className="font-semibold text-xl mb-4">All secure payment methods</p>
-          <img src="/sslcommerz.png" alt="" />
+          <Image src="/sslcommerz.png" alt="" />
         </div>
 
         <div className="flex flex-col items-center flex-1">
@@ -104,7 +105,7 @@ const FooterBanner = () => {
         <div className="flex flex-col items-center flex-1">
           <FaTruck className="text-3xl"></FaTruck>
           <p className="text-xl font-semibold  mb-4">Worldwide delivery</p>
-          <img src="/delivery.png" alt="" />
+          <Image src="/delivery.png" alt="" />
         </div>
 
 

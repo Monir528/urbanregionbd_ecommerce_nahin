@@ -96,10 +96,12 @@
 
 
 
+import Image from "next/image";
+
 const Hero = () => {
   return (
     <div >
-      <img className="max-h-[70vh] object-cover w-full" src="/urbanregion.jpg"/>
+      <Image width={580} height={363}  alt={""} className="max-h-[70vh] object-cover w-full" unoptimized={true} src="/urbanregion.jpg"/>
     </div>
   );
 };

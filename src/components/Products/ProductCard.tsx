@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Button from "../Shared/Button";
 import { resizeName } from "@/utils/sizes";
+import Image from "next/image";
 // eslint-disable-next-line react/prop-types
 
 const ProductCard = ({ data, index }) => {
@@ -17,8 +18,10 @@ const ProductCard = ({ data, index }) => {
         key={data._id}
       >
         <div className="relative">
-          <img
-            src={`${process.env.VITE_ROOT_API}/Images/${images[0].filename}`}
+          <Image
+            src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${images[0].filename}`}
+            width={231}
+            height={180}
             alt=""
             className="h-[180px] w-[260px] object-cover rounded-md"
           />

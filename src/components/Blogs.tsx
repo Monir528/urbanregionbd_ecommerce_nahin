@@ -1,30 +1,26 @@
 import Heading from "@/components/Shared/Heading";
-
-// import images
-import Img1 from "../../public/assets/blogs/blog1.jpg";
-import Img2 from "../../public/assets/blogs/blog2.jpg";
-import Img3 from "../../public/assets/blogs/blog3.jpg";
+import Image from "next/image";
 
 const BlogData = [
   {
     title: "Our Proud Customer.",
-
+    subtitle: "",
     published: "Jan 20, 2024 by Dilshad",
-    image: Img1,
+    image: "/assets/blogs/blog1.jpg",
     aosDelay: "0",
   },
   {
     title: "Thanks for supporting us",
-
+    subtitle: "",
     published: "Jan 20, 2024 by Satya",
-    image: Img2,
+    image: "/assets/blogs/blog2.jpg",
     aosDelay: "200",
   },
   {
     title: "Try to be alwys good.",
-
+    subtitle: "",
     published: "Jan 20, 2024 by Sabir",
-    image: Img3,
+    image: "/assets/blogs/blog3.jpg",
     aosDelay: "400",
   },
 ];
@@ -48,10 +44,12 @@ const Blogs = () => {
             >
               {/* image section */}
               <div className="overflow-hidden rounded-2xl mb-2">
-                <img
+                <Image
                   src={data.image}
                   alt=""
-                  className="w-full h-[220px] object-cover rounded-2xl hover:scale-105 duration-500"
+                  width={380}
+                  height={214}
+                  className="w-full h-[220px] object-cover rounded-2xl  hover:scale-105 duration-500"
                 />
               </div>
               {/* content section */}
