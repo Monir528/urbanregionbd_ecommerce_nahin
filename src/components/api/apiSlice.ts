@@ -2,6 +2,6 @@
 //
 // export const apiSlice = createApi({
 //   reducerPath: "api",
-//   baseQuery: fetchBaseQuery({ baseUrl: process.env.VITE_ROOT_API }),
+//   baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_ROOT_API }),
 //   endpoints: () => ({}),
 // });

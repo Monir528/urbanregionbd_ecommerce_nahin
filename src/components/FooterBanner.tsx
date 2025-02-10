@@ -92,7 +92,7 @@ const FooterBanner = () => {
         <div className="flex flex-col items-center flex-1">
           <IoLockClosedSharp className="text-3xl"></IoLockClosedSharp>
           <p className="font-semibold text-xl mb-4">All secure payment methods</p>
-          <Image src="/sslcommerz.png" alt="" />
+          <Image width={1191} height={213} src="/sslcommerz.png" alt="" />
         </div>
 
         <div className="flex flex-col items-center flex-1">
@@ -105,7 +105,7 @@ const FooterBanner = () => {
         <div className="flex flex-col items-center flex-1">
           <FaTruck className="text-3xl"></FaTruck>
           <p className="text-xl font-semibold  mb-4">Worldwide delivery</p>
-          <Image src="/delivery.png" alt="" />
+          <Image width={1214} height={80} src="/delivery.png" alt="" />
         </div>
 
 

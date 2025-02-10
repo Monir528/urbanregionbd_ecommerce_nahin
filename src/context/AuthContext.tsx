@@ -77,7 +77,7 @@ export function AuthProvider({ children }) {
   }
 
   const saveUser=(user)=>{
-    fetch(`${import.meta.env.VITE_ROOT_API}/addUser`,{
+    fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/addUser`,{
       method:"POST",
       headers:{
         "content-type":"application/json"

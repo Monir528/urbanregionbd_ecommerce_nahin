@@ -291,6 +291,7 @@ const Navbar:React.FC = () => {
                             width={300}
                             height={80}
                             src="/urbanregionbd.png"
+                            priority={true}
                             alt=""
                         />
                       </Link>

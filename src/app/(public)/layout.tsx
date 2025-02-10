@@ -26,12 +26,12 @@ export default function RootLayout({
             <body className="flex flex-col min-h-screen">
 
                         <ReduxProvider>
+                            <NavBarProvider>
                             <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 overflow-hidden">
                                 <ToastContainer />
                                 <div>
-                                    <NavBarProvider>
-                                        <Navbar></Navbar>
-                                    </NavBarProvider>
+                                    <Navbar></Navbar>
+
                         {/*            /!*{formCondition && <OrderForm></OrderForm>}*!/*/}
                         {/*            <OrderForm></OrderForm>*/}
                         {/*            <CartIcon></CartIcon>*/}
@@ -41,7 +41,7 @@ export default function RootLayout({
                                     {children}
                                 </div>
                             </div>
-
+                            </NavBarProvider>
                         </ReduxProvider>
 
             </body>

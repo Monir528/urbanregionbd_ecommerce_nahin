@@ -75,7 +75,7 @@ const CategoryItem2 = () => {
               width={210}
               height={44}
               alt=""
-              className="w-[210px] absolute bottom-0 right-[0rem]"
+              className="absolute bottom-0 right-[0rem]"
             />
           </div>
         </div>

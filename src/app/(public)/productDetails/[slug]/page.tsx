@@ -3,15 +3,15 @@
 import React, { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useSelector } from "react-redux";
-import { useGetProductsQuery, useGetSingleProductQuery } from "@/features/product/productApi";
-import DetailsImage from "@/components/DetailsImage/DetailsImage";
-import DetailsContent from "@/components/DetailsContent/DetailsContent";
-import CategoryPage from "@/components/CategoryPage/CategoryPage";
-import SubCategoryPage from "@/components/SubCategoryPage/SubCategoryPage";
-import FooterBanner from "@/components/FooterBanner/FooterBanner";
-import DetailsSkeleton from "@/components/DetailsSkeleton/DetailsSkeleton";
-import QuickView from "@/components/QuickView/QuickView";
 import { useNavBarContext } from "@/context/NavBarContext";
+import QuickView from "@/components/QuickView";
+import DetailsSkeleton from "@/components/DetailsSkeleton/DetailsSkeleton";
+import DetailsImage from "@/components/DetialsImage/DetailsImage";
+import DetailsContent from "@/components/DetailsContent/DetailsContent";
+import {useGetProductsQuery, useGetSingleProductQuery} from "@/components/api/productApi";
+import CategoryPage from "@/components/CategoryPage";
+import SubCategoryPage from "@/components/SubCategoryPage";
+import FooterBanner from "@/components/FooterBanner";
 
 // Define the Product type (adjust based on actual API response)
 interface Product {
@@ -30,7 +30,7 @@ interface Product {
 
 const ProductDetailsPage = () => {
     const params = useParams();
-    const productId = params?.id as string; // Ensure ID is a string
+    const productId = params.slug as string; // Ensure ID is a string
 
     const { data: product, isLoading, isError, isSuccess } = useGetSingleProductQuery(productId);
     const { open } = useSelector((state: any) => state?.popUp);

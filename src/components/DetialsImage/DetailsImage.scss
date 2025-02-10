@@ -1,0 +1,11 @@
+.main-image{
+    img {
+    margin-top: 10px;
+    // height: 400px;
+    object-fit: cover;
+    // width: 100%;
+    max-width: unset !important;
+    box-shadow: rgba(136, 165, 191, 0.288) 6px 2px 16px 0px,
+      rgba(255, 255, 255, 0.288) -6px -2px 16px 0px;
+  }
+}
