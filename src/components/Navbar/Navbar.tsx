@@ -202,6 +202,9 @@ const Navbar:React.FC = () => {
                                     >
                                       <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
                                         <Image
+                                            width={280}
+                                            height={280}
+                                            unoptimized={true}
                                             src={item.imageSrc}
                                             alt={item.imageAlt}
                                             className="object-cover object-center"
@@ -344,6 +347,9 @@ const Navbar:React.FC = () => {
                                                     >
                                                       <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
                                                         <Image
+                                                            width={280}
+                                                            height={280}
+                                                            unoptimized={true}
                                                             src={item.imageSrc}
                                                             alt={item.imageAlt}
                                                             className="object-cover object-center"
