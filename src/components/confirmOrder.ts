@@ -1,5 +1,5 @@
 
-import {apiSlice} from "../api/apiSlice"
+import {apiSlice} from "@/components/api/apiSlice"
 
 export const confirmOrder= apiSlice.injectEndpoints({
     tagTypes: ['Orders', 'Order'],

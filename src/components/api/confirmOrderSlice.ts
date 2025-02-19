@@ -1,4 +1,4 @@
-import { apiSlice } from "../api/apiSlice"
+import { apiSlice } from "@/components/api/apiSlice"
 
 const initialState={}
 
