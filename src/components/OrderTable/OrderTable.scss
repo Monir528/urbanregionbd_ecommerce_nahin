@@ -1,0 +1,30 @@
+@import "../../../css-config/mixins.scss";
+$border-color: #ddd;
+.orderTable{
+    margin: 30px 20px;
+    table {
+        border-collapse: collapse;
+        width: 100%;
+       th, td {
+        border: 1px solid $border-color;
+        padding: 8px;
+        text-align: left;
+        .table-img{
+            width: 70px;
+            @include sm{
+                width: 50px;
+            }
+        }
+        span{
+            margin: 0;
+           cursor: pointer; 
+        }
+       }
+       th {
+        background-color: rgba(137, 43, 226, 0.192);
+       }
+       @include sm{
+            margin: 20px 0;
+       }
+    }
+}

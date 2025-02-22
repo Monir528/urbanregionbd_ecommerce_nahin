@@ -12,11 +12,13 @@ import cartSlice from "@/components/api/cartSlice";
 import popUpSlice from "@/components/api/quickViewSlice";
 import sizeModal from "@/components/api/sizeModalSlice";
 import totalCount from "@/components/api/reviewSlice";
+import {confirmOrder} from "@/components/confirmOrder";
 
 export const store = configureStore({
     reducer: {
         [usersApi.reducerPath]: usersApi.reducer,
         [productApi.reducerPath]: productApi.reducer, // ✅ Added `productApi` reducer
+        [confirmOrder.reducerPath]: confirmOrder.reducer, // ✅ Added `productApi` reducer
         cardOrder: cardOrderSlice,
         order: orderProductSlice,
         cartHandler,
@@ -30,5 +32,5 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware()
             .concat(usersApi.middleware) // ✅ Ensuring usersApi middleware
-            .concat(productApi.middleware), // ✅ Ensuring productApi middleware
+            .concat(productApi.middleware).concat(confirmOrder.middleware), // ✅ Ensuring productApi middleware
 });

@@ -1,0 +1,41 @@
+.orderTableBody{
+    a{
+        color: blueviolet;
+    }
+    .productAction{
+        .content{
+            color: blueviolet;
+            display: flex;
+            gap: 2px;
+            justify-content: space-evenly;
+        }
+        
+    }
+    select{
+        border: none;
+        font-weight:700;
+        option{
+            background-color: gray;
+        }
+    }
+    .received{
+        background-color: blue;
+        color: white;
+        padding: 6px;
+    }
+    .failed{
+        background-color: red;
+        color: white;
+        padding: 6px;
+    }
+    .delivered{
+        background-color: green;
+        color: white;
+        padding: 6px;
+    }
+    .pending{
+        background-color: orange;
+        color: white;
+        padding: 6px;
+    }
+}

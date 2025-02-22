@@ -1,13 +1,12 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_ROOT_API, // 🔥 Must start with NEXT_PUBLIC_
+    baseUrl: process.env.NEXT_PUBLIC_ROOT_API, // 🔥 Make sure NEXT_PUBLIC_ is used
 });
 
 export const confirmOrder= createApi({
-    reducerPath: "api",
     tagTypes: ['Orders', 'Order'],
-    baseQuery: baseQuery,
+    baseQuery,
     refetchOnFocus: true,
     endpoints:(builder)=>({
         purchaseOrder:builder.mutation({
