@@ -12,10 +12,12 @@ import cartSlice from "@/components/api/cartSlice";
 import popUpSlice from "@/components/api/quickViewSlice";
 import sizeModal from "@/components/api/sizeModalSlice";
 import totalCount from "@/components/api/reviewSlice";
+import {apiSlice} from "@/components/api/apiSlice";
 import {confirmOrder} from "@/components/confirmOrder";
 
 export const store = configureStore({
     reducer: {
+        [apiSlice.reducerPath]: apiSlice.reducer,
         [usersApi.reducerPath]: usersApi.reducer,
         [productApi.reducerPath]: productApi.reducer, // ✅ Added `productApi` reducer
         [confirmOrder.reducerPath]: confirmOrder.reducer, // ✅ Added `productApi` reducer

@@ -19,13 +19,13 @@ export default function RootLayout({
 
     const [open, setOpen] = useState(false);
     const Menus = [
-        { title: "Orders", src: <MdOutlineBorderColor className="text-2xl"/>, gap: true , link:"/dashboard/orders"},
-        { title: "Products ", src: <GrOrderedList className="text-2xl"/>, link:"/dashboard/allProducts"},
-        { title: "Upload", src: <IoIosCreate className="text-2xl"/> , link:"/dashboard/upload"},
-        { title: "Control ", src: <MdOutlineAdminPanelSettings className="text-2xl"/>, link:"/dashboard/control"},
-        { title: "Garbage ", src: <MdAutoDelete className="text-2xl"/>, link:"/dashboard/garbage"},
-        { title: "Category ", src: <MdCategory className="text-2xl"/>, link:"/dashboard/createCategory"},
-        { title: "Overview ", src: <AiOutlineFundProjectionScreen className="text-2xl"/>, link:"/dashboard/overview"},
+        { title: "Orders", src: <MdOutlineBorderColor className="text-2xl"/>, gap: true , link:"/admin/orders"},
+        { title: "Products ", src: <GrOrderedList className="text-2xl"/>, link:"/admin/allProducts"},
+        { title: "Upload", src: <IoIosCreate className="text-2xl"/> , link:"/admin/upload"},
+        { title: "Control ", src: <MdOutlineAdminPanelSettings className="text-2xl"/>, link:"/admin/control"},
+        { title: "Garbage ", src: <MdAutoDelete className="text-2xl"/>, link:"/admin/garbage"},
+        { title: "Category ", src: <MdCategory className="text-2xl"/>, link:"/admin/createCategory"},
+        { title: "Overview ", src: <AiOutlineFundProjectionScreen className="text-2xl"/>, link:"/admin/overview"},
     ];
 
     return (
