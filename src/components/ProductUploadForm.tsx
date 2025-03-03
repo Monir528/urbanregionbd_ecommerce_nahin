@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useAddProductMutation } from "../../../features/product/productApi";
-import { modalOpen } from "../../../features/cartHandler/cartHandler";
-import { useGetCategoryQuery } from "../../../features/category/categoryApi";
-import {useGetSubCategoryQuery} from "../../../features/subCategory/subCategoryApi"
+import { useAddProductMutation } from "@/components/api/productApi";
+import { modalOpen } from "@/components/api/cartHandler";
+import { useGetCategoryQuery } from "@/components/api/categoryApi";
+import {useGetSubCategoryQuery} from "@/components/api/subCategoryApi"
 import axios from "axios";
-import TextArea from "../../components/TextArea/TextArea";
+import TextArea from "@/components/TextArea";
 
 export default function ProductUploadForm() {
   // get Category 

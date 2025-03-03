@@ -1,0 +1,16 @@
+.btn{
+    background-color: blueviolet;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    font-size: 1.15rem;
+    padding: 10px 25px;
+    cursor: pointer;
+}
+button:disabled,
+button[disabled]{
+    cursor: auto;
+}
+.btn:disabled:hover{
+    background-color: red;
+}

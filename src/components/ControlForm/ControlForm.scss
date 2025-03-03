@@ -1,0 +1,30 @@
+.ControlForm{
+    input[type="text"],
+    textarea,
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      box-sizing: border-box;
+      border-radius: 5px;
+      font-size: 1.15rem;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      span {
+        color: red;
+      }
+    }
+    select {
+      padding: 8px 3rem;
+      font-weight: bold;
+      border: none;
+      background-color: #e2e2e2;
+      border-radius: 0;
+    }
+    .submit-btn{
+      margin: 20px 0;
+    }
+}

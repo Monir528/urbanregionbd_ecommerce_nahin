@@ -1,29 +1,20 @@
 'use client';
-
-import {useGetAllOrderedQuery} from "@/components/confirmOrder";
-import {useMemo} from "react";
-import {dateBetweenFilterFn, DateRangeColumnFilter} from "@/components/filters";
-import TableContainer from "@/components/TableContainer";
+import ProductUploadForm from "@/components/ProductUploadForm";
+import {useSelector} from "react-redux";
+import Modal from "@/components/Modal/Modal";
 
 const Overview = () => {
 
-    const { data, isLoading, isError } = useGetAllOrderedQuery();
-    const columns = useMemo(
-        () => [
-            {
-                Header: "Date",
-                accessor: "date",
-                Filter: DateRangeColumnFilter,
-                filter: dateBetweenFilterFn,
-            },
-        ],
-        []
-    );
-
+    const handleSelector = useSelector((state) => state.cartHandler);
+    const { modalCondition } = handleSelector || {};
     return (
         <main>
-            <div className="font-abc">
-                {!isLoading && data && <TableContainer columns={columns} data={data} />}
+            <div className="product container">
+                {modalCondition && <Modal></Modal>}
+                <div>
+                    <h1 className="text-2xl font-semibold underline">Upload a Product</h1>
+                    <ProductUploadForm></ProductUploadForm>
+                </div>
             </div>
         </main>
 
