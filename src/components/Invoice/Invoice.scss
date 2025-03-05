@@ -1,0 +1,89 @@
+$bg-black: rgba(0, 0, 0, 0.767);
+$bg-gray: rgba(0, 0, 0, 0.219);
+@import "@/styles/css-config/mixins.scss";
+@mixin content-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px;
+  }
+
+.Invoice{
+    
+    .container{
+        margin-top: 40px;
+        margin-bottom: 30px;
+        padding-bottom: 2rem;
+    }
+    p, h3, h1{
+        margin: 7px 0;
+    }
+    hr{
+        margin: 0;
+    }
+    // height: 700px;
+    width: 500px;
+    margin: 0 auto;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    // Invoice Header Section
+    .invoiceHeader{
+        .invoice-top{
+            @include content-flex;
+            .invoice-logo{
+                color: blueviolet;
+            }
+        }
+        .invoice-text{
+            background-color: $bg-black;
+            color: white;
+            padding: 0 30px;
+            margin-right:-10px ;
+        }
+        .invoice-billing{
+            // @include content-flex;
+            margin: 0 20px;
+            
+        }
+    }
+    // Invoice Details Section
+    .InvoiceDetails{
+        margin: 0 10px;
+        table {
+            border-collapse: collapse;
+            width: 100%;
+           th, td {
+            border: 1px solid $bg-gray;
+            padding: 8px;
+            text-align: left;
+
+           }
+           
+           th {
+            background-color: #f2f2f2;
+           }
+        }
+ 
+    }
+
+    // Invoice Footer Section
+    .invoiceTotal{
+        .invoice-content{
+            @include content-flex();
+        .total-cost{
+            display: flex;
+            gap: 40px;
+        } 
+        }
+        .invoice-payable{
+            display: flex;
+            flex-direction: row;
+            justify-content:flex-end;
+            h2{
+                background-color: $bg-black;
+                color: white;
+                display: inline-block;
+                margin-right: 10px;
+            }
+        }
+    }
+}
