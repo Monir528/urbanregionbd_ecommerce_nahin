@@ -1,34 +1,49 @@
 /* eslint-disable react/prop-types */
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import { useState, useCallback } from 'react';
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState, ContentState } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
-const TextArea = ({setDescription, description}) => {
-
-  const modules = {
-    toolbar: [
-      [{header: [1, 2, 3, 4, 5, 6, false]}],
-      [{ font: [] }],
-      [{ size: [] }],
-      ["bold", "italic", "underline", "strike", "blockquote"],
-      [
-        {list: "ordered"},
-        {list: "bullet"},
-        {indent: "-1"},
-        {index: "+1"}
-      ]
-    ],
+// Polyfill for findDOMNode to address React 18 compatibility
+if (typeof window !== 'undefined') {
+  window.ReactDOM = window.ReactDOM || {};
+  window.ReactDOM.findDOMNode = (component) => {
+    return component || null;
   };
+}
+
+const TextArea = ({ value, onChange }) => {
+  const [editorState, setEditorState] = useState(() => {
+    const blocksFromHtml = htmlToDraft(value || '');
+    const { contentBlocks, entityMap } = blocksFromHtml;
+    const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+    return EditorState.createWithContent(contentState);
+  });
+
+  const handleEditorChange = useCallback((newEditorState) => {
+    setEditorState(newEditorState);
+    const html = draftToHtml(newEditorState.getCurrentContent());
+    if (html !== value) { // Only call onChange if the HTML has changed
+      onChange(html);
+    }
+  }, [value, onChange]);
 
   return (
-    <div className="my-8">
-      <ReactQuill
-        modules={modules}
-        theme="snow"
-        value={description}
-        onChange={setDescription}
-        className="w-full h-32 md:h-40 lg:h-56"
-      />
-    </div>
+      <div className="my-8">
+        <Editor
+            editorState={editorState}
+            onEditorStateChange={handleEditorChange}
+            wrapperClassName="border rounded-md"
+            editorClassName="p-2 min-h-[200px]"
+            toolbarClassName="border-b"
+            toolbar={{
+              options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link', 'emoji', 'image', 'remove', 'history'],
+              inline: { options: ['bold', 'italic', 'underline', 'strikethrough'] },
+            }}
+        />
+      </div>
   );
 };
 

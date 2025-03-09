@@ -1,52 +1,48 @@
-/* eslint-disable react/prop-types */
-
 const InvoiceHeader = ({ details }) => {
   return (
-    <div className="invoiceHeader font-abc leading-5 pt-4">
-      <div className="invoice-top">
-        <div>
-          <h1 className="invoice-logo">Urban Region BD</h1>
-          <p>Invoice Id: {details?._id}</p>
-          <p>Date: {details?.date}</p>
-        </div>
-        <div className="invoice-text">
-          <h1>Invoice</h1>
-        </div>
-      </div>
-      <hr />
-      <div className="invoice-billing">
-        <div className="flex flex-row w-full justify-between items-center">
+      <div className="w-[500px] mx-auto shadow-lg p-4 font-rajdhani text-[16px] font-normal">
+        {/* Invoice Top Section */}
+        <div className="flex items-center justify-between mb-4">
           <div>
-            <p>
-              BILL FROM: <strong>Urban Region BD</strong>
-            </p>
-
-            <p>Phone: 01858-124027</p>
-
-            <p>Address: Mirpur-11, Dhaka-1216</p>
+            <h1 className="text-blueviolet text-[16px]">Urban Region BD</h1>
+            <p className="text-gray-700">Invoice Id: {details?._id}</p>
+            <p className="text-gray-700">Date: {details?.date}</p>
           </div>
-          <img
-          className="h-16"
-            src="https://i.ibb.co/7GVcKqq/347120619-205072055716972-7844522544708747971-n.jpg"
-            alt=""
-          />
+          <div className="bg-black text-white px-8 py-2 rounded-md">
+            <h1 className="text-[16px] font-normal">Invoice</h1>
+          </div>
         </div>
-        <hr />
-        <div>
-          <p>
-            BILL TO:{" "}
-            <strong>
-              {details.firstName} {details.lastName}
-            </strong>
-          </p>
-          <p>Phone: {details.phone}</p>
-          <p>Address: {details.address}</p>
-          <p>Zip Code: {details.zip}</p>
-          <p>Email: {details.email}</p>
+
+        <hr className="border-gray-300 mb-4" />
+
+        {/* Billing Information */}
+        <div className="mb-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="font-normal">BILL FROM: Urban Region BD</p>
+              <p>Phone: 01858-124027</p>
+              <p>Address: Mirpur-11, Dhaka-1216</p>
+            </div>
+            <img
+                className="h-16"
+                src="https://i.ibb.co/7GVcKqq/347120619-205072055716972-7844522544708747971-n.jpg"
+                alt="Company Logo"
+            />
+          </div>
+
+          <hr className="border-gray-300 my-4" />
+
+          <div>
+            <p className="font-normal">
+              BILL TO: {details.firstName} {details.lastName}
+            </p>
+            <p>Phone: {details.phone}</p>
+            <p>Address: {details.address}</p>
+            <p>Zip Code: {details.zip}</p>
+            <p>Email: {details.email}</p>
+          </div>
         </div>
       </div>
-      {/* <hr /> */}
-    </div>
   );
 };
 

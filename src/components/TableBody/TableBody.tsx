@@ -19,7 +19,7 @@ const TableBody = ({ data }) => {
 
   const editGarbage=async(id)=>{
     console.log(id)
-    fetch(`${process.env.VITE_ROOT_API}/garbageTrash`,{
+    fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/garbageTrash`,{
       method: "PUT",
       headers:{
         "Content-Type": "application/json",
@@ -29,7 +29,7 @@ const TableBody = ({ data }) => {
   }
 
   const deleteGarbage=async(id)=>{
-    fetch(`${process.env.VITE_ROOT_API}/garbage/${id}`,{
+    fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/garbage/${id}`,{
       method: "DELETE",
     })
   }
@@ -42,7 +42,7 @@ const TableBody = ({ data }) => {
   };
 
   const handleEdit = (id) => {
-    router.push(`/dashboard/edit/${id}`);
+    router.push(`/admin/product-edit/${id}`);
   };
 
   return (
@@ -68,7 +68,7 @@ const TableBody = ({ data }) => {
       <td className="px-6 py-4">
         <img
           className="max-w-20"
-          src={`${process.env.VITE_ROOT_API}/Images/${images[0]?.filename}`}
+          src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${images[0]?.filename}`}
           alt=""
         />
       </td>

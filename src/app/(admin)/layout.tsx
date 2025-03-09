@@ -10,7 +10,6 @@ import {FaArrowLeft} from "react-icons/fa";
 import {CgSidebarOpen} from "react-icons/cg";
 import {ReduxProvider} from "@/reduxToolKit/provider";
 
-
 export default function RootLayout({
     children,
 }: {

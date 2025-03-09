@@ -1,6 +1,6 @@
 $bg-black: rgba(0, 0, 0, 0.767);
 $bg-gray: rgba(0, 0, 0, 0.219);
-@import "@/styles/css-config/mixins.scss";
+@import "../../styles/css-config/mixins.scss";
 @mixin content-flex {
     display: flex;
     align-items: center;

@@ -1,7 +1,7 @@
 import InvoiceHeader from "./InvoiceHeader";
 import InvoiceDetails from "./InvoiceDetails";
 import InvoiceTotal from "./InvoiceTotal";
-import "./Invoice.scss"
+import "./Invoice.module.scss"
 import { useLocation } from "react-router-dom";
 
 const Invoice = () => {
