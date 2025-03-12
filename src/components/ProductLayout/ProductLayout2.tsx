@@ -34,7 +34,7 @@ const ProductLayout2 = ({ data }) => {
               className="cursor-pointer h-[180px] sm:h-[220px] w-full object-cover hover:opacity-70 duration-75"
               onClick={() => handleDetails(_id)}
             />
-            <div className="flex items-center bg-white w-[120px] rounded-md absolute bottom-[-10px] justify-center gap-2 shadow-lg">
+            <div className="flex items-center text-black bg-white w-[120px] rounded-md absolute bottom-[-10px] justify-center gap-2 shadow-lg">
               <p className="font-semibold">৳{discount}</p>
               <p className="font-thin line-through">৳{price}</p>
             </div>

@@ -1,6 +1,7 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
+
+'use client';
 
 import { useEffect, useState } from "react";
 import { MdOutlineStar } from "react-icons/md";
@@ -10,7 +11,7 @@ import { useRouter, useParams } from "next/navigation";
 import { orderFormOpen } from "@/components/api/cartHandler";
 import { addToCart, decreaseCart, getTotals } from "@/components/api/cartSlice";
 import { PiToiletPaperLight } from "react-icons/pi";
-import { Link } from "next/link";
+import Link from "next/link";
 import SizeModal from "@/components/SizeModal";
 import { sizeModalOpen } from "@/components/api/sizeModalSlice";
 import { IoCartSharp } from "react-icons/io5";
@@ -116,12 +117,12 @@ const DetailsContent = ({ desc, img }) => {
   }
 
   return (
-    <div className="  w-full sm:w-auto md:w-8/12 lg:w-6/12 items-center">
+    <div className="  w-full sm:w-auto md:w-8/12 lg:w-6/12 items-center text-black">
       {isOpen && <SizeModal />}
       <p className=" focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 font-normal text-base leading-4 text-gray-600 font-abc  dark:text-gray-400">
         {category?.toUpperCase()}
       </p>
-      <h2 className="font-semibold lg:text-3xl text-2xl lg:leading-9 leading-7 text-gray-800 mt-4 dark:text-gray-200 font-abc">
+      <h2 className="font-semibold lg:text-3xl text-2xl lg:leading-9 leading-7 text-gray-800 mt-4">
         {productName?.toUpperCase()}
       </h2>
 
@@ -194,13 +195,13 @@ const DetailsContent = ({ desc, img }) => {
           {/* // quantity start */}
           <div className="mt-4">
             <div className="flex flex-row items-center justify-between">
-              <p className=" font-semibold text-base leading-4 text-gray-600 dark:text-gray-200 font-abc">
+              <p className=" font-semibold text-base leading-4 text-gray-600 font-abc">
                 পরিমান নির্ধারণ করুন
               </p>
               <div className="flex">
                 <span
                   onClick={minusCount}
-                  className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 cursor-pointer border text-2xl dark:bg-gray-600 border-gray-300 border-r-0 w-10 h-10 flex items-center justify-center pb-1"
+                  className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 cursor-pointer border text-2xl border-gray-300 border-r-0 w-10 h-10 flex items-center justify-center pb-1"
                 >
                   -
                 </span>
@@ -214,7 +215,7 @@ const DetailsContent = ({ desc, img }) => {
                 />
                 <span
                   onClick={addCount}
-                  className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 cursor-pointer text-2xl dark:bg-gray-600 border border-gray-300 border-l-0 w-10 h-10 flex items-center justify-center pb-1 "
+                  className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 cursor-pointer text-2xl border border-gray-300 border-l-0 w-10 h-10 flex items-center justify-center pb-1 "
                 >
                   +
                 </span>
@@ -226,7 +227,7 @@ const DetailsContent = ({ desc, img }) => {
             <button onClick={()=>addCount()} className="focus:outline-none focus:ring-2 duration-200 hover:bg-red-700 focus:ring-offset-2 focus:ring-gray-800  text-base text-white tracking-wide bg-orange-500 w-full py-4 lg:mt-4 mt-2 font-medium flex items-center justify-center gap-2">
               <span> কার্টে যোগ করুন</span> <span><IoCartSharp className="text-2xl"/></span> 
             </button>
-            {paymentCost?.cartTotalQuantity > 0 && <Link to="/shoppingCart"> <button
+            {paymentCost?.cartTotalQuantity > 0 && <Link href="/shoppingCart"> <button
             className="focus:outline-none focus:ring-2 hover:bg-black focus:ring-offset-2 duration-200 focus:ring-gray-800 font-medium text-base leading-4 text-white bg-blue-600 w-full py-4 lg:mt-4 mt-2"
           >
             অর্ডার করুন

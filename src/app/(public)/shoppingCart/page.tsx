@@ -37,7 +37,7 @@ const HomePage = () => {
                 {cart?.cartItems?.length === 0 && <EmptyCart />}
 
                 {cart?.cartItems?.length > 0 && (
-                    <div className="container">
+                    <div className="container mx-auto">
                         <div className="py-8">
                             {/* // need to modify these two line of code  col-span-12 md:col-span-4 col-span-12 md:col-span-8*/}
 
@@ -81,9 +81,9 @@ const HomePage = () => {
 
                 {cart?.cartItems?.length > 0 && (
                     <div>
-                        <div className="flex sm:justify-end justify-center mt-4 container">
+                        <div className="flex sm:justify-end justify-center mt-4 mx-auto container">
                             <div className="flex flex-col gap-2 col-span-12 md:col-span-6">
-                                <div className="flex gap-2 justify-between">
+                                <div className="flex gap-2 text-black justify-between">
                                     <h1 className="text-2xl font-thin ">Subtotal</h1>
                                     <h1 className="text-2xl">{cart.cartTotalAmount} Taka</h1>
                                 </div>
@@ -100,7 +100,7 @@ const HomePage = () => {
                             </div>
                         </div>
                         {/* // purchase button  */}
-                        <div className="container mt-8">
+                        <div className="container mx-auto mt-8">
                             <div
                                 onClick={() => dispatch(orderFormOpen())}
                                 className="bottom-16 md-block border hover:text-gray-200 text-indigo-600  border-indigo-600 flex rounded-lg justify-center bg-indigo-100 cursor-pointer shadow-md hover:bg-indigo-600 transition duration-500"
@@ -113,7 +113,7 @@ const HomePage = () => {
                     </div>
                 )}
                 <div className="mt-16"></div>
-                <FooterBanner></FooterBanner>
+                {/*<FooterBanner></FooterBanner>*/}
             </div>
         </main>
 

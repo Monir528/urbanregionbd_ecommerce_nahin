@@ -56,13 +56,15 @@ const ProductDetailsPage = () => {
         );
     }
 
+    console.log("single product:", product);
+
     return (
         <div>
             {open && <QuickView />}
             <div className="2xl:container 2xl:mx-auto lg:py-8 lg:px-20 md:py-12 md:px-6 py-4 px-4">
                 <div className="flex justify-center items-center lg:items-start lg:flex-row flex-col gap-8">
                     <DetailsImage images={product?.images} />
-                    <DetailsContent desc={product?.description?.text} img={product?.images} />
+                    <DetailsContent desc={product?.description} img={product?.images} />
                 </div>
 
                 {/* Embedded YouTube Video */}
@@ -85,7 +87,7 @@ const ProductDetailsPage = () => {
             )}
 
             <div className="mb-16"></div>
-            <FooterBanner />
+            {/*<FooterBanner />*/}
         </div>
     );
 };

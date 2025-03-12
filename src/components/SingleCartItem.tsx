@@ -55,13 +55,13 @@ const SingleCartItem = ({product}) => {
         <div className="grid grid-cols-1 md:grid-cols-5 w-full">
           <div className="md:col-span-2">
             <div className="flex flex-col max-[500px]:items-center gap-3">
-              <h6 className="font-semibold text-base leading-7 text-black dark:text-gray-200">
+              <h6 className="font-semibold text-base leading-7 text-black">
                 {modifiedName}
               </h6>
               <h6 onClick={()=>handleRemoveFromCart(product)} className="font-normal text-base leading-7 cursor-not-allowed text-gray-400 underline">
                 Remove
               </h6>
-              <h6 className="font-semibold text-base leading-7 text-indigo-600 dark:text-indigo-300">
+              <h6 className="font-semibold text-base leading-7 text-indigo-600">
                 Unit Price: {price}Tk
               </h6>
             </div>
@@ -74,7 +74,7 @@ const SingleCartItem = ({product}) => {
             <div className="flex">
               <span
                 onClick={minusCount}
-                className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 cursor-pointer border text-2xl dark:bg-gray-600 border-gray-300 border-r-0 w-10 h-10 flex items-center justify-center pb-1"
+                className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 cursor-pointer border text-black text-2xl border-gray-300 border-r-0 w-10 h-10 flex items-center justify-center pb-1"
               >
                 -
               </span>
@@ -88,7 +88,7 @@ const SingleCartItem = ({product}) => {
               />
               <span
                 onClick={addCount}
-                className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 cursor-pointer text-2xl dark:bg-gray-600 border border-gray-300 border-l-0 w-10 h-10 flex items-center justify-center pb-1 "
+                className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 cursor-pointer border text-2xl text-black border-gray-300 border-l-0 w-10 h-10 flex items-center justify-center pb-1 "
               >
                 +
               </span>
@@ -104,7 +104,7 @@ const SingleCartItem = ({product}) => {
           
           {/* / */}
           <div className="flex items-center max-[500px]:justify-center md:justify-end max-md:mt-3 h-full">
-            <p className="text-lg leading-8 text-gray-600 text-center dark:text-gray-300">
+            <p className="text-lg leading-8 text-gray-600 text-center">
             {product?.cartQuantity*product?.price} Taka {""}
             </p>
           </div>

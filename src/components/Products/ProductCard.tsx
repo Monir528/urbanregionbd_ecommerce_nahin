@@ -37,7 +37,7 @@ const ProductCard = ({ data, index }) => {
             </Link>
           </div>
         </div>
-        <div className="leading-7">
+        <div className="leading-7 text-black">
           <h2 className="font-semibold">{resizeName(productName,17)}</h2>
           <h2 className="font-semi-bold line-through text-red-500">${price}</h2>
           <h2 className="font-bold">${discount}</h2>

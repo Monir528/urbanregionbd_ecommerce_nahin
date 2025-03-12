@@ -46,7 +46,7 @@ function AutoPlayMethods({category, data}) {
 
   
   return (
-    <div className="slider-container mt-8">
+    <div className="slider-container mt-8 text-black">
       <h2 className="text-xl font-abc font-semibold">Similar Category</h2>
       <div className="h-[1px] w-full bg-black mt-2 mb-4"></div>
 

@@ -9,12 +9,12 @@ const EmptyCart = () => {
     }
     
     return (
-        <div className="container mt-8">
+        <div className="container mt-8 mx-auto">
             <div className="flex flex-col items-center justify-center">
                 
                 <p onClick={redirect} className="text-violet-500 underline cursor-pointer">কেনাকাটা করুন।</p>
 
-                <h1 className="text-2xl md:text-4xl mt-4 font-semibold">Your Cart is Empty!</h1>
+                <h1 className="text-2xl md:text-4xl text-black mt-4 font-semibold">Your Cart is Empty!</h1>
 
                 <Image width={640} height={480} src={"/assets/empty.gif"} alt="" className="m-12 w-[60%] max-w-[400px]" />
                 

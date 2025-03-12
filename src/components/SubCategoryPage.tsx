@@ -8,7 +8,7 @@ const filtered_product = data.filter((person) => person?.description?.subcategor
 
 
   return (
-    <div className="container mt-16">
+    <div className="container mt-16 mx-auto">
       <h2 className="text-xl font-abc font-semibold">You may also like</h2>
       <div className="h-[1px] w-full bg-black mt-2 mb-4"></div>
       {/* // subcategory section  */}

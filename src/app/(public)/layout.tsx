@@ -5,6 +5,7 @@ import OrderForm from "@/components/OrderForm";
 import {NavBarProvider} from "@/context/NavBarContext";
 import Navbar from "@/components/Navbar/Navbar";
 import {ReduxProvider} from "@/reduxToolKit/provider";
+import FooterBanner from "@/components/FooterBanner";
 // import FacebookChat from "@/components/FacebookChat";
 
 export default function RootLayout({
@@ -40,6 +41,7 @@ export default function RootLayout({
                         {/*            /!*<FacebookChat></FacebookChat>*!/*/}
                                     {children}
                                 </div>
+                                <FooterBanner></FooterBanner>
                             </div>
                             </NavBarProvider>
                         </ReduxProvider>
