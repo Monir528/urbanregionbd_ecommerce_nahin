@@ -3,8 +3,8 @@ import { IoMdArrowDropright } from "react-icons/io";
 
 const Notice = () => {
     return (
-        <div className="container">
-        <div className="mt-8 mb-2 text-sm lg:text-base py-2 px-4 bg-[#E0F7FA]">
+        <div className="container mx-auto">
+        <div className="mt-8 mb-2 text-sm text-black lg:text-base py-2 px-4 bg-[#E0F7FA]">
           {" "}
           <span className="font-bold">
             Event T-shirt <IoMdArrowDropright className="inline" />{" "}

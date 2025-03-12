@@ -27,7 +27,7 @@ export default function RootLayout({
 
                         <ReduxProvider>
                             <NavBarProvider>
-                            <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 overflow-hidden">
+                            <div className="bg-white duration-200 overflow-hidden">
                                 <ToastContainer />
                                 <div>
                                     <Navbar></Navbar>

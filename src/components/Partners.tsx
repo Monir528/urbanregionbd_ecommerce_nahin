@@ -31,7 +31,7 @@ import { FaPhoneAlt } from "react-icons/fa";
 const Partners = () => {
   return (
     <div className=" text-gray-200 bg-[#37383F]">
-      <div className="flex flex-col items-center lg:flex-row container py-16 lg:py-20 w-full lg:justify-between lg:gap-24 gap-12">
+      <div className="flex flex-col items-center lg:flex-row container mx-auto py-16 lg:py-20 w-full lg:justify-between lg:gap-24 gap-12">
         <div className="lg:flex-1 w-full">
           <p className="flex flex-row items-center text-gray-200 font-bold tracking-wider text-xl">
             <MdForwardToInbox className="m-2 text-orange-400 text-3xl"></MdForwardToInbox>

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { SideBySideMagnifier } from "react-image-magnifiers";
-import "./DetailsImage.scss"
 /* eslint-disable no-unused-vars */
 const DetailsImage = ({ images }) => {
   const [selected, setSelected] = useState(0);
@@ -11,7 +10,7 @@ const DetailsImage = ({ images }) => {
     <div className=" w-full sm:w-auto md:w-8/12 pt-0 lg:pt-12 lg:w-6/12 flex flex-col gap-4">
       {/* main images  */}
       <div className=" lg:w-10/12 bg-gray-100 flex justify-center items-center">
-        <div className="main-image">
+        <div className="mt-2 shadow-lg shadow-[rgba(136,165,191,0.3)]">
           <SideBySideMagnifier
             alwaysInPlace={true}
             imageSrc={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${

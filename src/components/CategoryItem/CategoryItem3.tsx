@@ -5,7 +5,7 @@ import Link from "next/link";
 const CategoryItem3 = () => {
   return (
     <div className="py-8">
-      <div className="container">
+      <div className="container mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* first col */}
           <div className="py-10 pl-5 bg-gradient-to-br from-black/50 to-white/40 text-white rounded-3xl relative h-[320px] flex items-start">

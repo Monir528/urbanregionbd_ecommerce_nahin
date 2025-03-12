@@ -4,7 +4,7 @@ import ProductCard from "./ProductCard";
 const Products = ({ data }) => {
   return (
     <div>
-      <div className="container mt-8">
+      <div className="container mt-8 mx-auto">
         <div className="mb-10">
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6  gap-5 place-items-center">
             {data?.length > 0 &&

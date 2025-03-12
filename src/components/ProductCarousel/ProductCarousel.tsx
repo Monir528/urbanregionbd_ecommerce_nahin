@@ -4,7 +4,6 @@
 import { useRef } from "react";
 import Slider from "react-slick";
 import CarouselItem from "@/components/CarouselItem"
-import "./productCarouse.scss"
 
 function AutoPlayMethods({category, data}) {
   let sliderRef = useRef(null);

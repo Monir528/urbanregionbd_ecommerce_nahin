@@ -5,7 +5,7 @@ const CategoryItem2 = () => {
 
   return (
     <div className="py-8">
-      <div className="container">
+      <div className="container mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* First col */}
           <div className="sm:col-span-2 py-10 pl-5 bg-gradient-to-br from-gray-400/90 to-gray-100 text-white rounded-3xl relative h-[320px] flex items-end">

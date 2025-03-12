@@ -28,7 +28,7 @@ const BlogData = [
 const Blogs = () => {
   return (
     <div className="my-32">
-      <div className="container">
+      <div className="container mx-auto text-black">
         {/* Header section */}
         <Heading title="Facebook Reviews" subtitle={"Visit out facebook page"} />
 
@@ -40,7 +40,6 @@ const Blogs = () => {
               data-aos="fade-up"
               data-aos-delay={data.aosDelay}
               key={data.title}
-              className="bg-white dark:bg-gray-900"
             >
               {/* image section */}
               <div className="overflow-hidden rounded-2xl mb-2">

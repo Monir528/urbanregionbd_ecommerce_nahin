@@ -85,8 +85,8 @@ import Image from "next/image";
 const FooterBanner = () => {
   return (
     <div>
-      <div className="bg-[#F3F3F3] py-8">
-      <div className="flex flex-col items-center container lg:flex-row lg:justify-between lg:items-start gap-4">
+      <div className="bg-[#F3F3F3] py-8 text-black">
+      <div className="flex flex-col items-center container mx-auto lg:flex-row lg:justify-between lg:items-start gap-4">
 
 
         <div className="flex flex-col items-center flex-1">
@@ -117,7 +117,7 @@ const FooterBanner = () => {
       <Partners></Partners>
 
       <div className="bg-[#58595B]">
-        <div className="container py-16 flex justify-between gap-4 flex-wrap text-gray-200">
+        <div className="container mx-auto py-16 flex justify-between gap-4 flex-wrap text-gray-200">
           <div className="">
             <p className="text-orange-400 text-xl tracking-wider font-bold mb-6">
               URBAN REGION
@@ -237,7 +237,7 @@ const FooterBanner = () => {
           </div>
         </div>
       </div>
-      <div className="py-8 bg-gray-200">
+      <div className="py-8 bg-gray-200 text-black">
         <div className="container text-sm  max-w-[85%] text-center">
           <p>
             URBAN REGION prints a huge variety of custom clothing like T-shirts,

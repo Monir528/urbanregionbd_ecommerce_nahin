@@ -99,7 +99,7 @@ const HomePage = () => {
                 <Blogs />
 
                 {/* <AppStore></AppStore> */}
-                {/*<FooterBanner></FooterBanner>*/}
+                <FooterBanner></FooterBanner>
                 <ShoppingCartForm></ShoppingCartForm>
                 <Popup />
             </div>
