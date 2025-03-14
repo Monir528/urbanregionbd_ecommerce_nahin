@@ -21,6 +21,7 @@
     "@types/react-table": "^7.7.20",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
+    "firebase": "^11.4.0",
     "html-to-draftjs": "^1.5.0",
     "next": "15.1.6",
     "react": "^19.0.0",

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://D:/SOFTWARE DEV/FrontEnd/Next/urbanregionbd-commerce-front-end/.idea/urbanregionbd-commerce-front-end.iml" filepath="D:/SOFTWARE DEV/FrontEnd/Next/urbanregionbd-commerce-front-end/.idea/urbanregionbd-commerce-front-end.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/urbanregionbd_ecommerce_nahin.iml" filepath="$PROJECT_DIR$/.idea/urbanregionbd_ecommerce_nahin.iml" />
     </modules>
   </component>
