@@ -1,93 +1,109 @@
-import  { useEffect } from "react";
-import { useState } from "react";
-import Button from "@/components/Button/Button";
-import "./ControlForm.scss";
-
-import {
-  useAddUserMutation,
-  useGetUsersQuery,
-} from "@/components/api/userApi";
-import Modal from "@/components/Modal/Modal";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { modalOpen } from "@/components/api/cartHandler";
+import {
+    useAddUserMutation,
+    useGetUsersQuery,
+} from "@/components/api/userApi";
+import Modal from "@/components/Modal/Modal";
 
 const ControlForm = () => {
-  const [role, setRole] = useState("moderator");
-  const { data:findUser } = useGetUsersQuery();
-  const [addUser, { isSuccess}]= useAddUserMutation()
+    const [role, setRole] = useState("moderator");
+    const { data: findUser } = useGetUsersQuery();
+    const [addUser, { isSuccess }] = useAddUserMutation();
 
-  const [search, setSearch] = useState("");
-  const [result, setResult] = useState();
+    const [search, setSearch] = useState("");
+    const [result, setResult] = useState();
 
-  const dispatch= useDispatch()
+    const dispatch = useDispatch();
+    const { modalCondition } = useSelector((state) => state.cartCondition) || {};
 
-  const {modalCondition}= useSelector(state=>state.cartCondition) || {}
-
-  // debounce handler start
-  const debounceHandler = (fn, delay) => {
-    let timeoutId;
-    return (...args) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        fn(...args);
-      }, delay);
+    // Debounce function to optimize search input
+    const debounceHandler = (fn, delay) => {
+        let timeoutId;
+        return (...args) => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                fn(...args);
+            }, delay);
+        };
     };
-  };
 
-  const doSearch = (value) => {
-    setSearch(value);
-  };
-  const handleSearch = debounceHandler(doSearch, 500);
-  // debounce handler end
+    const doSearch = (value) => {
+        setSearch(value);
+    };
 
-  // check either it exist or not
-  useEffect(() => {
-    setResult(findUser?.find((e) => e.email === search));
-  }, [search, findUser]);
+    const handleSearch = debounceHandler(doSearch, 500);
 
-  console.log(search);
+    useEffect(() => {
+        setResult(findUser?.find((e) => e.email === search));
+    }, [search, findUser]);
 
-  useEffect(()=>{
-    if(isSuccess){
-      setSearch("")
-      dispatch(modalOpen())
-    }
-  },[isSuccess,dispatch, role])
+    useEffect(() => {
+        if (isSuccess) {
+            setSearch("");
+            dispatch(modalOpen());
+        }
+    }, [isSuccess, dispatch, role]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    addUser({ email: search, role });
-  };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        addUser({ email: search, role });
+    };
 
-  return (
-    <form onSubmit={handleSubmit} className="text-base ControlForm">
-      {
-        modalCondition && <Modal></Modal>
-      }
-      <label htmlFor="product-name">Enter Email</label>
-      <input
-        type="text"
-        id="control-email"
-        name="control-email"
-        // value={search}
-        onChange={(e) => handleSearch(e.target.value)}
-        required
-      />
-      <label htmlFor="controller">Select Role</label>
-      <select
-        name="category"
-        required
-        id=""
-        onChange={(e) => setRole(e.target.value)}
-      >
-        <option value="moderator">Moderator</option>
-        <option value="admin">Admin</option>
-      </select>
-      <div className="submit-btn">
-        <Button disabled={!result}>Submit</Button>
-      </div>
-    </form>
-  );
+    return (
+        <form onSubmit={handleSubmit} className="w-full max-w-lg mx-auto bg-white p-6 shadow-md rounded-lg">
+            {modalCondition && <Modal />}
+
+            {/* Email Input */}
+            <div className="mb-4">
+                <label htmlFor="control-email" className="block text-sm font-medium text-gray-700">
+                    Enter Email
+                </label>
+                <input
+                    type="text"
+                    id="control-email"
+                    name="control-email"
+                    placeholder="Enter a valid email address"
+                    onChange={(e) => handleSearch(e.target.value)}
+                    required
+                    className="w-full mt-1 p-2 border border-gray-300 rounded-md text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <p className="text-xs text-gray-500 mt-1">This email must belong to an existing user.</p>
+            </div>
+
+            {/* Role Selection */}
+            <div className="mb-4">
+                <label htmlFor="controller" className="block text-sm font-medium text-gray-700">
+                    Select Role
+                </label>
+                <select
+                    name="category"
+                    required
+                    id="controller"
+                    onChange={(e) => setRole(e.target.value)}
+                    className="w-full mt-1 p-2 border border-gray-300 bg-gray-100 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                    <option value="moderator">Moderator</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <p className="text-xs text-gray-500 mt-1">Choose the role for the selected user.</p>
+            </div>
+
+            {/* Submit Button */}
+            <div className="mt-6">
+                <button
+                    type="submit"
+                    disabled={!result}
+                    className={`w-full py-2 px-4 text-white font-semibold rounded-md transition-all duration-300 ${
+                        result ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"
+                    }`}
+                >
+                    Submit
+                </button>
+            </div>
+        </form>
+    );
 };
 
 export default ControlForm;

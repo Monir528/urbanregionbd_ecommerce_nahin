@@ -1,6 +1,6 @@
 // src/firebase.ts
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth } from "@firebase/auth";
 import { getAnalytics, isSupported } from "firebase/analytics";
 
 export const firebaseConfig = {

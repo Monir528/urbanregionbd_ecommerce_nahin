@@ -1,7 +1,6 @@
 'use client';
 import {useGetProductsQuery} from "@/components/api/productApi";
-import TableBody from "@/components/TableBody/TableBody";
-import OrderTable from "@/components/OrderTable/OrderTable";
+import GarbageProduct from "@/components/GarbageProduct";
 
 const Overview = () => {
 
