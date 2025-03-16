@@ -36,8 +36,8 @@ const TextArea = ({ value, onChange }) => {
             editorState={editorState}
             onEditorStateChange={handleEditorChange}
             wrapperClassName="border rounded-md"
-            editorClassName="p-2 min-h-[200px]"
-            toolbarClassName="border-b"
+            editorClassName="p-2 min-h-[200px] text-black bg-white"
+            toolbarClassName="border-b text-black"
             toolbar={{
               options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link', 'emoji', 'image', 'remove', 'history'],
               inline: { options: ['bold', 'italic', 'underline', 'strikethrough'] },

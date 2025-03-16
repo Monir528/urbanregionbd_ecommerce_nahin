@@ -12,7 +12,7 @@ const Overview = () => {
             <div className="product container">
                 {modalCondition && <Modal></Modal>}
                 <div>
-                    <h1 className="text-2xl font-semibold underline">Upload a Product</h1>
+                    {/*<h1 className="text-2xl font-semibold underline">Upload a Product</h1>*/}
                     <ProductUploadForm></ProductUploadForm>
                 </div>
             </div>

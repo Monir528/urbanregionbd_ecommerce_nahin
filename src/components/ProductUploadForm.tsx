@@ -1,465 +1,413 @@
 /* eslint-disable no-unused-vars */
-
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useAddProductMutation } from "@/components/api/productApi";
 import { modalOpen } from "@/components/api/cartHandler";
 import { useGetCategoryQuery } from "@/components/api/categoryApi";
-import {useGetSubCategoryQuery} from "@/components/api/subCategoryApi"
-import axios from "axios";
+import { useGetSubCategoryQuery } from "@/components/api/subCategoryApi";
 import TextArea from "@/components/TextArea";
 
 export default function ProductUploadForm() {
-  // get Category 
+  // Fetch Categories
   const { data: getCatData, isSuccess: getCatSuccess } = useGetCategoryQuery();
 
-  // get Subcategory 
-  const {data: getSubCatData, isSuccess:getSubCatSuccess, isLoading: subCatLoading}= useGetSubCategoryQuery()
+  // Fetch Subcategories
+  const { data: getSubCatData, isSuccess: getSubCatSuccess, isLoading: subCatLoading } = useGetSubCategoryQuery();
 
-  // Add Product
-  const [addProduct, { data, isError, isLoading, isSuccess:addSuccess }] =
-    useAddProductMutation();
+  // Add Product Mutation
+  const [addProduct, { isLoading, isSuccess: addSuccess }] = useAddProductMutation();
 
   const selector = useSelector((state) => state.cartHandler);
-  
- 
+  const dispatch = useDispatch();
+
+  // Form State
   const [productName, setProductName] = useState("");
   const [review, setReview] = useState(5);
   const [price, setPrice] = useState("");
   const [videoLink, setVideoLink] = useState("");
   const [otherLink, setOtherLink] = useState("");
-  const [category, setCategory] = useState( getCatData?.[0]?.category || "Add Category");
+  const [category, setCategory] = useState(getCatData?.[0]?.category || "");
   const [subcategory, setSubcategory] = useState([]);
   const [description, setDescription] = useState("");
   const [variants, setVariants] = useState("");
   const [discount, setDiscount] = useState("");
-  const [extra, setExtra] = useState(null);
+  const [extra, setExtra] = useState("");
   const [extraInfo, setExtraInfo] = useState("");
   const [brand, setBrand] = useState("");
   const [shortDescription, setShortDescription] = useState("");
-  const [files, setFile] = useState([]);
-  const [message, setMessage] = useState();
-  const [error, setError]= useState(true)
-  const [stock, setStock]= useState(true)
+  const [files, setFiles] = useState([]);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState(true);
+  const [stock, setStock] = useState(true);
 
-  const dispatch = useDispatch();
-
+  // File Handling
   const handleFile = (e) => {
     setMessage("");
-    let file = e.target.files;
-    for (let i = 0; i < file.length; i++) {
-      const fileType = file[i]["type"];
-      const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
-      if (validImageTypes.includes(fileType)) {
-        setFile([...files, file[i]]);
-      } else {
-        setMessage("only images accepted");
-      }
+    const selectedFiles = Array.from(e.target.files);
+    const validFiles = selectedFiles.filter((file) =>
+        ["image/gif", "image/jpeg", "image/png"].includes(file.type)
+    );
+    if (validFiles.length < selectedFiles.length) {
+      setMessage("Only GIF, JPEG, and PNG files are accepted.");
     }
+    setFiles((prevFiles) => [...prevFiles, ...validFiles]);
+    setError(false);
   };
 
-  const removeImage = (i) => {
-    setFile(files.filter((x) => x.name !== i));
+  const removeImage = (fileName) => {
+    setFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
+    if (files.length <= 1) setError(true);
   };
 
+  // Form Submission
   const handleUpload = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    for (let index = 0; index < files?.length; index++) {
-      const file = files[index];
-      formData.append("files", file);
+    if (files.length === 0) {
+      setError(true);
+      return;
     }
-    formData.append("message", JSON.stringify(details));
-
-    addProduct(formData)
+    const formData = new FormData();
+    files.forEach((file) => formData.append("files", file));
+    formData.append("details", JSON.stringify({
+      productName,
+      brand,
+      review,
+      price,
+      videoLink,
+      otherLink,
+      category,
+      description,
+      variants,
+      subcategory,
+      discount,
+      extra,
+      extraInfo,
+      shortDescription,
+      stock,
+    }));
+    addProduct(formData);
   };
 
-  const details = {
-    productName,
-    brand,
-    review,
-    price,
-    videoLink,
-    otherLink,
-    category,
-    description,
-    variants,
-    subcategory,
-    discount,
-    extra,
-    extraInfo,
-    shortDescription,
-    stock
-  };
-
+  // Modal Trigger on Success
   useEffect(() => {
     if (addSuccess) {
       dispatch(modalOpen());
+      setFiles([]);
+      setError(true);
     }
   }, [addSuccess, dispatch]);
 
-  useEffect(()=>{
-    if(files?.length > 0){
-      setError(false)
-    }
-  },[files])
+  // Error State for File Upload
+  useEffect(() => {
+    setError(files.length === 0);
+  }, [files]);
 
-  
-  const  handleChange=(e)=> {
+  // Subcategory Checkbox Handler
+  const handleChange = (e) => {
+    const value = e.target.value;
     if (e.target.checked) {
-       setSubcategory([...subcategory, e.target.value]);
+      setSubcategory((prev) => [...prev, value]);
     } else {
-       setSubcategory(subcategory.filter((item) => item !== e.target.value));
+      setSubcategory((prev) => prev.filter((item) => item !== value));
     }
- }
+  };
 
   return (
-    <form onSubmit={handleUpload}>
-      <div className="space-y-12">
-        <div className="border-b border-gray-900/10 pb-12">
-          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="productName"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Product Name
-              </label>
-              <div className="mt-2">
-                <input
-                  onChange={(e) => setProductName(e.target.value)}
-                  type="text"
-                  name="product-name"
-                  id="product-name"
-                  autoComplete="given-name"
-                  className="block px-4 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
+      <form onSubmit={handleUpload} className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">Upload a Product</h2>
 
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="review"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Review
-              </label>
-              <div className="mt-2">
-                <input
-                  min="1"
-                  max="5"
-                  onChange={(e) => setReview(e.target.value)}
-                  type="number"
-                  name="review"
-                  id="review"
-                  autoComplete="family-name"
-                  className="block  px-4 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Product Name */}
+          <div>
+            <label htmlFor="productName" className="block text-sm font-medium text-gray-700 mb-1">
+              Product Name
+            </label>
+            <input
+                value={productName}
+                onChange={(e) => setProductName(e.target.value)}
+                type="text"
+                id="productName"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-gray-900"
+                placeholder="Enter product name"
+            />
+          </div>
 
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="Regular Price"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Regular Price
-              </label>
-              <div className="mt-2">
-                <input
-                  onChange={(e) => setPrice(e.target.value)}
-                  type="text"
-                  name="price"
-                  id="price"
-                  autoComplete="family-name"
-                  className="block  px-4 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
+          {/* Review */}
+          <div>
+            <label htmlFor="review" className="block text-sm font-medium text-gray-700 mb-1">
+              Review (1-5)
+            </label>
+            <input
+                value={review}
+                onChange={(e) => setReview(Math.max(1, Math.min(5, e.target.value)))}
+                type="number"
+                id="review"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-gray-900"
+                placeholder="Enter review"
+            />
+          </div>
 
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="Regular Price"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Discount Price
-              </label>
-              <div className="mt-2">
-                <input
-                  onChange={(e) => setDiscount(e.target.value)}
-                  type="text"
-                  name="discount"
-                  id="discount"
-                  autoComplete="family-name"
-                  className="block w-full  px-4 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
+          {/* Regular Price */}
+          <div>
+            <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
+              Regular Price
+            </label>
+            <input
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                type="text"
+                id="price"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-gray-900"
+                placeholder="Enter price"
+            />
+          </div>
 
-            <div className="col-span-full mb-4">
-              <label
-                htmlFor="description"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Short Description
-              </label>
-              {/* // text area  */}
+          {/* Discount Price */}
+          <div>
+            <label htmlFor="discount" className="block text-sm font-medium text-gray-700 mb-1">
+              Discount Price
+            </label>
+            <input
+                value={discount}
+                onChange={(e) => setDiscount(e.target.value)}
+                type="text"
+                id="discount"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-gray-900"
+                placeholder="Enter discount"
+            />
+          </div>
 
-              <TextArea
-                description={shortDescription}
-                setDescription={setShortDescription}
-              ></TextArea>
-            </div>
-             {/* category section  */}
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="category"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
+          {/* Short Description */}
+          <div className="md:col-span-2">
+            <label htmlFor="shortDescription" className="block text-sm font-medium text-gray-700 mb-1">
+              Short Description
+            </label>
+            <TextArea value={shortDescription} onChange={setShortDescription} />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-rows-2 gap-4">
+            {/* Category */}
+            <div>
+              <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
                 Category
               </label>
-              <div className="mt-2">
-                <select
-                  required
-                  id="category"
-                  name="category"
-                  autoComplete="category"
+              <select
+                  value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                >
-                  {getCatSuccess &&
-                    getCatData?.length > 0 &&
-                    getCatData.map((item) => (
-                      <option key={item._id} value={item.category}>
-                        {item.category}
-                      </option>
+                  id="category"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-gray-900"
+              >
+                {getCatSuccess && getCatData?.length > 0 && (
+                    <option value="">Select a category</option>
+                )}
+                {getCatSuccess &&
+                    getCatData?.map((item) => (
+                        <option key={item._id} value={item.category}>
+                          {item.category}
+                        </option>
                     ))}
-                </select>
-              </div>
+              </select>
             </div>
-
-            {/* sub category  */}
-            <div className="sm:col-span-3 text-base">
-              <label
-                htmlFor="subcategory"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Subcategory
-              </label>
-              {/* // subcategory data  */}
-              {
-                subCatLoading && "Sorry For Loading"
-              }
-              {
-                !subCatLoading && getSubCatSuccess && getSubCatData?.length >  0 && (
-                  <div>
-                    {
-                      getSubCatData.map(item=><div key={item._id} >
-                        <input className="font-thin rounded-full" onChange = {handleChange} value={item.name} type="checkbox"/> <span>{item.name?.toUpperCase()}</span>
-                      </div> )
-                    }
-                  </div>
-                )
-              }
-            </div>
-
-            {/* // for stock */}
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="category"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
+            {/* Stock */}
+            <div>
+              <label htmlFor="stock" className="block text-sm font-medium text-gray-700 mb-1 mt-1">
                 Stock Available
               </label>
-              <div className="mt-2">
-                <select
-                  required
+              <select
+                  value={stock}
+                  onChange={(e) => setStock(e.target.value === "true")}
                   id="stock"
-                  name="stock"
-                  autoComplete="stock"
-                  onChange={(e) => setStock(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                >
-                  <option value={true}>Available</option>
-                  <option value={false}>Not Available</option>
-                </select>
-              </div>
-            </div>
-            {/* // stock end  */}
-
-            <div className="col-span-full mb-4">
-              <label
-                htmlFor="description"
-                className="block text-sm font-medium leading-6 text-gray-900"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-gray-900"
               >
-                Description
-              </label>
-              {/* // text area  */}
-
-              <TextArea
-                description={description}
-                setDescription={setDescription}
-              ></TextArea>
-            </div>
-
-            <div className="col-span-full">
-              <label
-                htmlFor="street-address"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Brand Name
-              </label>
-              <div className="mt-2">
-                <input
-                  onChange={(e) => setBrand(e.target.value)}
-                  type="text"
-                  name="brand"
-                  id="brand"
-                  className="block w-full  px-4 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div className="col-span-full">
-              <label
-                htmlFor="street-address"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Video Link
-              </label>
-              <div className="mt-2">
-                <input
-                  onChange={(e) => setVideoLink(e.target.value)}
-                  type="text"
-                  name="video"
-                  id="video"
-                  className="block px-4 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div className="col-span-full">
-              <label
-                htmlFor="Other Link"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Other links
-              </label>
-              <div className="mt-2">
-                <input
-                  onChange={(e) => setOtherLink(e.target.value)}
-                  type="text"
-                  name="otherLink"
-                  id="otherLink"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
+                <option value={true}>Available</option>
+                <option value={false}>Not Available</option>
+              </select>
             </div>
           </div>
-        </div>
 
-        {/* // photo  */}
 
-        <div className="flex justify-center items-center px-3">
-          <div className="rounded-lg shadow-xl bg-gray-50 md:w-1/2 w-[360px]">
-            <div className="m-4">
-              <span className="flex justify-center items-center text-[12px] mb-1 text-red-500">
-                {message}
-              </span>
-              <div className="flex items-center justify-center w-full">
-                <label className="flex cursor-pointer flex-col w-full h-32 border-2 rounded-md border-dashed hover:bg-gray-100 hover:border-gray-300">
-                  <div className="flex flex-col items-center justify-center pt-7">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-12 h-12 text-gray-400 group-hover:text-gray-600"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <p className="pt-1 text-sm tracking-wider text-gray-400 group-hover:text-gray-600">
-                      Select a photo
-                    </p>
-                  </div>
-                  <input
+          {/* Subcategory */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Subcategory</label>
+            {subCatLoading && <p className="text-gray-600">Loading...</p>}
+            {!subCatLoading && getSubCatSuccess && getSubCatData?.length > 0 && (
+                <div className="space-y-1">
+                  {getSubCatData.map((item) => (
+                      <div key={item._id} className="flex items-center">
+                        <input
+                            checked={subcategory.includes(item.name)}
+                            onChange={handleChange}
+                            value={item.name}
+                            type="checkbox"
+                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                        />
+                        <span className="ml-2 text-gray-700">{item.name.toUpperCase()}</span>
+                      </div>
+                  ))}
+                </div>
+            )}
+          </div>
+
+
+
+          {/* Description */}
+          <div className="md:col-span-2">
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+              Description
+            </label>
+            <TextArea value={description} onChange={setDescription} />
+          </div>
+
+          {/* Brand Name */}
+          <div className="md:col-span-2">
+            <label htmlFor="brand" className="block text-sm font-medium text-gray-700 mb-1">
+              Brand Name
+            </label>
+            <input
+                value={brand}
+                onChange={(e) => setBrand(e.target.value)}
+                type="text"
+                id="brand"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-gray-900"
+                placeholder="Enter brand name"
+            />
+          </div>
+
+          {/* Video Link */}
+          <div className="md:col-span-2">
+            <label htmlFor="videoLink" className="block text-sm font-medium text-gray-700 mb-1">
+              Video Link
+            </label>
+            <input
+                value={videoLink}
+                onChange={(e) => setVideoLink(e.target.value)}
+                type="text"
+                id="videoLink"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-gray-900"
+                placeholder="Enter video URL"
+            />
+          </div>
+
+          {/* Other Links */}
+          <div className="md:col-span-2">
+            <label htmlFor="otherLink" className="block text-sm font-medium text-gray-700 mb-1">
+              Other Links
+            </label>
+            <input
+                value={otherLink}
+                onChange={(e) => setOtherLink(e.target.value)}
+                type="text"
+                id="otherLink"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-gray-900"
+                placeholder="Enter other URLs"
+            />
+          </div>
+
+          {/* File Upload Section */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
+            <div className="flex items-center justify-center w-full">
+              <label
+                  htmlFor="file-upload"
+                  className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
+              >
+                <svg
+                    className="w-8 h-8 text-gray-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  />
+                </svg>
+                <p className="text-sm text-gray-600">Drag and drop or click to upload</p>
+                <input
+                    id="file-upload"
                     type="file"
                     onChange={handleFile}
-                    className="opacity-0"
-                    multiple="multiple"
-                    name="files[]"
-                  />
+                    className="hidden"
+                    multiple
+                />
+              </label>
+            </div>
+            {message && <p className="text-sm text-red-600 mt-2">{message}</p>}
+            {files.length > 0 && (
+                <div className="grid grid-cols-4 gap-4 mt-4">
+                  {files.map((file, index) => (
+                      <div key={index} className="relative">
+                        <img
+                            src={URL.createObjectURL(file)}
+                            alt={`Preview ${index}`}
+                            className="w-full h-24 object-cover rounded-md"
+                        />
+                        <button
+                            onClick={() => removeImage(file.name)}
+                            className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                        >
+                          ×
+                        </button>
+                      </div>
+                  ))}
+                </div>
+            )}
+            {error && <p className="text-sm text-red-600 mt-2">Please upload at least one image</p>}
+          </div>
+
+          {/* Extra Information */}
+          <div className="md:col-span-2">
+            <label className="block text-lg font-medium text-gray-700 mb-2">Extra Information</label>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="extraInfo" className="block text-sm font-medium text-gray-700 mb-1">
+                  Color or Size
                 </label>
+                <input
+                    value={extraInfo}
+                    onChange={(e) => setExtraInfo(e.target.value)}
+                    type="text"
+                    id="extraInfo"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-gray-900"
+                    placeholder="e.g., Red, Blue"
+                />
               </div>
-              <div className="flex flex-wrap gap-2 mt-2">
-                {files.map((file, key) => {
-                  return (
-                    <div key={key} className="overflow-hidden relative">
-                      <i
-                        onClick={() => {
-                          removeImage(file.name);
-                        }}
-                        className="mdi mdi-close absolute right-1 hover:text-white cursor-pointer"
-                      ></i>
-                      <img
-                        className="h-20 w-20 rounded-md"
-                        src={URL.createObjectURL(file)}
-                      />
-                    </div>
-                  );
-                })}
+              <div>
+                <label htmlFor="extra" className="block text-sm font-medium text-gray-700 mb-1">
+                  Size Properties
+                </label>
+                <input
+                    value={extra}
+                    onChange={(e) => setExtra(e.target.value)}
+                    type="text"
+                    id="extra"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-gray-900"
+                    placeholder="e.g., S, M, L"
+                />
               </div>
             </div>
           </div>
+
+          {/* Submit Buttons */}
+          <div className="mt-6 flex justify-end gap-4">
+            <button
+                type="button"
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+            >
+              Cancel
+            </button>
+            <button
+                type="submit"
+                disabled={isLoading || error}
+                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-400"
+            >
+              {isLoading ? "Uploading..." : "Save"}
+            </button>
+          </div>
         </div>
-
-        {
-          error && <p className="text-red-500 font-bold text-2xl">Upload image</p>
-        }
-
-        {/* image upload end   */}
-
-        <p>Extra Information</p>
-        <div>
-          <label htmlFor="Available Size or Color">Color or Size</label>
-          <input
-            onChange={(e) => setExtraInfo(e.target.value)}
-            placeholder="Extra information like Color or Size"
-            type="text"
-            name="otherLink"
-            id="otherLink"
-            className="block px-4 mb-4 w-[300px] rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-          />
-          <label htmlFor="Color or Size Properties">Color or Size Properties</label>
-          <input
-            onChange={(e) => setExtra(e.target.value)}
-            placeholder="S, M, L, XL, XXL"
-            type="text"
-            name="otherLink"
-            id="otherLink"
-            className="block px-4 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-          />
-        </div>
-      </div>
-      {/* <ImageUpload></ImageUpload>  */}
-      <div className="mt-6 flex items-center justify-end gap-x-6">
-        <button
-          type="button"
-          className="text-sm font-semibold leading-6 text-gray-900"
-        >
-          Cancel
-        </button>
-        <button
-        disabled={files?.length == 0}
-          type="submit"
-          className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          Save
-        </button>
-      </div>
-    </form>
+      </form>
   );
 }
