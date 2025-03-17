@@ -15,7 +15,7 @@ import popUpSlice from "@/components/api/quickViewSlice";
 import sizeModal from "@/components/api/sizeModalSlice";
 import totalCount from "@/components/api/reviewSlice";
 import { apiSlice } from "@/components/api/apiSlice";
-import { orderApi } from "@/components/confirmOrder";
+import { confirmOrder } from "@/components/api/confirmOrder/confirmOrder";
 import authReducer from "@/reduxToolKit/authSlice";
 
 export const store = configureStore({
@@ -25,7 +25,7 @@ export const store = configureStore({
         [productApi.reducerPath]: productApi.reducer,
         [categoryApi.reducerPath]: categoryApi.reducer,
         [subCategoryApi.reducerPath]: subCategoryApi.reducer, // Add this line
-        [orderApi.reducerPath]: orderApi.reducer,
+        [confirmOrder.reducerPath]: confirmOrder.reducer,
         auth: authReducer,
         cardOrder: cardOrderSlice,
         order: orderProductSlice,
@@ -43,7 +43,7 @@ export const store = configureStore({
             .concat(productApi.middleware)
             .concat(categoryApi.middleware)
             .concat(subCategoryApi.middleware) // Add this line
-            .concat(orderApi.middleware),
+            .concat(confirmOrder.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

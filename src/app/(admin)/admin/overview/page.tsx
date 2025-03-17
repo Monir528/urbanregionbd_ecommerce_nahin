@@ -1,6 +1,6 @@
 'use client';
 
-import {useGetAllOrderedQuery} from "@/components/confirmOrder";
+import {useGetAllOrderedQuery} from "@/components/api/confirmOrder/confirmOrder";
 import {useMemo} from "react";
 import {dateBetweenFilterFn, DateRangeColumnFilter} from "@/components/filters";
 import TableContainer from "@/components/TableContainer";

@@ -1,7 +1,7 @@
 // src/reduxToolKit/authSlice.ts
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { signInWithEmailAndPassword, getAuth, User } from "firebase/auth";
-import { auth } from "@/firebase"; // Ensure your firebase config is correctly imported
+import { signInWithEmailAndPassword, signOut, getAuth, User } from "firebase/auth";
+import { auth } from "@/firebase";
 
 // Helper function to extract relevant user properties
 const extractUserData = async (user: User) => ({
@@ -33,7 +33,6 @@ export const initializeAuth = createAsyncThunk(
     "auth/initializeAuth",
     async (_, { rejectWithValue }) => {
         const authInstance = getAuth();
-        console.log("authInstance", authInstance);
         return new Promise(async (resolve, reject) => {
             const unsubscribe = authInstance.onAuthStateChanged(
                 async (user) => {
@@ -55,6 +54,16 @@ export const initializeAuth = createAsyncThunk(
         });
     }
 );
+
+// Async thunk for logging out a user
+export const logoutUser = createAsyncThunk("auth/logoutUser", async (_, { rejectWithValue }) => {
+    try {
+        await signOut(auth); // Firebase logout
+        return null; // Clears user state
+    } catch (error: any) {
+        return rejectWithValue(error.message);
+    }
+});
 
 interface AuthState {
     user: null | {
@@ -79,12 +88,7 @@ const initialState: AuthState = {
 const authSlice = createSlice({
     name: "auth",
     initialState,
-    reducers: {
-        logoutUser: (state) => {
-            state.user = null;
-            state.isAuthenticated = false;
-        },
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder
             // loginUser cases
@@ -109,7 +113,6 @@ const authSlice = createSlice({
             .addCase(initializeAuth.fulfilled, (state, action) => {
                 state.loading = false;
                 if (action.payload) {
-                    console.log("state", action.payload);
                     state.user = action.payload;
                     state.isAuthenticated = true;
                 } else {
@@ -122,9 +125,21 @@ const authSlice = createSlice({
                 state.error = action.payload as string;
                 state.user = null;
                 state.isAuthenticated = false;
+            })
+            // Logout cases
+            .addCase(logoutUser.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(logoutUser.fulfilled, (state) => {
+                state.loading = false;
+                state.user = null;
+                state.isAuthenticated = false;
+            })
+            .addCase(logoutUser.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
             });
     },
 });
 
-export const { logoutUser } = authSlice.actions;
 export default authSlice.reducer;
