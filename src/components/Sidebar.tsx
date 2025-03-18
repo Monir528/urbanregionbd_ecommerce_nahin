@@ -77,7 +77,7 @@ const Sidebar = () => {
                   </span>
                                 )}
                             </div>
-                            <span className={`origin-left duration-200 ${!open && "hidden"}`}>{menu.title}</span>
+                            <span className={`origin-left duration-200 text-gray-700  ${!open && "hidden"}`}>{menu.title}</span>
                         </li>
                     </Link>
                 ))}
