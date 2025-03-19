@@ -16,6 +16,7 @@ import {
 import { GrOrderedList } from "react-icons/gr";
 import { IoIosCreate } from "react-icons/io";
 import { AiOutlineFundProjectionScreen } from "react-icons/ai";
+import { FaPeopleGroup } from "react-icons/fa6";
 import { FaSignOutAlt } from "react-icons/fa";
 
 const Sidebar = () => {
@@ -34,7 +35,8 @@ const Sidebar = () => {
         { title: "Upload", icon: <IoIosCreate />, link: "/admin/upload" },
         { title: "Control", icon: <MdOutlineAdminPanelSettings />, link: "/admin/control" },
         { title: "Garbage", icon: <MdAutoDelete />, link: "/admin/garbage" },
-        { title: "Category", icon: <MdCategory />, link: "/admin/createCategory" },
+        { title: "Category", icon: <MdCategory />, link: "/admin/categories" },
+        { title: "Customers", icon: <FaPeopleGroup />, link: "/admin/customers" },
         { title: "Overview", icon: <AiOutlineFundProjectionScreen />, link: "/admin/overview" },
         { title: "Logout", icon: <FaSignOutAlt className="text-red-600" />, onClick: handleLogout },
     ];

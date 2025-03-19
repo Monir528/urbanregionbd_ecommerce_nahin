@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { Radio } from "react-loader-spinner";
 import { orderFormClose } from "@/components/cartHandler";
 import { clearCart } from "@/components/api/cartSlice";
+import { usePurchaseOrderMutation } from "@/components/api/confirmOrder/confirmOrder"; // Adjust import path
 
 interface OrderedItem {
   id?: string;
@@ -24,6 +25,16 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
 
   const router = useRouter();
 
+  // Add the purchaseOrder mutation hook
+  const [
+    purchaseOrder,
+    {
+      data: successData,
+      isSuccess: successPurchase,
+      isLoading: purchaseLoadingMutation,
+    },
+  ] = usePurchaseOrderMutation();
+
   const handleAddress = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setPurchaseLoading(true);
@@ -40,17 +51,15 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
     };
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/createOrder`, {
+      // Create client
+      await fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/addClient`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderStatus),
+        body: JSON.stringify({ name, phone, address, division }),
       });
 
-      if (response.ok) {
-        dispatch(orderFormClose());
-        dispatch(clearCart());
-        router.push("/paymentPage");
-      }
+      // Submit order
+      await purchaseOrder(orderStatus);
     } catch (error) {
       console.error("Order submission error:", error);
     } finally {
@@ -58,9 +67,19 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
     }
   };
 
+  // Add useEffect to handle navigation after successful order
+  useEffect(() => {
+    if (successPurchase && successData) {
+      dispatch(orderFormClose());
+      dispatch(clearCart());
+      // Use query parameters in Next.js instead of state
+      router.push(`/paymentPage?division=${division}&insertedId=${successData.insertedId}`);
+    }
+  }, [successPurchase, successData, division, dispatch, router]);
+
   return (
       <div className="isolate bg-white px-6 lg:px-8">
-        {purchaseLoading && (
+        {(purchaseLoading || purchaseLoadingMutation) && (
             <Radio
                 visible={true}
                 height="80"
@@ -71,15 +90,9 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
                 wrapperClass=""
             />
         )}
-        <form
-            onSubmit={handleAddress}
-            className="mx-auto max-w-xl flex flex-col gap-4"
-        >
+        <form onSubmit={handleAddress} className="mx-auto max-w-xl flex flex-col gap-4">
           <div>
-            <label
-                htmlFor="first-name"
-                className="block text-md font-semibold leading-6 text-gray-900"
-            >
+            <label htmlFor="first-name" className="block text-md font-semibold leading-6 text-gray-900">
               আপনার নাম <span className="text-red-600 text-md">*</span>
             </label>
             <div className="mt-2.5">
@@ -96,10 +109,7 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
           </div>
 
           <div className="sm:col-span-2">
-            <label
-                htmlFor="phone-number"
-                className="block text-md font-semibold leading-6 text-gray-900"
-            >
+            <label htmlFor="phone-number" className="block text-md font-semibold leading-6 text-gray-900">
               ফোন নম্বর <span className="text-red-600 text-md font-bold">*</span>
             </label>
             <div className="relative mt-2.5">
@@ -128,10 +138,7 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
           </div>
 
           <div className="col-span-full">
-            <label
-                htmlFor="street-address"
-                className="block text-md font-bold leading-6 text-gray-900"
-            >
+            <label htmlFor="street-address" className="block text-md font-bold leading-6 text-gray-900">
               ঠিকানা <span className="font-bold text-lg text-red-600">*</span>
             </label>
             <div className="mt-2">
@@ -161,7 +168,6 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
                 />{" "}
                 ঢাকার ভিতর
               </label>
-
               <label>
                 <input
                     onChange={(e) => setDivision(e.target.value)}

@@ -1,69 +1,148 @@
-/* eslint-disable no-unused-vars */
-//  eslint-disable no-unused-vars
+// components/CategoryForm.tsx
+import { useState } from "react";
+import {
+    useGetCategoryQuery,
+    useAddCategoryMutation,
+    useDeleteCategoryMutation,
+    useUpdateCategoryMutation,
+} from "@/components/api/categoryApi";
+import Modal from "@/components/CategoryForm/update_modal";
 
-import {useEffect, useState } from "react";
-import { useAddCategoryMutation, useGetCategoryQuery } from "@/components/api/categoryApi";
+const CategoryForm = () => {
+    const [file, setFile] = useState<File | null>(null);
+    const [categoryName, setCategoryName] = useState("");
+    const [editingCategory, setEditingCategory] = useState<any>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-function CategoryForm() {
-  const [file, setFile] = useState();
-  const [category, setCategory] = useState("");
-  const [addCategory,{isLoading:addLoading}]=useAddCategoryMutation()
-  const {data:getCatData, isSuccess: getCatSuccess}= useGetCategoryQuery()
- 
-  const upload = () => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("category", category.toLowerCase());
+    const { data: categories, isLoading } = useGetCategoryQuery();
+    const [addCategory] = useAddCategoryMutation();
+    const [deleteCategory] = useDeleteCategoryMutation();
+    const [updateCategory] = useUpdateCategoryMutation();
 
-    addCategory(formData)
-  };
+    const handleAddOrUpdate = async () => {
+        const formData = new FormData();
+        if (file) formData.append("file", file);
+        formData.append("category", categoryName.toLowerCase());
 
-  const handleDelete = (imageName) => {
-    fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/category/${imageName}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((res) => console.log(res));
-  };
-
-  return (
-    <div className="container mx-auto max-w-2xl py-5 sm:px-6 sm:py-12 lg:max-w-7xl">
-      
-    {addLoading &&  <h2 className="text-red-500 font-bold text-4xl mb-8">দয়া করে window রিলোড করুন। </h2> }
-      <input className="m-2" type="file" onChange={(e) => setFile(e.target.files[0])} />
-      
-      <input type="text" placeholder="Category Name" onChange={(e) => setCategory(e.target.value)} />
-      <button  className="bg-orange-500 m-2 font-semibold text-white text-base rounded-md p-2" type="button" onClick={upload}>
-        Create Category
-      </button>
-
-      <div className="grid mt-4 p-4 bg-gray-100 grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-        {
-          getCatSuccess && getCatData?.length===0 && "No Category Found"
+        try {
+            if (editingCategory) {
+                await updateCategory({ id: editingCategory._id, data: formData }).unwrap();
+            } else {
+                await addCategory(formData).unwrap();
+            }
+            resetForm();
+        } catch (error) {
+            console.error("Error saving category:", error);
         }
-        {getCatSuccess && getCatData?.length > 0 && getCatData.map((item) => (
-          <div key={item._id} className="border-2  overflow-hidden">
-            <div className="flex justify-between font-semibold bg-white px-4 text-xl items-center">
-              <p className="">{item?.category}</p>
-              <p
-                onClick={() => handleDelete(item?.image)}
-                className="cursor-pointer text-red-500 text-sm"
-              >
-                DELETE
-              </p>
+    };
+
+    const handleEdit = (category: any) => {
+        setEditingCategory(category);
+        setCategoryName(category.category);
+        setFile(null); // Reset file; user can upload a new one
+        setIsModalOpen(true);
+    };
+
+    const handleDelete = async (id: string) => {
+        if (confirm("Are you sure you want to delete this category?")) {
+            try {
+                await deleteCategory(id).unwrap();
+            } catch (error) {
+                console.error("Error deleting category:", error);
+            }
+        }
+    };
+
+    const resetForm = () => {
+        setFile(null);
+        setCategoryName("");
+        setEditingCategory(null);
+        setIsModalOpen(false);
+    };
+
+    return (
+        <div>
+            {/* Add/Edit Form */}
+            <div className="mb-6">
+                <input
+                    type="file"
+                    onChange={(e) => setFile(e.target.files?.[0] || null)}
+                    className="mb-2"
+                />
+                <input
+                    type="text"
+                    value={categoryName}
+                    onChange={(e) => setCategoryName(e.target.value)}
+                    placeholder="Category Name"
+                    className="border p-2 mr-2"
+                />
+                <button
+                    onClick={handleAddOrUpdate}
+                    className="bg-blue-500 text-white p-2 rounded"
+                >
+                    {editingCategory ? "Update" : "Save"}
+                </button>
             </div>
-            <div className="max-w-[300px]">
-              <img
-                key={item._id}
-                src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${item.image}`}
-                className="object-cover"
-                alt=""
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+
+            {/* Grid View */}
+            {isLoading ? (
+                <p>Loading categories...</p>
+            ) : (
+                <div className="grid grid-cols-3 gap-4">
+                    {categories?.map((cat: any) => (
+                        <div
+                            key={cat._id}
+                            className="border p-4 relative group"
+                        >
+                            <img
+                                src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${cat.image}`}
+                                alt={cat.category}
+                                className="w-full h-32 object-cover"
+                            />
+                            <p className="text-center mt-2">{cat.category}</p>
+                            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 flex space-x-2">
+                                <button
+                                    onClick={() => handleEdit(cat)}
+                                    className="bg-yellow-500 text-white p-1 rounded"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(cat._id)}
+                                    className="bg-red-500 text-white p-1 rounded"
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {/* Edit Modal */}
+            <Modal isOpen={isModalOpen} onClose={resetForm}>
+                <h2 className="text-xl mb-4">Edit Category</h2>
+                <input
+                    type="file"
+                    onChange={(e) => setFile(e.target.files?.[0] || null)}
+                    className="mb-2"
+                />
+                <input
+                    type="text"
+                    value={categoryName}
+                    onChange={(e) => setCategoryName(e.target.value)}
+                    placeholder="Category Name"
+                    className="border p-2 mb-2 w-full"
+                />
+                <button
+                    onClick={handleAddOrUpdate}
+                    className="bg-blue-500 text-white p-2 rounded"
+                >
+                    Update
+                </button>
+            </Modal>
+        </div>
+    );
+};
+
 export default CategoryForm;

@@ -1,46 +1,48 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-// Define the base query with the API root URL
 const baseQuery = fetchBaseQuery({
-  baseUrl: process.env.NEXT_PUBLIC_ROOT_API, // Adjust based on your env setup
+  baseUrl: process.env.NEXT_PUBLIC_ROOT_API,
 });
 
-// Create the category API slice
 export const categoryApi = createApi({
-  reducerPath: "categoryApi", // Unique key for this API’s state in the store
+  reducerPath: "categoryApi",
   baseQuery,
-  tagTypes: ["Category"], // Tags for cache management
+  tagTypes: ["Category"],
   endpoints: (builder) => ({
-    // Fetch all categories
     getCategory: builder.query({
       query: () => "/getCategories",
-      providesTags: ["Category"], // Tags this query provides
+      providesTags: ["Category"],
     }),
-
-    // Add a new category
     addCategory: builder.mutation({
       query: (data) => ({
         url: "/createCategory",
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Category"], // Invalidates cache on mutation
+      invalidatesTags: ["Category"],
     }),
-
-    // Delete a category by ID
     deleteCategory: builder.mutation({
       query: (id) => ({
-        url: `/deleteCategory/${id}`,
+        url: `/category/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Category"], // Invalidates cache on mutation
+      invalidatesTags: ["Category"],
+    }),
+    // New endpoint for updating a category
+    updateCategory: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/updateCategory/${id}`, // Adjust URL based on your backend
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Category"],
     }),
   }),
 });
 
-// Export hooks for use in components
 export const {
   useGetCategoryQuery,
   useAddCategoryMutation,
   useDeleteCategoryMutation,
+  useUpdateCategoryMutation,
 } = categoryApi;

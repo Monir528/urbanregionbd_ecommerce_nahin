@@ -8,6 +8,7 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import EmptyCart from "@/components/EmptyCart";
 import { useRouter } from "next/navigation";
 import FooterBanner from "@/components/FooterBanner"
+import OrderForm from "@/components/OrderForm";
 
 const HomePage = () => {
 
@@ -24,9 +25,12 @@ const HomePage = () => {
     }, []);
 
     const [totalPrice, setTotalPrice] = useState(0);
+    const { formCondition } = useSelector((state) => state.cartHandler);
+
 
     return (
         <main>
+            {formCondition && <OrderForm></OrderForm>}
             <div>
                 <div className="flex cursor-cell hover:bg-gray-200 hover:text-gray-500 flex-col items-center justify-center w-full pb-4 bg-gray-500 text-gray-200 h-32 lg:h-52 duration-300">
                     <h1 className="text-5xl md:text-6xl lg:text-8xl font-bold font-abc">
