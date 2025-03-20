@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import OrderTableBody from "../OrderTableBody/OrderTableBody";
 import { useGetAllOrderedQuery } from "@/components/api/confirmOrder/confirmOrder";
 import { useState } from "react";

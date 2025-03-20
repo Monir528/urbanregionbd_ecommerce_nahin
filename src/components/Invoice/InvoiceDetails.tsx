@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import InvoiceItem from "./InvoiceItem";
 
 const InvoiceDetails = ({ details }) => {

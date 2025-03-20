@@ -1,12 +1,12 @@
 import "../globals.css";
 import { ToastContainer } from "react-toastify";
-import CartIcon from "@/components/icons/CartIcon";
-import OrderForm from "@/components/OrderForm";
+// import CartIcon from "@/components/icons/CartIcon";
+// import OrderForm from "@/components/OrderForm";
 import {NavBarProvider} from "@/context/NavBarContext";
 import Navbar from "@/components/Navbar/Navbar";
 import {ReduxProvider} from "@/reduxToolKit/providers/provider";
 import FooterBanner from "@/components/FooterBanner";
-import {useSelector} from "react-redux";
+// import {useSelector} from "react-redux";
 // import FacebookChat from "@/components/FacebookChat";
 
 export default function RootLayout({

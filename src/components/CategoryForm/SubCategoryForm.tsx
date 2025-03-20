@@ -10,7 +10,7 @@ import Modal from "@/components/CategoryForm/update_modal";
 
 const SubCategoryForm = () => {
     const [subCategoryName, setSubCategoryName] = useState("");
-    const [editingSubCategory, setEditingSubCategory] = useState<any>(null);
+    const [editingSubCategory, setEditingSubCategory] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const { data: subCategories, isLoading } = useGetSubCategoryQuery();
@@ -32,7 +32,7 @@ const SubCategoryForm = () => {
         }
     };
 
-    const handleEdit = (subCat: any) => {
+    const handleEdit = (subCat) => {
         setEditingSubCategory(subCat);
         setSubCategoryName(subCat.name);
         setIsModalOpen(true);
@@ -85,7 +85,7 @@ const SubCategoryForm = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {subCategories?.map((subCat: any) => (
+                    {subCategories?.map((subCat) => (
                         <tr key={subCat._id} className="border">
                             <td className="p-2">{subCat.name}</td>
                             <td className="p-2 flex space-x-2">

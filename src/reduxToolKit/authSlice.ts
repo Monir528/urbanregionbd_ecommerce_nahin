@@ -22,7 +22,7 @@ export const loginUser = createAsyncThunk(
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             return await extractUserData(userCredential.user);
-        } catch (error: any) {
+        } catch (error) {
             return rejectWithValue(error.message);
         }
     }
@@ -60,7 +60,7 @@ export const logoutUser = createAsyncThunk("auth/logoutUser", async (_, { reject
     try {
         await signOut(auth); // Firebase logout
         return null; // Clears user state
-    } catch (error: any) {
+    } catch (error) {
         return rejectWithValue(error.message);
     }
 });

@@ -1,8 +1,7 @@
-/* eslint-disable react/prop-types */
-
 import { useState } from "react";
 import { SideBySideMagnifier } from "react-image-magnifiers";
-/* eslint-disable no-unused-vars */
+import Image from "next/image";
+
 const DetailsImage = ({ images }) => {
   const [selected, setSelected] = useState(0);
 
@@ -29,7 +28,10 @@ const DetailsImage = ({ images }) => {
             className="bg-gray-100 flex justify-center items-center py-2"
             onClick={() => setSelected(index)}
           >
-            <img
+            <Image
+            width={12}
+            height={12}
+            unoptimized
               src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${
                 images[index].filename
               }`}

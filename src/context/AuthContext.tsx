@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
@@ -20,7 +19,6 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
-// eslint-disable-next-line react/prop-types
 export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState();

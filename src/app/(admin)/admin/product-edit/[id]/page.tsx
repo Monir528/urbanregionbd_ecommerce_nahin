@@ -1,12 +1,12 @@
 "use client";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import "@fontsource/rajdhani";
 import {useGetSingleProductQuery} from "@/components/api/productApi";
 import EditForm from "@/components/EditForm";
 
 const ProductDetailsPage = () => {
     const { id } = useParams();
-    const { data, isError, isLoading, isSuccess } = useGetSingleProductQuery(id);
+    const { data, isLoading, isSuccess } = useGetSingleProductQuery(id);
 
     return (
         <main>

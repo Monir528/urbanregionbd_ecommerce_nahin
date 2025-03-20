@@ -78,7 +78,7 @@ const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
-  const cart = useSelector((state: any) => state.cart);
+  const cart = useSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch(getTotals());

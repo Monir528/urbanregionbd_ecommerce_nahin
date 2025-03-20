@@ -7,7 +7,7 @@ import {useDeleteProductMutation} from "@/components/api/productApi";
 
 const TableBody = ({ data }) => {
   const { description: productDetails, images, _id } = data || {};
-  let { category, brand, stock, price, discount, productName, subcategory, extra } = productDetails;
+  const { category, brand, stock, price, discount, productName, subcategory, extra } = productDetails;
 
 
   const router = useRouter();

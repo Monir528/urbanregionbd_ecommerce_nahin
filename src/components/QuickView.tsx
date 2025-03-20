@@ -1,18 +1,15 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-
 import { Fragment, useState } from "react";
-import { Dialog, RadioGroup, Transition } from "@headlessui/react";
+import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { useDispatch, useSelector } from "react-redux";
-import { popUpClose, popUpOpen } from "@/components/api/quickViewSlice";
+import { popUpClose } from "@/components/api/quickViewSlice";
 import { addToCart } from "@/components/api/cartSlice";
 import { makeSizes } from "@/utils/sizes";
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+// function classNames(...classes) {
+//   return classes.filter(Boolean).join(" ");
+// }
 
 export default function QuickView() {
   const dispatch = useDispatch();

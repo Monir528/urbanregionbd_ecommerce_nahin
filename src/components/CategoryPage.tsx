@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import ProductCarousel from "@/components/ProductCarousel/ProductCarousel";
 const CategoryPage = ({category, data}) => {
 

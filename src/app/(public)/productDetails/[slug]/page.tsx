@@ -11,29 +11,29 @@ import DetailsContent from "@/components/DetailsContent/DetailsContent";
 import {useGetProductsQuery, useGetSingleProductQuery} from "@/components/api/productApi";
 import CategoryPage from "@/components/CategoryPage";
 import SubCategoryPage from "@/components/SubCategoryPage";
-import FooterBanner from "@/components/FooterBanner";
+// import FooterBanner from "@/components/FooterBanner";
 
 // Define the Product type (adjust based on actual API response)
-interface Product {
-    id: string;
-    images: string[];
-    description: {
-        text: string;
-        videoLink?: string;
-        category?: string;
-        subcategory?: string;
-    };
-    category: {
-        name: string;
-    };
-}
+// interface Product {
+//     id: string;
+//     images: string[];
+//     description: {
+//         text: string;
+//         videoLink?: string;
+//         category?: string;
+//         subcategory?: string;
+//     };
+//     category: {
+//         name: string;
+//     };
+// }
 
 const ProductDetailsPage = () => {
     const params = useParams();
     const productId = params.slug as string; // Ensure ID is a string
 
     const { data: product, isLoading, isError, isSuccess } = useGetSingleProductQuery(productId);
-    const { open } = useSelector((state: any) => state?.popUp);
+    const { open } = useSelector((state) => state?.popUp);
     const { data: allProductData, isSuccess: allProductSuccess } = useGetProductsQuery();
     const { productCategory } = useNavBarContext();
 

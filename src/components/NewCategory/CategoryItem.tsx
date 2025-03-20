@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const CategoryItem = ({ item }) => {
   const { description, images } = item || {};
-  let { productName, price, discount } = description || {};
+  const { productName, price, discount } = description || {};
 
   const quickView=()=>{
     console.log("done");

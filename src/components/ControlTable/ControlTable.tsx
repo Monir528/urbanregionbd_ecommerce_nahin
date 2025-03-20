@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDeleteUserMutation, useEditUserMutation, useGetUsersQuery } from "@/components/api/userApi";
+import { useDeleteUserMutation, useGetUsersQuery } from "@/components/api/userApi";
 import { ImBin } from "react-icons/im";
 import Modal from "@/components/Modal/Modal";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,7 +7,7 @@ import { modalOpen } from "@/components/api/cartHandler";
 
 const ControlTable = () => {
   const { data: findUser, isLoading: findLoading } = useGetUsersQuery();
-  const [editUser] = useEditUserMutation();
+  // const [editUser] = useEditUserMutation();
   const [deleteUser, { isSuccess: deleteSuccess }] = useDeleteUserMutation();
   const { modalCondition } = useSelector((state) => state.cartHandler) || {};
   const dispatch = useDispatch();
@@ -22,9 +22,9 @@ const ControlTable = () => {
     deleteUser(id);
   };
 
-  const handleEdit = (_id) => {
-    editUser({ _id });
-  };
+  // const handleEdit = (_id) => {
+  //   editUser({ _id });
+  // };
 
   const [controlUser, setControlUser] = useState([]);
 

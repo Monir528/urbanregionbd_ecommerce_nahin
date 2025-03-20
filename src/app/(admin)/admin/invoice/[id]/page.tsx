@@ -1,12 +1,12 @@
 "use client";
-import { useParams, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import InvoiceHeader from "@/components/Invoice/InvoiceHeader";
 import InvoiceDetails from "@/components/Invoice/InvoiceDetails";
 import InvoiceTotal from "@/components/Invoice/InvoiceTotal";
 import "@fontsource/rajdhani";
 
 const ProductDetailsPage = () => {
-    const { id } = useParams();
+    // const { id } = useParams();
     const searchParams = useSearchParams();
     const data = searchParams.get("data");
     const details = data ? JSON.parse(data) : {};

@@ -7,7 +7,7 @@ import { getTotals } from "@/components/api/cartSlice";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import EmptyCart from "@/components/EmptyCart";
 import { useRouter } from "next/navigation";
-import FooterBanner from "@/components/FooterBanner"
+// import FooterBanner from "@/components/FooterBanner"
 import OrderForm from "@/components/OrderForm";
 
 const HomePage = () => {
@@ -27,7 +27,7 @@ const HomePage = () => {
     const [totalPrice, setTotalPrice] = useState(0);
     const { formCondition } = useSelector((state) => state.cartHandler);
 
-
+    console.log(totalPrice);
     return (
         <main>
             {formCondition && <OrderForm></OrderForm>}

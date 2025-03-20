@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { useGetCategoryQuery } from "@/components/api/categoryApi";
 import { useGetSubCategoryQuery } from "@/components/api/subCategoryApi";

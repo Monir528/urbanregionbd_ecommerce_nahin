@@ -1,8 +1,7 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import { useRouter } from "next/navigation";
 import { resizeName } from "@/utils/sizes";
-import {ContentState} from "draft-js";
+// import {ContentState} from "draft-js";
+import Image from 'next/image';
 
 const CarouselItem = ({ data }) => {
   const { description, images, _id } = data || {};
@@ -15,13 +14,16 @@ const CarouselItem = ({ data }) => {
   };
 
 
-  console.log('CarouselItem ', images);
+  console.log('review ', review);
   return (
       <div
           onClick={() => handleDescription(_id)}
           className="w-full max-w-sm p-2 text-black bg-white dark:border-gray-700 cursor-pointer"
       >
-        <img
+        <Image
+            width={235}
+            height={180}
+            unoptimized
             src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${images[0]?.filename}`}
             // src={images?.[0] || "/placeholder-image.jpg"}
             alt={productName || "Product Image"}

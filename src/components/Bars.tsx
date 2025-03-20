@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 const Bars = ({item}) => {
     const {text, style, heading, textStyle}= item
     return (

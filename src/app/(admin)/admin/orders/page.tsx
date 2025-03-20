@@ -1,12 +1,12 @@
 'use client';
-import {useGetProductsQuery} from "@/components/api/productApi";
-import TableBody from "@/components/TableBody/TableBody";
+// import {useGetProductsQuery} from "@/components/api/productApi";
+// import TableBody from "@/components/TableBody/TableBody";
 import OrderTable from "@/components/OrderTable/OrderTable";
 
 const Overview = () => {
 
-    const {data, isSuccess, isError, isLoading}=useGetProductsQuery()
-    console.log(data);
+    // const {data, isSuccess, isError, isLoading}=useGetProductsQuery()
+    // console.log(data);
 
     return (
         <main>

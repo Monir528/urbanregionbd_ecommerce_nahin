@@ -8,7 +8,7 @@ import Hero from "@/components/Hero";
 import Notice from "@/components/Notice";
 import { Bars } from "react-loader-spinner";
 import NewCategory from "@/components/NewCategory/NewCategory";
-import CategoryItem from "@/components/NewCategory/CategoryItem";
+// import CategoryItem from "@/components/NewCategory/CategoryItem";
 import CategoryItem2 from "@/components/CategoryItem/CategoryItem2";
 import CategoryItem3 from "@/components/CategoryItem/CategoryItem3";
 import Services from "@/components/Services";
@@ -17,7 +17,7 @@ import SampleProduct from "@/components/SampleProduct/SampleProduct";
 import Banner from "@/components/Banner";
 import Blogs from "@/components/Blogs";
 import Products from "@/components/Products/Products";
-import FooterBanner from "@/components/FooterBanner";
+// import FooterBanner from "@/components/FooterBanner";
 import ShoppingCartForm from "@/components/ShoppingCartForm";
 import Popup from "@/components/Popup";
 

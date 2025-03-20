@@ -1,11 +1,11 @@
 'use client';
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import ControlTable from "@/components/ControlTable/ControlTable";
 import ControlForm from "@/components/ControlForm/ControlForm";
 
 const Overview = () => {
-    const handleSelector = useSelector((state) => state.cartHandler);
-    const { modalCondition } = handleSelector || {};
+    // const handleSelector = useSelector((state) => state.cartHandler);
+    // const { modalCondition } = handleSelector || {};
 
     return (
         <main className="p-4">

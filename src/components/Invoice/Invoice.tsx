@@ -5,7 +5,7 @@ import "./Invoice.module.scss"
 import { useLocation } from "react-router-dom";
 
 const Invoice = () => {
-  let {state}=useLocation()
+  const {state}=useLocation()
   return (
     <div className="Invoice">
       <div className="container">

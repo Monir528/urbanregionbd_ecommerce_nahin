@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import { useRef } from "react";
 import dynamic from "next/dynamic";
 import CarouselItem from "@/components/CarouselItem";

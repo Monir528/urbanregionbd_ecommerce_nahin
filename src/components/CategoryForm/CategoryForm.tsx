@@ -7,11 +7,12 @@ import {
     useUpdateCategoryMutation,
 } from "@/components/api/categoryApi";
 import Modal from "@/components/CategoryForm/update_modal";
+import Image from "next/image";
 
 const CategoryForm = () => {
     const [file, setFile] = useState<File | null>(null);
     const [categoryName, setCategoryName] = useState("");
-    const [editingCategory, setEditingCategory] = useState<any>(null);
+    const [editingCategory, setEditingCategory] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const { data: categories, isLoading } = useGetCategoryQuery();
@@ -36,7 +37,7 @@ const CategoryForm = () => {
         }
     };
 
-    const handleEdit = (category: any) => {
+    const handleEdit = (category) => {
         setEditingCategory(category);
         setCategoryName(category.category);
         setFile(null); // Reset file; user can upload a new one
@@ -89,12 +90,15 @@ const CategoryForm = () => {
                 <p>Loading categories...</p>
             ) : (
                 <div className="grid grid-cols-3 gap-4">
-                    {categories?.map((cat: any) => (
+                    {categories?.map((cat) => (
                         <div
                             key={cat._id}
                             className="border p-4 relative group"
                         >
-                            <img
+                            <Image
+                                height={32}
+                                width={28}
+                                unoptimized
                                 src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${cat.image}`}
                                 alt={cat.category}
                                 className="w-full h-32 object-cover"

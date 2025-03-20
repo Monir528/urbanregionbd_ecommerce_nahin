@@ -1,9 +1,7 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import { HiArrowTrendingUp, HiArrowTrendingDown } from "react-icons/hi2";
 import { RiShoppingCart2Fill } from "react-icons/ri";
 import { IoMdAlarm } from "react-icons/io";
-import { MdOutlineCancelPresentation } from "react-icons/md";
+// import { MdOutlineCancelPresentation } from "react-icons/md";
 import { TbDevicesCancel } from "react-icons/tb";
 import { FaRegMoneyBill1 } from "react-icons/fa6";
 import Link from "next/link"

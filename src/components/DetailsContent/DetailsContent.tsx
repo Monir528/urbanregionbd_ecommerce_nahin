@@ -1,6 +1,3 @@
-/* eslint-disable no-empty */
-/* eslint-disable no-unused-vars */
-
 'use client';
 
 import { useEffect, useState } from "react";
@@ -8,7 +5,7 @@ import { MdOutlineStar } from "react-icons/md";
 import { makeSizes } from "@/utils/sizes";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter, useParams } from "next/navigation";
-import { orderFormOpen } from "@/components/api/cartHandler";
+// import { orderFormOpen } from "@/components/api/cartHandler";
 import { addToCart, decreaseCart, getTotals } from "@/components/api/cartSlice";
 import { PiToiletPaperLight } from "react-icons/pi";
 import Link from "next/link";
@@ -17,19 +14,19 @@ import { sizeModalOpen } from "@/components/api/sizeModalSlice";
 import { IoCartSharp } from "react-icons/io5";
 
 const DetailsContent = ({ desc, img }) => {
-  const [rotate, setRotate] = useState(false);
+  // const [rotate, setRotate] = useState(false);
   const [count, setCount] = useState(0);
   const [selectSize, setSelectSize] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [warning, setWarning] = useState(false);
-  const [amountWarning, setAmountWarning] = useState(false);
+  // const [amountWarning, setAmountWarning] = useState(false);
   const { id } = useParams();
-  const navigate = useRouter();
+  // const navigate = useRouter();
 
   const {
-    brand,
+    // brand,
     category,
-    description,
+    // description,
     shortDescription,
     discount,
     extra,
@@ -44,7 +41,7 @@ const DetailsContent = ({ desc, img }) => {
   const sizes = makeSizes(extra) || [];
 
   // make a single number to array for rating
-  let newArr = [];
+  const newArr = [];
   if (review) {
     for (let el = 0; el < review; el++) {
       newArr.push(el);
@@ -99,16 +96,16 @@ const DetailsContent = ({ desc, img }) => {
     setSelectedIndex(index);
   };
 
-  const handlePurchase = () => {
-    if (selectSize === null || count === 0) {
-      setWarning(true);
-      setCount(1)
-    } else {
-      setWarning(false);
-      // dispatch(orderFormOpen());
-      navigate.push("/shoppingCart");
-    }
-  };
+  // const handlePurchase = () => {
+  //   if (selectSize === null || count === 0) {
+  //     setWarning(true);
+  //     setCount(1)
+  //   } else {
+  //     setWarning(false);
+  //     // dispatch(orderFormOpen());
+  //     navigate.push("/shoppingCart");
+  //   }
+  // };
 
   const { isOpen } = useSelector((state) => state.size);
 

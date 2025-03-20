@@ -1,3 +1,4 @@
+import Image from "next/image";
 const InvoiceHeader = ({ details }) => {
   return (
       <div className="w-[500px] mx-auto shadow-lg p-4 font-rajdhani text-[16px] font-normal">
@@ -23,7 +24,10 @@ const InvoiceHeader = ({ details }) => {
               <p>Phone: 01858-124027</p>
               <p>Address: Mirpur-11, Dhaka-1216</p>
             </div>
-            <img
+            <Image
+            width={16}
+            height={16}
+            unoptimized
                 className="h-16"
                 src="https://i.ibb.co/7GVcKqq/347120619-205072055716972-7844522544708747971-n.jpg"
                 alt="Company Logo"

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useState } from "react";
 import { IoMdDownload } from "react-icons/io";
 import Link from "next/link";

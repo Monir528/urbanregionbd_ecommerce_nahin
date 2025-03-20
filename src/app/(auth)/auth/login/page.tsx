@@ -30,7 +30,7 @@ const LoginPage: React.FC = () => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         const result = await dispatch(loginUser({ email, password }));
-        console.log("login result", result);
+        console.log("login result", result, 'user data:', user);
         if (loginUser.fulfilled.match(result)) {
             router.push("/admin/overview");
         }

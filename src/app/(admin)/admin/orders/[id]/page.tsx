@@ -2,13 +2,14 @@
 
 import { useParams } from "next/navigation";
 import { useGetSingleOrderQuery } from "@/components/api/confirmOrder/confirmOrder";
+import Image from "next/image";
 
 const ViewOrder = () => {
     const { id } = useParams();
     const { data, isLoading } = useGetSingleOrderQuery(id);
 
     const {
-        _id,
+        // _id,
         address,
         date,
         division,
@@ -75,7 +76,7 @@ const ViewOrder = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
                         {orderedItem.map((item, index) => (
                             <div key={index} className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center">
-                                <img className="w-20 h-20 object-cover rounded-lg" src={item?.image} alt={item?.name} />
+                                <Image height={20} width={20} unoptimized className="w-20 h-20 object-cover rounded-lg" src={item?.image} alt={item?.name} />
                                 <h4 className="text-xs font-medium text-gray-800 mt-2">{item.name}</h4>
                                 <p className="text-gray-500 text-xs">Size: {item.id?.split(">>>")[1]}</p>
                                 <p className="text-gray-500 text-xs">Order ID: {item.id?.split(">>>")[0]}</p>

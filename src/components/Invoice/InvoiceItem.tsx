@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 const InvoiceItem = ({item}) => {
     // console.log(item?.id);
     const size=item?.id.split('>>>')?.[1]

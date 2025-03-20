@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 const InvoiceTotal = ({ details }) => {
     return (
         <div className="font-rajdhani text-[16px] font-normal">

@@ -1,9 +1,10 @@
 import Button from '../Button/Button';
-import { useSelector, useDispatch } from 'react-redux';
+import {useDispatch } from 'react-redux';
 import { modalClose } from '@/components/cartHandler';
+import Image from "next/image";
 
 const Modal = () => {
-    const { cartHandler } = useSelector(state => state.cartHandler) || {};
+    // const { cartHandler } = useSelector(state => state.cartHandler) || {};
     const dispatch = useDispatch();
 
     const handleClose = () => {
@@ -15,7 +16,10 @@ const Modal = () => {
             <div className='bg-white w-11/12 max-w-md p-4 rounded-lg shadow-lg relative'>
                 <div className='flex flex-col items-center justify-center'>
                     <h1 className='text-xl font-semibold mb-4'>Successfully</h1>
-                    <img
+                    <Image
+                    width={30}
+                    height={30}
+                        unoptimized
                         src="https://cdn.dribbble.com/users/129972/screenshots/3964116/75_smile.gif"
                         alt="Success"
                         className='w-4/5 object-cover'

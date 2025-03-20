@@ -7,7 +7,7 @@ import TableBody from "@/components/TableBody/TableBody";
 
 const Overview = () => {
 
-    const {data, isSuccess, isError, isLoading}=useGetProductsQuery()
+    const {data, isSuccess, isLoading}=useGetProductsQuery()
     console.log(data);
 
     return (

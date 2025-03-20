@@ -1,16 +1,13 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import React from "react";
 import OverviewComponent from "./OverviewComponent";
 
 export const Filter = ({ column }) => {
-    let totalEarn = 0;
-    let received = [];
-    let pending = [];
-    let failed = [];
-    let delivered = [];
-    let arr = column?.filteredRows;
+    const totalEarn = 0;
+    const received = [];
+    const pending = [];
+    const failed = [];
+    const delivered = [];
+    const arr = column?.filteredRows;
 
     for (let x = 0; x < arr?.length; x++) {
         if (arr[x]?.original?.status === "received") {
