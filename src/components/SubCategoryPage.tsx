@@ -1,6 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-import { AiFillTablet } from "react-icons/ai";
 import ProductLayout2 from "@/components/ProductLayout/ProductLayout2";
 const SubCategoryPage = ({ subcategory, data }) => {
 

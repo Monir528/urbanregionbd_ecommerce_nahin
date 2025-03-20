@@ -1,7 +1,3 @@
-// /* eslint-disable no-unused-vars */
-/* eslint-disable no-unsafe-optional-chaining */
-/* eslint-disable react/prop-types */
-
 import { useRouter } from "next/navigation";
 import {  useDispatch } from "react-redux";
 import { popUpOpen} from "@/components/api/quickViewSlice"
@@ -28,12 +24,14 @@ const ProductLayout2 = ({ data }) => {
       {data && (
         <div>
           <div className="relative flex flex-col items-center">
-            <img
-              src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${images[0]?.filename}`}
-              alt=""
-              className="cursor-pointer h-[180px] sm:h-[220px] w-full object-cover hover:opacity-70 duration-75"
-              onClick={() => handleDetails(_id)}
-            />
+            <picture>
+              <img
+                  src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${images[0]?.filename}`}
+                  alt=""
+                  className="cursor-pointer h-[180px] sm:h-[220px] w-full object-cover hover:opacity-70 duration-75"
+                  onClick={() => handleDetails(_id)}
+              />
+            </picture>
             <div className="flex items-center text-black bg-white w-[120px] rounded-md absolute bottom-[-10px] justify-center gap-2 shadow-lg">
               <p className="font-semibold">৳{discount}</p>
               <p className="font-thin line-through">৳{price}</p>

@@ -16,8 +16,8 @@ const orderProductSlice= createSlice({
             delete state[action.payload.id]
             return state
         },
-        resetOrder:(state)=>{
-            state={}
+        resetOrder:()=>{
+            // state={}
         }
     }
 })

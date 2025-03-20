@@ -1,13 +1,24 @@
 'use client';
-
-
-
 import {useGetProductsQuery} from "@/components/api/productApi";
 import TableBody from "@/components/TableBody/TableBody";
 
+// Define the Product interface based on your table structure
+interface Product {
+    _id: string;
+    name: string; // Assuming "Product" column maps to a name field
+    category: string;
+    subcategory: string;
+    price: number | string;
+    discount?: number | string;
+    image: string;
+    available: boolean;
+    size?: string;
+    // Add other fields as needed based on your API response
+}
+
 const Overview = () => {
 
-    const {data, isSuccess, isLoading}=useGetProductsQuery()
+    const {data, isSuccess, isLoading}=useGetProductsQuery(undefined)
     console.log(data);
 
     return (
@@ -131,7 +142,7 @@ const Overview = () => {
                             <tbody>
                             {!isLoading &&
                                 isSuccess &&
-                                data?.map((row) => <TableBody data={row} key={row._id} />)}
+                                data?.map((row: Product) => <TableBody data={row} key={row._id} />)}
                             {isLoading && "Sorry For loading..."}
                             </tbody>
                         </table>

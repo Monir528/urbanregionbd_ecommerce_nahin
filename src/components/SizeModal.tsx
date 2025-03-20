@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { sizeModalClose, sizeModalOpen } from '@/components/api/sizeModalSlice'
+import { sizeModalClose } from '@/components/api/sizeModalSlice'
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
 
@@ -46,7 +45,9 @@ export default function SizeModal() {
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all relative">
-                  <img src={value} alt="size" />
+                  <picture>
+                    <img src={value} alt="size" />
+                  </picture>
 
                   <div className="mt-4">
                     {/* <button

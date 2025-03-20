@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useAddProductMutation } from "@/components/api/productApi";
 import { modalOpen } from "@/components/api/cartHandler";
 import { useGetCategoryQuery } from "@/components/api/categoryApi";
@@ -17,7 +16,7 @@ export default function ProductUploadForm() {
   // Add Product Mutation
   const [addProduct, { isLoading, isSuccess: addSuccess }] = useAddProductMutation();
 
-  const selector = useSelector((state) => state.cartHandler);
+  // const selector = useSelector((state) => state.cartHandler);
   const dispatch = useDispatch();
 
   // Form State
@@ -29,7 +28,9 @@ export default function ProductUploadForm() {
   const [category, setCategory] = useState(getCatData?.[0]?.category || "");
   const [subcategory, setSubcategory] = useState([]);
   const [description, setDescription] = useState("");
-  const [variants, setVariants] = useState("");
+  const [variants
+    // , setVariants
+  ] = useState("");
   const [discount, setDiscount] = useState("");
   const [extra, setExtra] = useState("");
   const [extraInfo, setExtraInfo] = useState("");
@@ -340,11 +341,14 @@ export default function ProductUploadForm() {
                 <div className="grid grid-cols-4 gap-4 mt-4">
                   {files.map((file, index) => (
                       <div key={index} className="relative">
-                        <img
-                            src={URL.createObjectURL(file)}
-                            alt={`Preview ${index}`}
-                            className="w-full h-24 object-cover rounded-md"
-                        />
+                        <picture>
+                          <img
+                              src={URL.createObjectURL(file)}
+                              alt={`Preview ${index}`}
+                              className="w-full h-24 object-cover rounded-md"
+                          />
+                        </picture>
+
                         <button
                             onClick={() => removeImage(file.name)}
                             className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"

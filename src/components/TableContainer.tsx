@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/no-unknown-property */
-/* eslint-disable react/prop-types */
 import { Fragment } from "react";
 import {
     useTable,
@@ -11,14 +8,16 @@ import {
 } from "react-table";
 import { Filter, DefaultColumnFilter } from "./filters";
 
-const TableContainer = ({ columns, data, renderRowSubComponent }) => {
+const TableContainer = ({ columns, data,
+                            // renderRowSubComponent
+}) => {
     const {
         getTableProps,
-        getTableBodyProps,
+        // getTableBodyProps,
         headerGroups,
-        page,
-        prepareRow,
-        visibleColumns,
+        // page,
+        // prepareRow,
+        // visibleColumns,
     } = useTable(
         {
             columns,

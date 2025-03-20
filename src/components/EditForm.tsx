@@ -39,7 +39,7 @@ export default function EditForm({ data }) {
   const [subcategory, setSubcategory] = useState(eSubcategory || []);
   const [shortDescription, setShortDescription] = useState(eShortDescription || "");
   const [description, setDescription] = useState(eDescription || "");
-  const [variants, setVariants] = useState(eVariants || "");
+  const [variants] = useState(eVariants || "");
   const [discount, setDiscount] = useState(eDiscount || "");
   const [extra, setExtra] = useState(eExtra || "");
   const [extraInfo, setExtraInfo] = useState(eExtraInfo || "");

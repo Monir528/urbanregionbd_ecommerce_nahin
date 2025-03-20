@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useState, useCallback } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, ContentState } from 'draft-js';

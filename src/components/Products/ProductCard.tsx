@@ -1,10 +1,8 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import Link from "next/link";
 import Button from "../Shared/Button";
 import { resizeName } from "@/utils/sizes";
 import Image from "next/image";
-// eslint-disable-next-line react/prop-types
+
 
 const ProductCard = ({ data, index }) => {
   const { description, images } = data || {};

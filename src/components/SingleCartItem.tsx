@@ -1,9 +1,6 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-
 import {  useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, clearCart, decreaseCart, getTotals, removeFromCart } from "@/components/api/cartSlice";
+import { addToCart, decreaseCart, getTotals, removeFromCart } from "@/components/api/cartSlice";
 
 const SingleCartItem = ({product}) => {
 
@@ -12,7 +9,7 @@ const SingleCartItem = ({product}) => {
   const dispatch= useDispatch()
   const [count, setCount] = useState(cartQuantity);
 
-  let subString= id?.split(">>>")[1]
+  const subString= id?.split(">>>")[1]
 
   let modifiedName;
   if (name.length > 22) {
@@ -42,15 +39,18 @@ const SingleCartItem = ({product}) => {
     dispatch(removeFromCart(product));
   };
 
-  const handleClearCart = () => {
-    dispatch(clearCart());
-  };
+  // const handleClearCart = () => {
+  //   dispatch(clearCart());
+  // };
 
   return (
     <div>
       <div className="flex flex-col min-[500px]:flex-row min-[500px]:items-center gap-5 py-6  border-b border-gray-200">
         <div className="w-full md:max-w-[126px]">
-          <img src={image} alt="Urban region product image" className="mx-auto" />
+
+          <picture>
+            <img src={image} alt="Urban region product image" className="mx-auto" />
+          </picture>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-5 w-full">
           <div className="md:col-span-2">

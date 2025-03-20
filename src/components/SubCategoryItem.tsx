@@ -1,12 +1,12 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-
 import { useDeleteSubCategoryMutation } from "@/components/api/subCategoryApi";
 
 
 
 const SubCategory = ({item}) => {
-    const [deleteSubCategory, {isLoading, isSuccess}]=useDeleteSubCategoryMutation()
+    const [deleteSubCategory
+        // , {
+        // isLoading, isSuccess}
+    ]=useDeleteSubCategoryMutation()
 
     const handleDelete=()=>{
         console.log(item?._id);

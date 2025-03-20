@@ -1,41 +1,43 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import { MdDeleteForever } from "react-icons/md";
 import { RiFileEditFill } from "react-icons/ri";
 import { useRouter } from "next/navigation";
-import {useDeleteProductMutation} from "@/components/api/productApi";
+// import {useDeleteProductMutation} from "@/components/api/productApi";
 
 const TableBody = ({ data }) => {
-  const { description: productDetails, images, _id } = data || {};
+  const { description: productDetails, images,
+      // _id
+  } = data || {};
   const { category, brand, stock, price, discount, productName, subcategory, extra } = productDetails;
 
 
   const router = useRouter();
-  const {editProduct}=useDeleteProductMutation()
+  // const {editProduct}=useDeleteProductMutation()
 
   if (productName?.length > 25) {
     productName = productName.substring(0, 21) + "...";
   }
 
-  const editGarbage=async(id)=>{
-    console.log(id)
-    fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/garbageTrash`,{
-      method: "PUT",
-      headers:{
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({id, images}),
-    })
-  }
+  // const editGarbage=async(id)=>{
+  //   console.log(id)
+  //   fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/garbageTrash`,{
+  //     method: "PUT",
+  //     headers:{
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({id, images}),
+  //   })
+  // }
 
-  const deleteGarbage=async(id)=>{
-    fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/garbage/${id}`,{
-      method: "DELETE",
-    })
-  }
+  // const deleteGarbage=async(id)=>{
+  //   fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/garbage/${id}`,{
+  //     method: "DELETE",
+  //   })
+  // }
 
-  const handleDelete = async(id) => {
-    let res= await Promise.all([editGarbage(id), deleteGarbage(id)])
+  const handleDelete = async(
+      // id
+  ) => {
+    // let res= await Promise.all([editGarbage(id), deleteGarbage(id)])
 
     alert("Product Deleted Successfully.")
     window.location.reload();
@@ -66,11 +68,13 @@ const TableBody = ({ data }) => {
       <td className="px-6 py-4">{price}</td>
       <td className="px-6 py-4">{discount}</td>
       <td className="px-6 py-4">
-        <img
-          className="max-w-20"
-          src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${images[0]?.filename}`}
-          alt=""
-        />
+        <picture>
+            <img
+                className="max-w-20"
+                src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${images[0]?.filename}`}
+                alt=""
+            />
+        </picture>
       </td>
       
       <td className="px-6 py-4">{stock ? "Available" :"stock out" }</td>

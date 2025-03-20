@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import ProductCard from "./ProductCard";
 
 const Products = ({ data }) => {

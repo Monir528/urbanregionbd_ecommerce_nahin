@@ -2,7 +2,7 @@ import React from "react";
 import OverviewComponent from "./OverviewComponent";
 
 export const Filter = ({ column }) => {
-    const totalEarn = 0;
+    // let totalEarn = 0;
     const received = [];
     const pending = [];
     const failed = [];
@@ -19,7 +19,7 @@ export const Filter = ({ column }) => {
         } else {
             failed.push(arr[x].original);
         }
-        totalEarn += arr[x]?.original?.total;
+        // totalEarn += arr[x]?.original?.total;
     }
 
     return (
@@ -123,6 +123,8 @@ export function DateRangeColumnFilter({
 
         return [min, max];
     }, [id, preFilteredRows]);
+
+    console.log(min, max);
 
     return (
         <div className="text-sm">

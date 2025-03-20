@@ -32,7 +32,6 @@ export function NavBarProvider( { children }: { children: React.ReactNode } ) { 
     );
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export function useNavBarContext() {
     const context = useContext(AppContexts);
     if (!context) throw new Error('useCart must be used within CartProvider');

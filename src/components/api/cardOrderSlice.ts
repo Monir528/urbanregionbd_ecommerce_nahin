@@ -1,5 +1,3 @@
-
-/* eslint-disable no-unused-vars */
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState=[]
@@ -18,8 +16,8 @@ const cardOrderSlice= createSlice({
             delete state[action.payload.id]
             return state
         },
-        resetOrder:(state)=>{
-            state={}
+        resetOrder:()=>{
+            // state={};
         }
     }
 })
