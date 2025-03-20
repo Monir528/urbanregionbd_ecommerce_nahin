@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { MdOutlineStar } from "react-icons/md";
 import { makeSizes } from "@/utils/sizes";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter, useParams } from "next/navigation";
+import {  useParams } from "next/navigation";
 // import { orderFormOpen } from "@/components/api/cartHandler";
 import { addToCart, decreaseCart, getTotals } from "@/components/api/cartSlice";
 import { PiToiletPaperLight } from "react-icons/pi";

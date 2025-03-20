@@ -31,7 +31,7 @@ export const loginUser = createAsyncThunk(
 // Async thunk to check for a locally authenticated user
 export const initializeAuth = createAsyncThunk(
     "auth/initializeAuth",
-    async (_, { rejectWithValue }) => {
+    async () => {
         const authInstance = getAuth();
         return new Promise(async (resolve, reject) => {
             const unsubscribe = authInstance.onAuthStateChanged(
