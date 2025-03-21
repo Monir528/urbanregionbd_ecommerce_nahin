@@ -6,7 +6,6 @@ import { useGetProductsQuery } from "@/components/api/productApi";
 import RightCart from "@/components/RightCart";
 import Hero from "@/components/Hero";
 import Notice from "@/components/Notice";
-import { Bars } from "react-loader-spinner";
 import NewCategory from "@/components/NewCategory/NewCategory";
 // import CategoryItem from "@/components/NewCategory/CategoryItem";
 import CategoryItem2 from "@/components/CategoryItem/CategoryItem2";
@@ -20,6 +19,8 @@ import Products from "@/components/Products/Products";
 // import FooterBanner from "@/components/FooterBanner";
 import ShoppingCartForm from "@/components/ShoppingCartForm";
 import Popup from "@/components/Popup";
+import Bars from "@/components/Bars";
+import { useState } from "react";
 
 const BannerData = {
     discount: "২১ টি ভিন্ন ডিজাইন থেকে বেছে নিন আপনার পছন্দ মত জার্সি গুলো। ",
@@ -47,7 +48,8 @@ const bars = [
     {
         style: "text-[#cc8119] bg-[#fcf4e9]",
         heading: "NEW ARRIVAL",
-        text: "zfdgh",
+        text: "",
+        textStyle: "mb-[-14px] mt-[4px]",
     },
     {
         style: "text-[#009688] bg-[#ccf7f1]",
@@ -64,8 +66,12 @@ const bars = [
 ];
 
 const HomePage = () => {
+    const [orderPopup, setOrderPopup] = useState(false);
+    const { data, isSuccess, isLoading } = useGetProductsQuery(undefined);
 
-    const { data, isSuccess, isLoading } = useGetProductsQuery();
+    const handleOrderPopup = () => {
+        setOrderPopup(false);
+    };
 
     console.log("fetched products", data);
 
@@ -75,7 +81,7 @@ const HomePage = () => {
                 <RightCart></RightCart>
                 <Hero />
                 <Notice></Notice>
-                <Bars item={bars[0]}></Bars>
+                <Bars item={bars[0]} id="new arrival"></Bars>
                 <NewCategory></NewCategory>
                 {/*<CategoryItem />*/}
                 <CategoryItem2 />
@@ -101,7 +107,7 @@ const HomePage = () => {
                 {/* <AppStore></AppStore> */}
                 {/*<FooterBanner></FooterBanner>*/}
                 <ShoppingCartForm></ShoppingCartForm>
-                <Popup />
+                <Popup orderPopup={orderPopup} handleOrderPopup={handleOrderPopup} />
             </div>
         </main>
 

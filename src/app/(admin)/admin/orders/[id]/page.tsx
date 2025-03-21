@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import { useGetSingleOrderQuery } from "@/components/api/confirmOrder/confirmOrder";
 import Image from "next/image";
+import {OrderedItem} from "@/types/order";
 
 const ViewOrder = () => {
     const { id } = useParams();
@@ -74,7 +75,7 @@ const ViewOrder = () => {
                 <div className="mt-8">
                     <h3 className="text-sm font-semibold text-gray-700 border-b pb-2">Ordered Items</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                        {orderedItem.map((item, index) => (
+                        {orderedItem.map((item: OrderedItem, index: number) => (
                             <div key={index} className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center">
                                 <Image height={20} width={20} unoptimized className="w-20 h-20 object-cover rounded-lg" src={item?.image} alt={item?.name} />
                                 <h4 className="text-xs font-medium text-gray-800 mt-2">{item.name}</h4>

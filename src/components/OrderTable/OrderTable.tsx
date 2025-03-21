@@ -1,9 +1,10 @@
 import OrderTableBody from "../OrderTableBody/OrderTableBody";
 import { useGetAllOrderedQuery } from "@/components/api/confirmOrder/confirmOrder";
 import { useState } from "react";
+import {Order} from "@/types/order";
 
 const OrderTable = () => {
-  const { data, isLoading } = useGetAllOrderedQuery();
+  const { data, isLoading } = useGetAllOrderedQuery(undefined);
   const [searchText, setSearchText] = useState("");
 
   return (
@@ -32,15 +33,14 @@ const OrderTable = () => {
           <tbody>
           {!isLoading &&
               data?.length > 0 &&
-              data
-                  ?.filter((val) => {
+              data?.filter((val: Order) => {
                     if (searchText === "") {
                       return val;
                     } else if (val?._id?.toLowerCase()?.includes(searchText.toLowerCase())) {
                       return val;
                     }
                   })
-                  ?.map((item) => <OrderTableBody key={item._id} item={item} />)}
+                  ?.map((item:Order) => <OrderTableBody key={item._id} item={item} />)}
           </tbody>
         </table>
       </div>

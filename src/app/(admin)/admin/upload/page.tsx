@@ -2,10 +2,11 @@
 import ProductUploadForm from "@/components/ProductUploadForm";
 import {useSelector} from "react-redux";
 import Modal from "@/components/Modal/Modal";
+import {RootState} from "@/reduxToolKit/store";
 
 const Overview = () => {
 
-    const handleSelector = useSelector((state) => state.cartHandler);
+    const handleSelector = useSelector((state: RootState) => state.cartHandler);
     const { modalCondition } = handleSelector || {};
     return (
         <main>

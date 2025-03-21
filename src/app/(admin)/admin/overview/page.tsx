@@ -7,7 +7,7 @@ import TableContainer from "@/components/TableContainer";
 
 const Overview = () => {
 
-    const { data, isLoading } = useGetAllOrderedQuery();
+    const { data, isLoading } = useGetAllOrderedQuery(undefined);
     const columns = useMemo(
         () => [
             {

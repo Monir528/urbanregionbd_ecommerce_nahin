@@ -7,13 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { orderFormClose } from "@/components/cartHandler";
 import {getTotals} from "@/components/api/cartSlice"
 import CustomerAddress from "@/components/CustomerAddress";
+import { RootState } from "@/reduxToolKit/store";
 
 export default function OrderForm() {
-  const {formCondition}= useSelector(state=>state.cartHandler)
+  const {formCondition}= useSelector((state:RootState)=>state.cartHandler);
   const dispatch= useDispatch()
   const cancelButtonRef = useRef(null);
 
-  const cart = useSelector((state) => state.cart);
+  const cart = useSelector((state: RootState) => state.cart);
 
   useEffect(() => {
     dispatch(getTotals());
@@ -54,7 +55,7 @@ export default function OrderForm() {
             >
               <Dialog.Panel className="relative transform overflow-hidden my-16 lg:mt-20 rounded-lg bg-white text-left shadow-xl transition-all  sm:w-full sm:max-w-lg">
                 <div className="bg-gray-50 py-3 flex p-8 items-center">
-                  <p className="text-center font-semibold text-base md:text-lg">
+                  <p className="text-black text-center font-semibold text-base md:text-lg">
                     ক্যাশ অন ডেলিভারিতে অর্ডার করতে আপনার তথ্য দিন
                   </p>
                   <span onClick={()=>dispatch(orderFormClose())} className="font-bold cursor-pointer text-2xl ml-4 text-red-500">

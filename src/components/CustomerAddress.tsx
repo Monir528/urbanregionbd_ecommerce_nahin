@@ -7,6 +7,7 @@ import { Radio } from "react-loader-spinner";
 import { orderFormClose } from "@/components/cartHandler";
 import { clearCart } from "@/components/api/cartSlice";
 import { usePurchaseOrderMutation } from "@/components/api/confirmOrder/confirmOrder"; // Adjust import path
+import { RootState } from "@/reduxToolKit/store";
 
 interface OrderedItem {
   id?: string;
@@ -15,7 +16,7 @@ interface OrderedItem {
 
 export default function CustomerAddress({ orderedItem }: { orderedItem?: OrderedItem }) {
   const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart);
+  const cart = useSelector((state: RootState) => state.cart);
 
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
@@ -84,7 +85,7 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
                 visible={true}
                 height="80"
                 width="80"
-                color="#4fa94d"
+                colors={["#4fa94d", "#4fa94d", "#4fa94d"]}
                 ariaLabel="radio-loading"
                 wrapperStyle={{}}
                 wrapperClass=""
@@ -92,7 +93,7 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
         )}
         <form onSubmit={handleAddress} className="mx-auto max-w-xl flex flex-col gap-4">
           <div>
-            <label htmlFor="first-name" className="block text-md font-semibold leading-6 text-gray-900">
+            <label htmlFor="first-name" className="block text-md font-semibold leading-6 text-black">
               আপনার নাম <span className="text-red-600 text-md">*</span>
             </label>
             <div className="mt-2.5">
@@ -103,13 +104,13 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
                   autoComplete="given-name"
                   required
                   onChange={(e) => setName(e.target.value)}
-                  className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 px-3.5 py-2 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
 
           <div className="sm:col-span-2">
-            <label htmlFor="phone-number" className="block text-md font-semibold leading-6 text-gray-900">
+            <label htmlFor="phone-number" className="block text-md font-semibold leading-6 text-black">
               ফোন নম্বর <span className="text-red-600 text-md font-bold">*</span>
             </label>
             <div className="relative mt-2.5">
@@ -120,7 +121,7 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
                 <select
                     id="country"
                     name="country"
-                    className="h-full rounded-md border-0 bg-transparent bg-none py-0 pl-4 pr-6 text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                    className="h-full rounded-md border-0 bg-transparent bg-none py-0 pl-4 pr-6 text-black focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
                 >
                   <option>Ban</option>
                 </select>
@@ -132,13 +133,13 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
                   autoComplete="tel"
                   required
                   onChange={(e) => setPhone(e.target.value)}
-                  className="block w-full rounded-md border-0 px-3.5 py-2 pl-24 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 px-3.5 py-2 pl-24 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
 
           <div className="col-span-full">
-            <label htmlFor="street-address" className="block text-md font-bold leading-6 text-gray-900">
+            <label htmlFor="street-address" className="block text-md font-bold leading-6 text-black">
               ঠিকানা <span className="font-bold text-lg text-red-600">*</span>
             </label>
             <div className="mt-2">
@@ -148,7 +149,7 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
                   name="street-address"
                   id="street-address"
                   autoComplete="street-address"
-                  className="block pl-4 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block pl-4 w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   required
               />
             </div>
@@ -156,9 +157,9 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
 
           <div className="border my-4 p-4 rounded-md">
             <div className="flex flex-col gap-2">
-              <p className="font-bold">শিপিং মেথড</p>
+              <p className="font-bold text-black">শিপিং মেথড</p>
               <hr />
-              <label>
+              <label className="text-black">
                 <input
                     onChange={(e) => setDivision(e.target.value)}
                     type="radio"
@@ -168,7 +169,7 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
                 />{" "}
                 ঢাকার ভিতর
               </label>
-              <label>
+              <label className="text-black">
                 <input
                     onChange={(e) => setDivision(e.target.value)}
                     type="radio"

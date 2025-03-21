@@ -1,7 +1,7 @@
 'use client'; // Mark this as a client-side component
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image'; // Import Image component
 
 // Define an interface for successData (adjust based on your API response)
@@ -13,8 +13,9 @@ interface PaymentResponse {
 
 const Payment2 = () => {
   const router = useRouter();
-  const division = router.query?.division as string;
-  const insertedId = router.query?.insertedId as string;
+  const searchParams = useSearchParams();
+  const division = searchParams.get('division') as string;
+  const insertedId = searchParams.get('insertedId') as string;
 
   const [phone, setPhone] = useState<string>('');
   const [transId, setTransId] = useState<string>('');
