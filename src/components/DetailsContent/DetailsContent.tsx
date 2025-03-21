@@ -12,12 +12,19 @@ import Link from "next/link";
 import SizeModal from "@/components/SizeModal";
 import { sizeModalOpen } from "@/components/api/sizeModalSlice";
 import { IoCartSharp } from "react-icons/io5";
+import {RootState} from "@/reduxToolKit/store";
+import {ProductImage, ProductDescription} from "@/types/product";
 
-const DetailsContent = ({ desc, img }) => {
+interface DetailsContentTypeDef {
+    desc: ProductDescription;
+    img: ProductImage[];
+}
+
+const DetailsContent = ({ desc, img } : DetailsContentTypeDef) => {
   // const [rotate, setRotate] = useState(false);
   const [count, setCount] = useState(0);
-  const [selectSize, setSelectSize] = useState(null);
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectSize, setSelectSize] = useState<string>();
+  const [selectedIndex, setSelectedIndex] = useState<number>();
   const [warning, setWarning] = useState(false);
   // const [amountWarning, setAmountWarning] = useState(false);
   const { id } = useParams();
@@ -43,7 +50,7 @@ const DetailsContent = ({ desc, img }) => {
   // make a single number to array for rating
   const newArr = [];
   if (review) {
-    for (let el = 0; el < review; el++) {
+    for (let el = 0; el < Number(review); el++) {
       newArr.push(el);
     }
   }
@@ -68,12 +75,12 @@ const DetailsContent = ({ desc, img }) => {
     }
   };
 
-  const cart = useSelector((state) => state.cart);
+  const cart = useSelector((state: RootState) => state.cart);
   
   useEffect(() => {
     dispatch(getTotals());
   }, [cart, dispatch]);
-  const paymentCost = useSelector((state) => state.cart);
+  const paymentCost = useSelector((state: RootState) => state.cart);
 
 
   const minusCount = () => {
@@ -91,7 +98,7 @@ const DetailsContent = ({ desc, img }) => {
     }
   };
 
-  const handleSize = (value, index) => {
+  const handleSize = (value: string, index: number) => {
     setSelectSize(value);
     setSelectedIndex(index);
   };
@@ -107,7 +114,7 @@ const DetailsContent = ({ desc, img }) => {
   //   }
   // };
 
-  const { isOpen } = useSelector((state) => state.size);
+  const { isOpen } = useSelector((state: RootState) => state.size);
 
   function openModal() {
     dispatch(sizeModalOpen(otherLink));
@@ -157,7 +164,7 @@ const DetailsContent = ({ desc, img }) => {
       <p className="font-abc font-semibold mt-4">{extraInfo?.toUpperCase()}</p>
       {/* sizes start */}
       <div className="flex flex-row gap-2 mt-2 flex-wrap">
-        {sizes.map((item, index) => (
+        {sizes.map((item: string, index) => (
           <div
             key={index}
             className={`${

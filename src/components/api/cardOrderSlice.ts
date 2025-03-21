@@ -1,16 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
+import {CartItem} from "@/types/cart";
 
-const initialState=[]
+const initialState: CartItem[] =[]
 
 const cardOrderSlice= createSlice({
     name:'cardOrder',
     initialState,
     reducers:{
         addCard:(state,action)=>{
-            state[action.payload.id]= state.push(action.payload.details)
+            state.push(action.payload.details)
         },
         reduceOrder:(state,action)=>{
-            state[action.payload.id]= action.payload.count
+            const index = state.findIndex(item => item.id === action.payload.id)
+            if (index !== -1) {
+                state[index].cartQuantity = action.payload.count
+            }
         },
         removeOrder:(state,action)=>{
             delete state[action.payload.id]

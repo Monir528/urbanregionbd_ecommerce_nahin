@@ -1,12 +1,17 @@
-import { apiSlice } from "../api/apiSlice";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const garbageApi = apiSlice.injectEndpoints({
-  tagTypes: ["garbages"],
+const baseQuery = fetchBaseQuery({
+  baseUrl: process.env.NEXT_PUBLIC_ROOT_API,
+});
 
+export const garbageApi = createApi({
+  reducerPath: "garbageApi",
+  baseQuery,
+  tagTypes: ["Garbages"],
   endpoints: (builder) => ({
     getGarbage: builder.query({
       query: () => "/getGarbage",
-      providesTags: ["garbages"],
+      providesTags: ["Garbages"],
     }),
 
     addGarbage: builder.mutation({
@@ -15,7 +20,7 @@ export const garbageApi = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["garbages"],
+      invalidatesTags: ["Garbages"],
     }),
 
     deleteGarbage: builder.mutation({
@@ -23,13 +28,13 @@ export const garbageApi = apiSlice.injectEndpoints({
         url: `/deleteGarbage/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Garbages"],
     }),
-    invalidatesTags: ["garbages"],
   }),
 });
 
 export const {
-    useGetGarbageQuery,
-    useAddGarbageMutation,
-    useDeleteGarbageMutation
+  useGetGarbageQuery,
+  useAddGarbageMutation,
+  useDeleteGarbageMutation,
 } = garbageApi;

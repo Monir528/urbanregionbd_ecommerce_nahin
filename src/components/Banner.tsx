@@ -1,6 +1,12 @@
+import { BannerDataType } from "@/types/bannerData";
 import Image from "next/image";
 
-const Banner = ({ data }) => {
+
+interface BannerTypeDef {
+  data: BannerDataType
+}
+
+const Banner = ({ data }: BannerTypeDef) => {
   return (
     <div className="min-h-[450px] flex justify-center items-center py-12">
       <div className="container">

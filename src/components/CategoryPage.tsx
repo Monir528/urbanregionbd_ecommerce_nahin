@@ -1,5 +1,7 @@
 import ProductCarousel from "@/components/ProductCarousel/ProductCarousel";
-const CategoryPage = ({category, data}) => {
+import { CategoryPageTypeDef } from "@/types/type";
+
+const CategoryPage = ({category, data} : CategoryPageTypeDef) => {
 
     console.log('category', category);
     console.log('category data', data);

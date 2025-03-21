@@ -3,16 +3,21 @@ import { resizeName } from "@/utils/sizes";
 // import {ContentState} from "draft-js";
 import Image from 'next/image';
 
-const CarouselItem = ({ data }) => {
+import { Product } from "@/types/product";
+
+interface CarouselItemProps {
+  data: Product;
+}
+
+const CarouselItem = ({ data }: CarouselItemProps) => {
   const { description, images, _id } = data || {};
   const { productName, price, discount, review } = description || {};
 
   const router = useRouter();
 
-  const handleDescription = (id) => {
+  const handleDescription = (id: string) => {
     router.push(`/productDetails/${id}`);
   };
-
 
   console.log('review ', review);
   return (
@@ -25,7 +30,6 @@ const CarouselItem = ({ data }) => {
             height={180}
             unoptimized
             src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${images[0]?.filename}`}
-            // src={images?.[0] || "/placeholder-image.jpg"}
             alt={productName || "Product Image"}
             className="w-full max-w-sm p-2 bg-white dark:bg-gray-800 dark:border-gray-700"
         />

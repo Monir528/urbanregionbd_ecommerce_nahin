@@ -1,16 +1,22 @@
-import { apiSlice } from "../api/apiSlice"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState={}
+interface OrderState {
+  [key: string]: {
+    status: string;
+  };
+}
 
-export const orderStatusSlice= apiSlice({
-    name:"orderStatus",
-    initialState,
-    reducers:{
-        changeStatus:(state,action)=>{
-            state[action.payload.id].status=action.payload.status
-        }
+const initialState: OrderState = {};
+
+export const orderStatusSlice = createSlice({
+  name: "orderStatus",
+  initialState,
+  reducers: {
+    changeStatus: (state, action: PayloadAction<{ id: string; status: string }>) => {
+      state[action.payload.id].status = action.payload.status;
     }
-})
+  }
+});
 
-export const {changeStatus}= orderStatusSlice.actions
-export default orderStatusSlice.reducer
+export const { changeStatus } = orderStatusSlice.actions;
+export default orderStatusSlice.reducer;

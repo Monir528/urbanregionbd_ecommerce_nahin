@@ -2,8 +2,13 @@ import {  useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, decreaseCart, getTotals, removeFromCart } from "@/components/api/cartSlice";
 import { RootState } from "@/reduxToolKit/store";
+import {CartItem} from "@/types/cart";
 
-const SingleCartItem = ({product}) => {
+interface SingleCartItemProps {
+  product: CartItem;
+}
+
+const SingleCartItem = ({product} : SingleCartItemProps) => {
 
   const {cartQuantity, image, name, price, id} = product || {}
   const cart = useSelector((state: RootState) => state.cart);
@@ -35,7 +40,7 @@ const SingleCartItem = ({product}) => {
     dispatch(addToCart(product));
   };
 
-  const handleRemoveFromCart = (product) => {
+  const handleRemoveFromCart = (product: CartItem) => {
     // console.log(product);
     dispatch(removeFromCart(product));
   };
@@ -106,7 +111,7 @@ const SingleCartItem = ({product}) => {
           {/* / */}
           <div className="flex items-center max-[500px]:justify-center md:justify-end max-md:mt-3 h-full">
             <p className="text-lg leading-8 text-gray-600 text-center">
-            {product?.cartQuantity*product?.price} Taka {""}
+            {product?.cartQuantity && product?.price ? product.cartQuantity * parseFloat(product.price) : 0} Taka {""}
             </p>
           </div>
         </div>

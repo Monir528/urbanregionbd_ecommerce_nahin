@@ -1,8 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
+import {Product} from "@/types/product";
 
-const initialState = {
+interface PopUpSlice {
+  open: boolean;
+  value: Product;
+}
+
+const initialState: PopUpSlice  = {
   open: false,
-  value:{}
+  value: {} as Product
 }
 
 export const popUpSlice = createSlice({
@@ -19,7 +25,7 @@ export const popUpSlice = createSlice({
     },
     popUpToggle: (state) => {
       state.open = !state.open
-      state.value={}
+      state.value={} as Product
     },
   },
 })

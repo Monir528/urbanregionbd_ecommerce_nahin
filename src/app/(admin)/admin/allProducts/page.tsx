@@ -1,20 +1,8 @@
 'use client';
 import {useGetProductsQuery} from "@/components/api/productApi";
 import TableBody from "@/components/TableBody/TableBody";
+import {Product} from "@/types/product";
 
-// Define the Product interface based on your table structure
-interface Product {
-    _id: string;
-    name: string; // Assuming "Product" column maps to a name field
-    category: string;
-    subcategory: string;
-    price: number | string;
-    discount?: number | string;
-    image: string;
-    available: boolean;
-    size?: string;
-    // Add other fields as needed based on your API response
-}
 
 const Overview = () => {
 

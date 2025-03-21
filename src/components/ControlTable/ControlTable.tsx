@@ -4,12 +4,14 @@ import { ImBin } from "react-icons/im";
 import Modal from "@/components/Modal/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { modalOpen } from "@/components/api/cartHandler";
+import { RootState } from "@/reduxToolKit/store";
+import {SysUser} from "@/types/user";
 
 const ControlTable = () => {
-  const { data: findUser, isLoading: findLoading } = useGetUsersQuery();
+  const { data: findUser, isLoading: findLoading } = useGetUsersQuery(undefined);
   // const [editUser] = useEditUserMutation();
   const [deleteUser, { isSuccess: deleteSuccess }] = useDeleteUserMutation();
-  const { modalCondition } = useSelector((state) => state.cartHandler) || {};
+  const { modalCondition } = useSelector((state: RootState) => state.cartHandler) || {};
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -18,7 +20,7 @@ const ControlTable = () => {
     }
   }, [deleteSuccess, dispatch]);
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: string) => {
     deleteUser(id);
   };
 
@@ -30,7 +32,7 @@ const ControlTable = () => {
 
   useEffect(() => {
     if (findUser?.length > 0) {
-      setControlUser(findUser.filter((user) => user?.role));
+      setControlUser(findUser.filter((user: SysUser) => user?.role));
     }
   }, [findUser]);
 
@@ -53,7 +55,7 @@ const ControlTable = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {controlUser.map((user) => (
+                {controlUser.map((user: SysUser) => (
                     <tr key={user._id} className="hover:bg-gray-100">
                       <td className="p-3 border border-gray-300">{user.name}</td>
                       <td className="p-3 border border-gray-300">{user.email}</td>

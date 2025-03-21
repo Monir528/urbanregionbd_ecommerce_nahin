@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { popUpClose } from "@/components/api/quickViewSlice";
 import { addToCart } from "@/components/api/cartSlice";
 import { makeSizes } from "@/utils/sizes";
+import {RootState} from "@/reduxToolKit/store";
 
 // function classNames(...classes) {
 //   return classes.filter(Boolean).join(" ");
@@ -13,16 +14,16 @@ import { makeSizes } from "@/utils/sizes";
 
 export default function QuickView() {
   const dispatch = useDispatch();
-  const { value, open } = useSelector((state) => state?.popUp);
+  const { value, open } = useSelector((state: RootState) => state?.popUp);
   const { _id, description, images } = value || {};
-  const [selectSize, setSelectSize] = useState(null);
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectSize, setSelectSize] = useState<string>();
+  const [selectedIndex, setSelectedIndex] = useState<number>();
   const [count, setCount] = useState(0);
   const [warning, setWarning] = useState(false);
 
   const sizes = makeSizes(description?.extra);
 
-  const handleSize = (value, index) => {
+  const handleSize = (value:string, index:number) => {
     setWarning(false);
     setSelectSize(value);
     setSelectedIndex(index);
@@ -49,10 +50,10 @@ export default function QuickView() {
   };
 
   return (
-    <Transition.Root show={open} as={Fragment} className="mt-14 font-abc">
+    <Transition.Root show={open} as={Fragment}>
       <Dialog
         as="div"
-        className="relative z-10"
+        className="relative z-10 mt-14 font-abc"
         onClose={() => dispatch(popUpClose())}
       >
         <Transition.Child
@@ -78,7 +79,7 @@ export default function QuickView() {
               leaveFrom="opacity-100 translate-y-0 scale-100"
               leaveTo="opacity-0 translate-y-0 scale-95"
             >
-              <Dialog.Panel className="flex  transform text-left text-base transition my-20 px-4 max-w-4xl">
+              <Dialog.Panel className="flex transform text-left text-base transition my-20 px-4 max-w-4xl">
                 <div className="relative flex w-full items-center overflow-hidden bg-white shadow-2xl p-4 md:p-8">
                   <button
                     type="button"

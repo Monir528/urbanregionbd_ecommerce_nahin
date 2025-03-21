@@ -1,13 +1,19 @@
 import { MdDeleteForever } from "react-icons/md";
 import { RiFileEditFill } from "react-icons/ri";
 import { useRouter } from "next/navigation";
+import {Product} from "@/types/product";
 // import {useDeleteProductMutation} from "@/components/api/productApi";
 
-const TableBody = ({ data }) => {
+interface TableBodyProps {
+    data: Product
+}
+
+const TableBody = ({ data }: TableBodyProps) => {
   const { description: productDetails, images,
       // _id
   } = data || {};
-  const { category, brand, stock, price, discount, productName, subcategory, extra } = productDetails;
+  let { productName } = productDetails;
+  const { category, brand, stock, price, discount, subcategory, extra } = productDetails;
 
 
   const router = useRouter();
@@ -17,33 +23,33 @@ const TableBody = ({ data }) => {
     productName = productName.substring(0, 21) + "...";
   }
 
-  // const editGarbage=async(id)=>{
-  //   console.log(id)
-  //   fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/garbageTrash`,{
-  //     method: "PUT",
-  //     headers:{
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({id, images}),
-  //   })
-  // }
+  const editGarbage=async(id: string)=>{
+    console.log(id)
+    fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/garbageTrash`,{
+      method: "PUT",
+      headers:{
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({id, images}),
+    })
+  }
 
-  // const deleteGarbage=async(id)=>{
-  //   fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/garbage/${id}`,{
-  //     method: "DELETE",
-  //   })
-  // }
+  const deleteGarbage=async(id:string)=>{
+    fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/garbage/${id}`,{
+      method: "DELETE",
+    })
+  }
 
   const handleDelete = async(
-      // id
+      id: string
   ) => {
-    // let res= await Promise.all([editGarbage(id), deleteGarbage(id)])
+    await Promise.all([editGarbage(id), deleteGarbage(id)])
 
     alert("Product Deleted Successfully.")
     window.location.reload();
   };
 
-  const handleEdit = (id) => {
+  const handleEdit = (id: string) => {
     router.push(`/admin/product-edit/${id}`);
   };
 

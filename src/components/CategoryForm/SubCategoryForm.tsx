@@ -7,13 +7,14 @@ import {
     useUpdateSubCategoryMutation,
 } from "@/components/api/subCategoryApi";
 import Modal from "@/components/CategoryForm/update_modal";
+import {SubCategory} from "@/types/SubCateogry";
 
 const SubCategoryForm = () => {
     const [subCategoryName, setSubCategoryName] = useState("");
-    const [editingSubCategory, setEditingSubCategory] = useState(null);
+    const [editingSubCategory, setEditingSubCategory] = useState<SubCategory>();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const { data: subCategories, isLoading } = useGetSubCategoryQuery();
+    const { data: subCategories, isLoading } = useGetSubCategoryQuery(undefined);
     const [addSubCategory] = useAddSubCategoryMutation();
     const [deleteSubCategory] = useDeleteSubCategoryMutation();
     const [updateSubCategory] = useUpdateSubCategoryMutation();
@@ -32,7 +33,7 @@ const SubCategoryForm = () => {
         }
     };
 
-    const handleEdit = (subCat) => {
+    const handleEdit = (subCat: SubCategory) => {
         setEditingSubCategory(subCat);
         setSubCategoryName(subCat.name);
         setIsModalOpen(true);
@@ -50,7 +51,7 @@ const SubCategoryForm = () => {
 
     const resetForm = () => {
         setSubCategoryName("");
-        setEditingSubCategory(null);
+        setEditingSubCategory(undefined);
         setIsModalOpen(false);
     };
 
@@ -85,7 +86,7 @@ const SubCategoryForm = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {subCategories?.map((subCat) => (
+                    {subCategories?.map((subCat: SubCategory) => (
                         <tr key={subCat._id} className="border">
                             <td className="p-2">{subCat.name}</td>
                             <td className="p-2 flex space-x-2">

@@ -21,27 +21,28 @@ import ShoppingCartForm from "@/components/ShoppingCartForm";
 import Popup from "@/components/Popup";
 import Bars from "@/components/Bars";
 import { useState } from "react";
+import { BannerDataType } from "@/types/bannerData";
 
-const BannerData = {
+const BannerData: BannerDataType = {
     discount: "২১ টি ভিন্ন ডিজাইন থেকে বেছে নিন আপনার পছন্দ মত জার্সি গুলো। ",
     title: "Summer Offer",
     title2: "Combo Offer",
     image: jerseyCombo,
     title3: "৫ টি জার্সি মাত্র ৯৫০ টাকা",
-    title4:
-        "২১ টি ভিন্ন ভিন্ন ডিজাইনের জার্সি পছন্দ করে নিতে এখনই ক্লিক করুন।",
+    title4: "২১ টি ভিন্ন ভিন্ন ডিজাইনের জার্সি পছন্দ করে নিতে এখনই ক্লিক করুন।",
     bgColor: "#777",
+    date: ''
 };
 
-const BannerData2 = {
+const BannerData2: BannerDataType = {
     discount: "Summer Sale",
     title: "6 Pocket, 8 Pocket Cargo",
     image: cargoCombo,
     title2: "Combo Offer",
     title3: "3 টি কার্গো মাত্র ১৯৫০ টাকা",
-    title4:
-        "১১ টি ভিন্ন ভিন্ন ডিজাইনের কার্গো পছন্দ করে নিতে এখনই ক্লিক করুন।",
+    title4: "১১ টি ভিন্ন ভিন্ন ডিজাইনের কার্গো পছন্দ করে নিতে এখনই ক্লিক করুন।",
     bgColor: "#E5D3B3",
+    date: ''
 };
 
 const bars = [

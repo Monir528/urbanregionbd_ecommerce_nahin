@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { SideBySideMagnifier } from "react-image-magnifiers";
 import Image from "next/image";
+import { ProductImage} from "@/types/product";
 
-const DetailsImage = ({ images }) => {
+const DetailsImage = ({ images } : {images: ProductImage[]}) => {
   const [selected, setSelected] = useState(0);
 
   return (
@@ -29,8 +30,8 @@ const DetailsImage = ({ images }) => {
             onClick={() => setSelected(index)}
           >
             <Image
-            width={12}
-            height={12}
+            width={100}
+            height={80}
             unoptimized
               src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${
                 images[index].filename

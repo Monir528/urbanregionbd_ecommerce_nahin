@@ -8,14 +8,15 @@ import {
 } from "@/components/api/categoryApi";
 import Modal from "@/components/CategoryForm/update_modal";
 import Image from "next/image";
+import {Category} from "@/types/cateogry";
 
 const CategoryForm = () => {
     const [file, setFile] = useState<File | null>(null);
     const [categoryName, setCategoryName] = useState("");
-    const [editingCategory, setEditingCategory] = useState(null);
+    const [editingCategory, setEditingCategory] = useState<Category>();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const { data: categories, isLoading } = useGetCategoryQuery();
+    const { data: categories, isLoading } = useGetCategoryQuery(undefined);
     const [addCategory] = useAddCategoryMutation();
     const [deleteCategory] = useDeleteCategoryMutation();
     const [updateCategory] = useUpdateCategoryMutation();
@@ -37,7 +38,7 @@ const CategoryForm = () => {
         }
     };
 
-    const handleEdit = (category) => {
+    const handleEdit = (category: Category) => {
         setEditingCategory(category);
         setCategoryName(category.category);
         setFile(null); // Reset file; user can upload a new one
@@ -57,7 +58,7 @@ const CategoryForm = () => {
     const resetForm = () => {
         setFile(null);
         setCategoryName("");
-        setEditingCategory(null);
+        setEditingCategory(undefined);
         setIsModalOpen(false);
     };
 
@@ -90,7 +91,7 @@ const CategoryForm = () => {
                 <p>Loading categories...</p>
             ) : (
                 <div className="grid grid-cols-3 gap-4">
-                    {categories?.map((cat) => (
+                    {categories?.map((cat: Category) => (
                         <div
                             key={cat._id}
                             className="border p-4 relative group"

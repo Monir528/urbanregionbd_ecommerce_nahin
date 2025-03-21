@@ -6,22 +6,23 @@ import {
     useGetUsersQuery,
 } from "@/components/api/userApi";
 import Modal from "@/components/Modal/Modal";
+import {RootState} from "@/reduxToolKit/store";
+import {SysUser} from "@/types/user";
 
 const ControlForm = () => {
     const [role, setRole] = useState("moderator");
-    const { data: findUser } = useGetUsersQuery();
+    const { data: findUser } = useGetUsersQuery(undefined);
     const [addUser, { isSuccess }] = useAddUserMutation();
 
     const [search, setSearch] = useState("");
     const [result, setResult] = useState();
 
     const dispatch = useDispatch();
-    const { modalCondition } = useSelector((state) => state.cartCondition) || {};
-
+    const { modalCondition } = useSelector((state: RootState) => state.cartHandler) || {};
     // Debounce function to optimize search input
-    const debounceHandler = (fn, delay) => {
-        let timeoutId;
-        return (...args) => {
+    const debounceHandler = (fn: (...args: never[]) => void, delay: number) => {
+        let timeoutId: ReturnType<typeof setTimeout>;
+        return (...args: never[]) => {
             clearTimeout(timeoutId);
             timeoutId = setTimeout(() => {
                 fn(...args);
@@ -29,14 +30,14 @@ const ControlForm = () => {
         };
     };
 
-    const doSearch = (value) => {
+    const doSearch = (value:string) => {
         setSearch(value);
     };
 
     const handleSearch = debounceHandler(doSearch, 500);
 
     useEffect(() => {
-        setResult(findUser?.find((e) => e.email === search));
+        setResult(findUser?.find((e: SysUser) => e.email === search));
     }, [search, findUser]);
 
     useEffect(() => {
@@ -46,7 +47,7 @@ const ControlForm = () => {
         }
     }, [isSuccess, dispatch, role]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         addUser({ email: search, role });
     };
@@ -65,7 +66,7 @@ const ControlForm = () => {
                     id="control-email"
                     name="control-email"
                     placeholder="Enter a valid email address"
-                    onChange={(e) => handleSearch(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSearch(e.target.value as never)}
                     required
                     className="w-full mt-1 p-2 border border-gray-300 rounded-md text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />

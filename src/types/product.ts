@@ -1,4 +1,4 @@
-export interface Image {
+export interface ProductImage {
     fieldname: string;
     originalname: string;
     encoding: string;
@@ -30,5 +30,5 @@ export interface ProductDescription {
 export interface Product {
     _id: string;
     description: ProductDescription;
-    images: Image[];
+    images: ProductImage[];
 }

@@ -1,13 +1,13 @@
-import { useRef } from "react";
+// import { useRef } from "react";
 import dynamic from "next/dynamic";
 import CarouselItem from "@/components/CarouselItem";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { CategoryPageTypeDef } from "@/types/type";
 
 const Slider = dynamic(() => import("react-slick"), { ssr: false });
 
-function AutoPlayMethods({ category, data }) {
-    const sliderRef = useRef(null);
+function AutoPlayMethods({ category, data }: CategoryPageTypeDef) {
 
     const settings = {
         dots: true,
@@ -47,7 +47,7 @@ function AutoPlayMethods({ category, data }) {
     return (
         <div>
             <h3 className={"text-black"}>Similar Category</h3>
-            <Slider ref={(slider) => (sliderRef.current = slider)} {...settings}>
+            <Slider {...settings} customPaging={(i) => <div>{i + 1}</div>}>
                 {data
                     ?.filter((item) => item?.description?.category === category)
                     .map((item) => (
