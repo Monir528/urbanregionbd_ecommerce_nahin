@@ -1,5 +1,6 @@
 "use client";
 
+import { CartItem } from "@/types/cart";
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const getInitialState = () => {
   if (typeof window !== 'undefined') {
     const savedItems = localStorage.getItem("cartItems");
+    console.log("saved items", savedItems)
     return {
       cartItems: savedItems ? JSON.parse(savedItems) : [],
       cartTotalQuantity: 0,
@@ -26,7 +28,7 @@ const cartSlice = createSlice({
   reducers: {
     addToCart(state, action) {
       const existingIndex = state.cartItems.findIndex(
-          (item) => item.id === action.payload.id
+          (item: CartItem) => item.id === action.payload.id
       );
 
       if (existingIndex >= 0) {
@@ -50,7 +52,7 @@ const cartSlice = createSlice({
     },
     decreaseCart(state, action) {
       const itemIndex = state.cartItems.findIndex(
-          (item) => item.id === action.payload.id
+          (item: CartItem) => item.id === action.payload.id
       );
 
       if (state.cartItems[itemIndex].cartQuantity > 1) {
@@ -60,7 +62,7 @@ const cartSlice = createSlice({
         });
       } else if (state.cartItems[itemIndex].cartQuantity === 1) {
         state.cartItems = state.cartItems.filter(
-            (item) => item.id !== action.payload.id
+            (item: CartItem) => item.id !== action.payload.id
         );
         toast.error("Product removed from cart", {
           position: "bottom-left",
@@ -73,7 +75,7 @@ const cartSlice = createSlice({
     },
     removeFromCart(state, action) {
       state.cartItems = state.cartItems.filter(
-          (item) => item.id !== action.payload.id
+          (item: CartItem) => item.id !== action.payload.id
       );
       if (typeof window !== 'undefined') {
         localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
@@ -84,8 +86,8 @@ const cartSlice = createSlice({
     },
     getTotals(state) {
       const { total, quantity } = state.cartItems.reduce(
-          (cartTotal, cartItem) => ({
-            total: cartTotal.total + cartItem.price * cartItem.cartQuantity,
+          (cartTotal: { total: number; quantity: number }, cartItem: CartItem) => ({
+            total: cartTotal.total + parseFloat(cartItem.price) * cartItem.cartQuantity,
             quantity: cartTotal.quantity + cartItem.cartQuantity,
           }),
           {

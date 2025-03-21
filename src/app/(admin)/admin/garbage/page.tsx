@@ -1,7 +1,7 @@
 'use client';
 import {useGetProductsQuery} from "@/components/api/productApi";
 import GarbageProduct from "@/components/GarbageProduct";
-import {Product} from "@/types/product";
+import { Product } from "@/types/product";
 
 const Overview = () => {
 
@@ -16,7 +16,7 @@ const Overview = () => {
                 }
                 {!isLoading && isSuccess && data?.length > 0 && (
                     <div className="grid lg:grid-cols-3 gap-2 grid-cols-1 md:grid-flow-col-2">
-                        {data?.map((item:Product) => (
+                        {data?.map((item: Product) => (
                             <GarbageProduct data={item} key={item._id} />
                         ))}
                     </div>

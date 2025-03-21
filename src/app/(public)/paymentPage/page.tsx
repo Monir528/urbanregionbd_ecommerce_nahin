@@ -35,7 +35,7 @@ const Payment2 = () => {
       const data: PaymentResponse = await response.json(); // Type the response
       setSuccessData(data);
 
-      if (typeof window !== 'undefined' && window.fbq) {
+      if (typeof window !== 'undefined' && 'fbq' in window) {
         await window.fbq('track', 'ButtonClick');
       }
     } catch (err) {

@@ -2,18 +2,20 @@
 import { useDispatch, useSelector } from "react-redux";
 import SingleCartItem from "@/components/SingleCartItem";
 import { orderFormOpen } from "@/components/api/cartHandler";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getTotals } from "@/components/api/cartSlice";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import EmptyCart from "@/components/EmptyCart";
 import { useRouter } from "next/navigation";
 // import FooterBanner from "@/components/FooterBanner"
 import OrderForm from "@/components/OrderForm";
+import { RootState } from "@/reduxToolKit/store";
+import { CartItem } from "@/types/cart";
 
 const HomePage = () => {
 
     const dispatch = useDispatch();
-    const cart = useSelector((state) => state.cart);
+    const cart = useSelector((state: RootState) => state.cart);
     const navigate= useRouter()
 
     useEffect(() => {
@@ -24,10 +26,10 @@ const HomePage = () => {
         window.scrollTo(0, 0);
     }, []);
 
-    const [totalPrice, setTotalPrice] = useState(0);
-    const { formCondition } = useSelector((state) => state.cartHandler);
+    // const [totalPrice, setTotalPrice] = useState(0);
+    const { formCondition } = useSelector((state: RootState) => state.cartHandler);
 
-    console.log(totalPrice);
+    // console.log(totalPrice);
     return (
         <main>
             {formCondition && <OrderForm></OrderForm>}
@@ -72,9 +74,9 @@ const HomePage = () => {
                                 </div>
                             </div>
 
-                            {cart?.cartItems.map((item) => (
+                            {cart?.cartItems.map((item: CartItem) => (
                                 <SingleCartItem
-                                    totalPrice={setTotalPrice}
+                                    // totalPrice={setTotalPrice}
                                     key={item.id}
                                     product={item}
                                 />

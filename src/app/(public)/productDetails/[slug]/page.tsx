@@ -11,6 +11,7 @@ import DetailsContent from "@/components/DetailsContent/DetailsContent";
 import {useGetProductsQuery, useGetSingleProductQuery} from "@/components/api/productApi";
 import CategoryPage from "@/components/CategoryPage";
 import SubCategoryPage from "@/components/SubCategoryPage";
+import { RootState } from "@/reduxToolKit/store";
 // import FooterBanner from "@/components/FooterBanner";
 
 // Define the Product type (adjust based on actual API response)
@@ -33,8 +34,8 @@ const ProductDetailsPage = () => {
     const productId = params.slug as string; // Ensure ID is a string
 
     const { data: product, isLoading, isError, isSuccess } = useGetSingleProductQuery(productId);
-    const { open } = useSelector((state) => state?.popUp);
-    const { data: allProductData, isSuccess: allProductSuccess } = useGetProductsQuery();
+    const { open } = useSelector((state: RootState) => state.popUp);
+    const { data: allProductData, isSuccess: allProductSuccess } = useGetProductsQuery(undefined);
     const { productCategory } = useNavBarContext();
 
     // Update category in NavBarContext when data is available

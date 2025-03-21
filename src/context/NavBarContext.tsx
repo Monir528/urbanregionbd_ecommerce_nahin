@@ -1,39 +1,38 @@
 'use client';
 import { createContext, useContext, useState } from 'react';
 
-/**
- * @typedef {Object} AppContext
- * @property {Object} productCategory
- * @property {string} productCategory.get
- * @property {function(string): void} productCategory.update
- */
+// Define the shape of our context
+interface NavBarContextType {
+  productCategory: {
+    get: string;
+    update: (category: string) => void;
+  };
+}
 
-/** @type {React.Context<AppContext|null>} */
-const AppContexts = createContext(null);
+// Create the context with a default value matching the type
+const AppContexts = createContext<NavBarContextType | undefined>(undefined);
 
-// Fix 1: Properly destructure children from propst
-export function NavBarProvider( { children }: { children: React.ReactNode } ) {  // Changed this line
-    const [productCategory, setProductCategory] = useState("");
+export function NavBarProvider({ children }: { children: React.ReactNode }) {
+  const [productCategory, setProductCategory] = useState("");
 
-    const AppContext = {
-        productCategory: {
-            get: productCategory,
-            update: function (cart) {
-                setProductCategory(cart);
-            }
-        }
-    };
+  const AppContext: NavBarContextType = {
+    productCategory: {
+      get: productCategory,
+      update: function(category: string) {
+        setProductCategory(category);
+      }
+    }
+  };
 
-    // Fix 2: Pass AppContext directly instead of wrapping in an object
-    return (
-        <AppContexts.Provider value={AppContext}>
-            {children}
-        </AppContexts.Provider>
-    );
+  return (
+    <AppContexts.Provider value={AppContext}>
+      {children}
+    </AppContexts.Provider>
+  );
 }
 
 export function useNavBarContext() {
-    const context = useContext(AppContexts);
-    if (!context) throw new Error('useCart must be used within CartProvider');
-    return context;
+  const context = useContext(AppContexts);
+  if (!context) throw new Error('useNavBarContext must be used within NavBarProvider');
+  return context;
 }

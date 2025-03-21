@@ -1,11 +1,12 @@
 import {  useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, decreaseCart, getTotals, removeFromCart } from "@/components/api/cartSlice";
+import { RootState } from "@/reduxToolKit/store";
 
 const SingleCartItem = ({product}) => {
 
   const {cartQuantity, image, name, price, id} = product || {}
-  const cart = useSelector((state) => state.cart);
+  const cart = useSelector((state: RootState) => state.cart);
   const dispatch= useDispatch()
   const [count, setCount] = useState(cartQuantity);
 
