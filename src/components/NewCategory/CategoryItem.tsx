@@ -2,8 +2,13 @@
 import Link from "next/link";
 import { resizeName } from "@/utils/sizes";
 import Image from "next/image";
+import { Product } from "@/types/product";
 
-const CategoryItem = ({ item }) => {
+interface CategoryItemProps {
+  item: Product
+}
+
+const CategoryItem = ({ item }: CategoryItemProps) => {
   const { description, images } = item || {};
   const { productName, price, discount } = description || {};
 
@@ -35,7 +40,7 @@ const CategoryItem = ({ item }) => {
         <p className="mb-1 md:mb-4 font-medium text-gray-700 font-blinker">
           Offer Price: {discount}
         </p>
-        <button onClick={quickView} className=" bg-black text-xs py-[2px] px-2 font-semibold text-white">Save Tk: {price - discount}</button>
+        <button onClick={quickView} className=" bg-black text-xs py-[2px] px-2 font-semibold text-white">Save Tk: {parseFloat(price) - parseFloat(discount)}</button>
       </div>
     </Link>
   );

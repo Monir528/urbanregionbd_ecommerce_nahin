@@ -1,5 +1,10 @@
 import Image from "next/image";
-const InvoiceHeader = ({ details }) => {
+import { Order } from "@/types/order";
+
+interface InvoiceHeaderProps {
+  details: Order
+}
+const InvoiceHeader = ({ details }: InvoiceHeaderProps) => {
   return (
       <div className="w-[500px] mx-auto shadow-lg p-4 font-rajdhani text-[16px] font-normal">
         {/* Invoice Top Section */}
@@ -38,11 +43,11 @@ const InvoiceHeader = ({ details }) => {
 
           <div>
             <p className="font-normal">
-              BILL TO: {details.firstName} {details.lastName}
+              BILL TO: {details.name}
             </p>
             <p>Phone: {details.phone}</p>
             <p>Address: {details.address}</p>
-            <p>Zip Code: {details.zip}</p>
+            {/* <p>Zip Code: {details.zip}</p> */}
             <p>Email: {details.email}</p>
           </div>
         </div>

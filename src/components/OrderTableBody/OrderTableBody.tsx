@@ -4,14 +4,19 @@ import Link from "next/link";
 import { TbEyeClosed } from "react-icons/tb";
 import { FaEdit } from "react-icons/fa";
 import { useEditOrderMutation } from "@/components/api/confirmOrder/confirmOrder";
+import { Order } from "@/types/order";
 
-const OrderTableBody = ({ item }) => {
+interface OrderTableBodyProps {
+    item: Order
+}
+
+const OrderTableBody = ({ item }: OrderTableBodyProps) => {
     const { _id, total, payment, date, status } = item || {};
 
-    const [orderStatus, setOrderStatus] = useState(status);
+    const [orderStatus, setOrderStatus] = useState<string>(status);
     const [editOrder] = useEditOrderMutation();
 
-    const handleEdit = (e) => {
+    const handleEdit = (e: string) => {
         setOrderStatus(e);
         console.log(_id, e);
         editOrder({ id: _id, status: e });
@@ -60,7 +65,7 @@ const OrderTableBody = ({ item }) => {
                 <Link href="">
                     <IoMdDownload />
                 </Link>
-                <Link href={`invoice/${_id}`} state={item}>
+                <Link href={`invoice/${_id}`} >
                     <TbEyeClosed />
                 </Link>
                 <Link href="">

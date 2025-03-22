@@ -1,4 +1,8 @@
-const InvoiceTotal = ({ details }) => {
+import { Order } from "@/types/order";
+interface InvoiceTotalProps {
+    details: Order
+}
+const InvoiceTotal = ({ details }: InvoiceTotalProps) => {
     return (
         <div className="font-rajdhani text-[16px] font-normal">
             {/* Invoice Content Section */}

@@ -1,9 +1,10 @@
 import { useGetProductsQuery } from "@/components/api/productApi";
 import ProductListSkeleton from "../ProductListSkeleton/ProductListSkeleton";
 import CategoryItem from "./CategoryItem";
+import { Product } from "@/types/product";
 
 const NewCategory = () => {
-  const { data, isSuccess, isError, isLoading } = useGetProductsQuery();
+  const { data, isSuccess, isError, isLoading } = useGetProductsQuery(undefined);
 
   return (
     <div className="py-8">
@@ -16,8 +17,8 @@ const NewCategory = () => {
         {/*} */}
           {isSuccess &&
             data?.length > 0 &&
-            data.filter(item=>item?.description?.subcategory?.includes("new arrival"))
-            .map((item) => <CategoryItem key={item._id} item={item} />)}
+            data.filter((item: Product)=>item?.description?.subcategory?.includes("new arrival"))
+            .map((item: Product) => <CategoryItem key={item._id} item={item} />)}
 
           {isError && "Failed to load"}
         </div>

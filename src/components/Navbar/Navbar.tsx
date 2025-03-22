@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getTotals } from "@/components/api/cartSlice";
 import { FaFacebookSquare, FaInstagramSquare } from "react-icons/fa";
 import { useNavBarContext } from "@/context/NavBarContext";
+import { RootState } from "@/reduxToolKit/store";
 
 // Navigation configuration (unchanged)
 const navigation = {
@@ -78,7 +79,7 @@ const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart);
+  const cart = useSelector((state: RootState) => state.cart);
 
   useEffect(() => {
     dispatch(getTotals());

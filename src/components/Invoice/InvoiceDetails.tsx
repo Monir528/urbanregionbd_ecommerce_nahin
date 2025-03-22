@@ -1,6 +1,11 @@
 import InvoiceItem from "./InvoiceItem";
+import { Order } from "@/types/order";
 
-const InvoiceDetails = ({ details }) => {
+interface InvoiceDetailsProps {
+  details: Order
+}
+
+const InvoiceDetails = ({ details }: InvoiceDetailsProps) => {
   return (
       <div className="mx-[10px]">
         <table className="w-full border-collapse">

@@ -18,5 +18,11 @@ export interface Order {
     orderedItem: OrderedItem[];
     date: string; // You might want to use Date type if you parse the string in your app
     total: number;
-    status: string;
+    status: "received" | "pending" | "shipped" | "delivered" | "cancelled" | "failed";
+    payment:Payment
+}
+
+export interface Payment {
+    phone: string;
+    transId: string;
 }
