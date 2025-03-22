@@ -1,5 +1,7 @@
 import ProductLayout2 from "@/components/ProductLayout/ProductLayout2";
-const SubCategoryPage = ({ subcategory, data }) => {
+import {SubCategoryPageTypeDef} from "@/types/type";
+
+const SubCategoryPage = ({ subcategory, data }: SubCategoryPageTypeDef) => {
 
 const filtered_product = data.filter((person) => person?.description?.subcategory?.includes(subcategory?.[0] || subcategory?.[1]  ) )
 

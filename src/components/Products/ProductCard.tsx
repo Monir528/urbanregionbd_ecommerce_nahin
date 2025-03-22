@@ -2,9 +2,14 @@ import Link from "next/link";
 import Button from "../Shared/Button";
 import { resizeName } from "@/utils/sizes";
 import Image from "next/image";
+import {Product} from "@/types/product";
 
+interface ProductCardProps {
+  data: Product;
+  index: number;
+}
 
-const ProductCard = ({ data, index }) => {
+const ProductCard = ({ data, index }:ProductCardProps) => {
   const { description, images } = data || {};
   const { productName, price, discount } = description || {};
 

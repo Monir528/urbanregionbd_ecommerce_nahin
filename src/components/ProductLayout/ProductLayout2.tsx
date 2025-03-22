@@ -1,8 +1,13 @@
 import { useRouter } from "next/navigation";
 import {  useDispatch } from "react-redux";
 import { popUpOpen} from "@/components/api/quickViewSlice"
+import {Product} from "@/types/product";
 
-const ProductLayout2 = ({ data }) => {
+interface  ProductLayout2 {
+  data: Product
+}
+
+const ProductLayout2 = ({ data }: ProductLayout2) => {
   const { images, _id } = data || {};
 
   const navigate = useRouter();
@@ -10,12 +15,12 @@ const ProductLayout2 = ({ data }) => {
   const dispatch= useDispatch()
   const { price, discount } = data?.description || {};
 
-  const handleDetails = (id) => {
+  const handleDetails = (id: string) => {
     navigate.push(`/productDetails/${id}`);
     window.scrollTo(0, 0);
   };
 
-  const handlePopUp=(data)=>{
+  const handlePopUp=(data: Product)=>{
     dispatch(popUpOpen(data))
   }
 

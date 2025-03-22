@@ -8,10 +8,10 @@ import TextArea from "@/components/TextArea";
 
 export default function ProductUploadForm() {
   // Fetch Categories
-  const { data: getCatData, isSuccess: getCatSuccess } = useGetCategoryQuery();
+  const { data: getCatData, isSuccess: getCatSuccess } = useGetCategoryQuery(undefined);
 
   // Fetch Subcategories
-  const { data: getSubCatData, isSuccess: getSubCatSuccess, isLoading: subCatLoading } = useGetSubCategoryQuery();
+  const { data: getSubCatData, isSuccess: getSubCatSuccess, isLoading: subCatLoading } = useGetSubCategoryQuery(undefined);
 
   // Add Product Mutation
   const [addProduct, { isLoading, isSuccess: addSuccess }] = useAddProductMutation();

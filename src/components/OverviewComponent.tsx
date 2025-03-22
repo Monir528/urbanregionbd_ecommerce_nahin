@@ -5,8 +5,15 @@ import { IoMdAlarm } from "react-icons/io";
 import { TbDevicesCancel } from "react-icons/tb";
 import { FaRegMoneyBill1 } from "react-icons/fa6";
 import Link from "next/link"
+import { Order } from "@/types/order";
 
-const OverviewComponent = ({ received, pending, failed, delivered }) => {
+interface OverviewComponentProps { 
+    received: Order[], 
+    pending: Order[], 
+    failed: Order[], 
+    delivered: Order[] 
+}
+const OverviewComponent = ({ received, pending, failed, delivered } : OverviewComponentProps) => {
 
     let deliveredTotal=0
     let deliveredQuantity=0
