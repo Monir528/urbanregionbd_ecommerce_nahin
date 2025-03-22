@@ -3,11 +3,12 @@ import { Fragment } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { sizeModalClose } from '@/components/api/sizeModalSlice'
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import {RootState} from "@/reduxToolKit/store";
 
 
 export default function SizeModal() {
   // let [isOpen, setIsOpen] = useState(true)
-  const {isOpen, value} = useSelector(state=>state.size)
+  const {isOpen, value} = useSelector((state: RootState)=>state.size)
 
   const dispatch= useDispatch()
 

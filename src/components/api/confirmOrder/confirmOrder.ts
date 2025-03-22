@@ -5,6 +5,7 @@ const baseQuery = fetchBaseQuery({
 });
 
 export const confirmOrder= createApi({
+    reducerPath: "confirmOrder",
     tagTypes: ['Orders', 'Order'],
     baseQuery,
     refetchOnFocus: true,

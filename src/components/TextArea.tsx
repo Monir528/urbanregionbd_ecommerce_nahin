@@ -1,19 +1,24 @@
 import { useState, useCallback } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, ContentState } from 'draft-js';
+import { EditorState, ContentState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 // Polyfill for findDOMNode to address React 18 compatibility
-if (typeof window !== 'undefined') {
-  window.ReactDOM = window.ReactDOM || {};
-  window.ReactDOM.findDOMNode = (component) => {
-    return component || null;
-  };
+// if (typeof window !== 'undefined') {
+//   window.ReactDOM = window.ReactDOM || {};
+//   window.ReactDOM.findDOMNode = (component) => {
+//     return component || null;
+//   };
+// }
+
+interface TextAreaProps {
+    value: string;
+    onChange: (html: string) => void;
 }
 
-const TextArea = ({ value, onChange }) => {
+const TextArea = ({ value, onChange }: TextAreaProps) => {
   const [editorState, setEditorState] = useState(() => {
     const blocksFromHtml = htmlToDraft(value || '');
     const { contentBlocks, entityMap } = blocksFromHtml;
@@ -21,9 +26,11 @@ const TextArea = ({ value, onChange }) => {
     return EditorState.createWithContent(contentState);
   });
 
-  const handleEditorChange = useCallback((newEditorState) => {
+  const handleEditorChange = useCallback((newEditorState: EditorState) => {
     setEditorState(newEditorState);
-    const html = draftToHtml(newEditorState.getCurrentContent());
+      const contentState = newEditorState.getCurrentContent(); // Get ContentState
+      const rawContentState = convertToRaw(contentState); // Convert to RawDraftContentState
+      const html = draftToHtml(rawContentState);          // Generate HTML
     if (html !== value) { // Only call onChange if the HTML has changed
       onChange(html);
     }

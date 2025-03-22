@@ -1,8 +1,15 @@
 import { useDeleteSubCategoryMutation } from "@/components/api/subCategoryApi";
 
+interface SubCategoryProps {
+    item: SubCategory
+}
 
+interface SubCategory {
+    _id: string;
+    name: string;
+}
 
-const SubCategory = ({item}) => {
+const SubCategory = ({item}: SubCategoryProps) => {
     const [deleteSubCategory
         // , {
         // isLoading, isSuccess}

@@ -5,6 +5,8 @@ import { modalOpen } from "@/components/api/cartHandler";
 import { useGetCategoryQuery } from "@/components/api/categoryApi";
 import { useGetSubCategoryQuery } from "@/components/api/subCategoryApi";
 import TextArea from "@/components/TextArea";
+import {Category} from "@/types/cateogry";
+import {SubCategory} from "@/types/SubCateogry";
 
 export default function ProductUploadForm() {
   // Fetch Categories
@@ -16,35 +18,32 @@ export default function ProductUploadForm() {
   // Add Product Mutation
   const [addProduct, { isLoading, isSuccess: addSuccess }] = useAddProductMutation();
 
-  // const selector = useSelector((state) => state.cartHandler);
   const dispatch = useDispatch();
 
-  // Form State
-  const [productName, setProductName] = useState("");
-  const [review, setReview] = useState(5);
-  const [price, setPrice] = useState("");
-  const [videoLink, setVideoLink] = useState("");
-  const [otherLink, setOtherLink] = useState("");
-  const [category, setCategory] = useState(getCatData?.[0]?.category || "");
-  const [subcategory, setSubcategory] = useState([]);
-  const [description, setDescription] = useState("");
-  const [variants
-    // , setVariants
-  ] = useState("");
-  const [discount, setDiscount] = useState("");
-  const [extra, setExtra] = useState("");
-  const [extraInfo, setExtraInfo] = useState("");
-  const [brand, setBrand] = useState("");
-  const [shortDescription, setShortDescription] = useState("");
-  const [files, setFiles] = useState([]);
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState(true);
-  const [stock, setStock] = useState(true);
+  // Form State with Explicit Types
+  const [productName, setProductName] = useState<string>("");
+  const [review, setReview] = useState<number>(5);
+  const [price, setPrice] = useState<string>("");
+  const [videoLink, setVideoLink] = useState<string>("");
+  const [otherLink, setOtherLink] = useState<string>("");
+  const [category, setCategory] = useState<string>(getCatData?.[0]?.category || "");
+  const [subcategory, setSubcategory] = useState<string[]>([]);
+  const [description, setDescription] = useState<string>("");
+  const [variants] = useState<string>(""); // Note: Unused in the form; consider adding an input or removing
+  const [discount, setDiscount] = useState<string>("");
+  const [extra, setExtra] = useState<string>("");
+  const [extraInfo, setExtraInfo] = useState<string>("");
+  const [brand, setBrand] = useState<string>("");
+  const [shortDescription, setShortDescription] = useState<string>("");
+  const [files, setFiles] = useState<File[]>([]);
+  const [message, setMessage] = useState<string>("");
+  const [error, setError] = useState<boolean>(true);
+  const [stock, setStock] = useState<boolean>(true);
 
-  // File Handling
-  const handleFile = (e) => {
+  // File Handling with Typed Event
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage("");
-    const selectedFiles = Array.from(e.target.files);
+    const selectedFiles = Array.from(e.target.files || []); // Handle null case
     const validFiles = selectedFiles.filter((file) =>
         ["image/gif", "image/jpeg", "image/png"].includes(file.type)
     );
@@ -55,13 +54,14 @@ export default function ProductUploadForm() {
     setError(false);
   };
 
-  const removeImage = (fileName) => {
+  const removeImage = (fileName: string) => {
     setFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
-    if (files.length <= 1) setError(true);
+    // Removed: if (files.length <= 1) setError(true);
+    // useEffect below handles error state
   };
 
-  // Form Submission
-  const handleUpload = async (e) => {
+  // Form Submission with Typed Event
+  const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (files.length === 0) {
       setError(true);
@@ -103,8 +103,8 @@ export default function ProductUploadForm() {
     setError(files.length === 0);
   }, [files]);
 
-  // Subcategory Checkbox Handler
-  const handleChange = (e) => {
+  // Subcategory Checkbox Handler with Typed Event
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (e.target.checked) {
       setSubcategory((prev) => [...prev, value]);
@@ -140,7 +140,7 @@ export default function ProductUploadForm() {
             </label>
             <input
                 value={review}
-                onChange={(e) => setReview(Math.max(1, Math.min(5, e.target.value)))}
+                onChange={(e) => setReview(Math.max(1, Math.min(5, Number(e.target.value))))} // Explicitly convert string to number
                 type="number"
                 id="review"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-gray-900"
@@ -202,7 +202,7 @@ export default function ProductUploadForm() {
                     <option value="">Select a category</option>
                 )}
                 {getCatSuccess &&
-                    getCatData?.map((item) => (
+                    getCatData?.map((item: Category) => (
                         <option key={item._id} value={item.category}>
                           {item.category}
                         </option>
@@ -215,17 +215,16 @@ export default function ProductUploadForm() {
                 Stock Available
               </label>
               <select
-                  value={stock}
+                  value={stock.toString()} // Convert boolean to string for select
                   onChange={(e) => setStock(e.target.value === "true")}
                   id="stock"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-gray-900"
               >
-                <option value={true}>Available</option>
-                <option value={false}>Not Available</option>
+                <option value="true">Available</option>
+                <option value="false">Not Available</option>
               </select>
             </div>
           </div>
-
 
           {/* Subcategory */}
           <div>
@@ -233,7 +232,7 @@ export default function ProductUploadForm() {
             {subCatLoading && <p className="text-gray-600">Loading...</p>}
             {!subCatLoading && getSubCatSuccess && getSubCatData?.length > 0 && (
                 <div className="space-y-1">
-                  {getSubCatData.map((item) => (
+                  {getSubCatData.map((item: SubCategory) => (
                       <div key={item._id} className="flex items-center">
                         <input
                             checked={subcategory.includes(item.name)}
@@ -248,8 +247,6 @@ export default function ProductUploadForm() {
                 </div>
             )}
           </div>
-
-
 
           {/* Description */}
           <div className="md:col-span-2">
@@ -348,7 +345,6 @@ export default function ProductUploadForm() {
                               className="w-full h-24 object-cover rounded-md"
                           />
                         </picture>
-
                         <button
                             onClick={() => removeImage(file.name)}
                             className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"

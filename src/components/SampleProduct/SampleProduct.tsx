@@ -1,8 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { resizeName } from "@/utils/sizes";
+import {Product} from "@/types/product";
 
-export default function SampleProduct({ data }) {
+interface SampleProductProps {
+    data: Product[]
+}
+
+export default function SampleProduct({ data }: SampleProductProps) {
 
   return (
     <div className="bg-white">
@@ -27,7 +32,7 @@ export default function SampleProduct({ data }) {
                     <p className="absolute top-0 left-0 bg-red-500 px-2 py-[2px] text-sm font-semibold text-gray-100">
                       <span>Save TK : </span> 
 
-                      {Math.ceil(product?.description?.price - product?.description?.discount)} 
+                      {Math.ceil(parseFloat(product?.description?.price ?? '0') - parseFloat(product?.description?.discount ?? '0'))}
                      
                     </p>
                     <div className="mt-4 flex w-full px-2 justify-between">
