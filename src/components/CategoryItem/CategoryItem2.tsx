@@ -17,8 +17,7 @@ const CategoryItem2 = () => {
                   Cargo Pants
                 </p>
                 <Link href="category/cargo pants">
-                <button className="cursor-pointer hover:scale-105 duration-300 py-2 px-8 rounded-full relative z-10 bg-primary
-                text-white"
+                <button className="cursor-pointer hover:scale-105 duration-300 py-2 px-8 rounded-full relative z-10  bg-red-600 text-white"
                   
                 >Browse</button></Link>
                
@@ -42,8 +41,7 @@ const CategoryItem2 = () => {
                   T-Shirt
                 </p>
                 <Link href="category/t-shirt">
-                <button className="cursor-pointer hover:scale-105 duration-300 py-2 px-8 rounded-full relative z-10 bg-white
-                text-brandGreen"
+                <button className="cursor-pointer hover:scale-105 duration-300 py-2 px-8 rounded-full relative z-10  bg-red-600 text-white"
                 >Browse</button></Link>
               </div>
             </div>
@@ -62,8 +60,7 @@ const CategoryItem2 = () => {
                 </p>
                 <Link href="category/hoodie">
                   <button
-                    className="cursor-pointer hover:scale-105 duration-300 py-2 px-8 rounded-full relative z-10 bg-primary
-                text-white"
+                    className="cursor-pointer hover:scale-105 duration-300 py-2 px-8 rounded-full relative z-10  bg-red-600 text-white"
                   >
                     Browse
                   </button>

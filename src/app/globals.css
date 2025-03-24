@@ -19,3 +19,15 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.slick-dots li.slick-active div {
+  background-color: #ffffff;
+}
+
+.slick-dots li div {
+  transition: all 0.3s ease;
+}
+
+.slick-dots li div:hover {
+  background-color: #ffffff50;
+}

@@ -74,7 +74,7 @@ const HomePage = () => {
         setOrderPopup(false);
     };
 
-    console.log("fetched products", data);
+    // console.log("fetched products", data);
 
     return (
         <main>

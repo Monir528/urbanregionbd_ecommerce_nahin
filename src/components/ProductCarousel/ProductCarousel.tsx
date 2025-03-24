@@ -1,4 +1,5 @@
 // import { useRef } from "react";
+"use client";
 import dynamic from "next/dynamic";
 import CarouselItem from "@/components/CarouselItem";
 import 'slick-carousel/slick/slick.css';
@@ -15,7 +16,8 @@ function AutoPlayMethods({ category, data }: CategoryPageTypeDef) {
         speed: 700,
         autoplay: true,
         slidesToShow: 6,
-        adaptiveHeight: true,
+        adaptiveHeight: false,
+        arrows: false,
         responsive: [
             {
                 breakpoint: 1024,
@@ -45,13 +47,20 @@ function AutoPlayMethods({ category, data }: CategoryPageTypeDef) {
     };
 
     return (
-        <div>
-            <h3 className={"text-black"}>Similar Category</h3>
-            <Slider {...settings} customPaging={(i) => <div>{i + 1}</div>}>
+        <div className="px-4 py-8">
+            <h3 className={"text-xl font-bold mb-4 text-black"}>Similar Category</h3>
+            <Slider {...settings }
+                    appendDots={(dots: React.ReactNode) => (
+                <div className="mt-4">
+                    <ul className="flex justify-center gap-2">{dots}</ul>
+                </div>
+            )} >
                 {data
                     ?.filter((item) => item?.description?.category === category)
                     .map((item) => (
-                        <CarouselItem key={item._id} data={item} />
+                        <div key={item._id} className="px-2">
+                            <CarouselItem data={item} />
+                        </div>
                     ))}
             </Slider>
         </div>

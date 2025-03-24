@@ -57,7 +57,7 @@ const ProductDetailsPage = () => {
         );
     }
 
-    console.log("single product:", product);
+    // console.log("single product:", product);
 
     return (
         <div>

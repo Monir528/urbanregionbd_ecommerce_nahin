@@ -11,7 +11,7 @@ interface CarouselItemProps {
 
 const CarouselItem = ({ data }: CarouselItemProps) => {
   const { description, images, _id } = data || {};
-  const { productName, price, discount, review } = description || {};
+  const { productName, price, discount } = description || {};
 
   const router = useRouter();
 
@@ -19,24 +19,33 @@ const CarouselItem = ({ data }: CarouselItemProps) => {
     router.push(`/productDetails/${id}`);
   };
 
-  console.log('review ', review);
+  // console.log('review ', review);
   return (
       <div
           onClick={() => handleDescription(_id)}
-          className="w-full max-w-sm p-2 text-black bg-white dark:border-gray-700 cursor-pointer"
+          className="group w-full h-full  bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
       >
-        <Image
-            width={235}
-            height={180}
-            unoptimized
-            src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${images[0]?.filename}`}
-            alt={productName || "Product Image"}
-            className="w-full max-w-sm p-2 bg-white dark:bg-gray-800 dark:border-gray-700"
-        />
-        <div>
-          <h3>{resizeName(productName, 15)?.toUpperCase()}</h3>
-          <p>৳ {price}</p>
-          {discount && <p className="line-through">৳ {discount}</p>}
+        <div className="relative aspect-square mb-4 overflow-hidden rounded-lg">
+          <Image
+              fill
+              unoptimized
+              src={images?.[0]?.filename ?
+                  `${process.env.NEXT_PUBLIC_ROOT_API}/Images/${images[0]?.filename}` :
+                  '/fallback-image.jpg'}
+              alt={productName || "Product Image"}
+              className="object-cover object-center"
+          />
+        </div>
+        <div className="text-center text-black">
+          <h3 className="text-sm font-medium mb-1">
+            {resizeName(productName, 15)?.toUpperCase()}
+          </h3>
+          <div className="flex justify-center items-center gap-2">
+            <p className="text-lg font-bold text-primary">৳ {price}</p>
+            {discount && (
+                <p className="text-sm text-gray-400 line-through">৳ {discount}</p>
+            )}
+          </div>
         </div>
       </div>
   );

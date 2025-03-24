@@ -3,8 +3,8 @@ import { CategoryPageTypeDef } from "@/types/type";
 
 const CategoryPage = ({category, data} : CategoryPageTypeDef) => {
 
-    console.log('category', category);
-    console.log('category data', data);
+    // console.log('category', category);
+    // console.log('category data', data);
     return (
         <div className="container mx-auto">
             <ProductCarousel category={category} data={data}></ProductCarousel>

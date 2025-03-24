@@ -4,7 +4,11 @@ import { useAddProductMutation } from "@/components/api/productApi";
 import { modalOpen } from "@/components/api/cartHandler";
 import { useGetCategoryQuery } from "@/components/api/categoryApi";
 import { useGetSubCategoryQuery } from "@/components/api/subCategoryApi";
-import TextArea from "@/components/TextArea";
+import dynamic from 'next/dynamic';
+const TextArea = dynamic(
+    () => import('@/components/TextArea'),
+    { ssr: false }
+);
 import {Category} from "@/types/cateogry";
 import {SubCategory} from "@/types/SubCateogry";
 
