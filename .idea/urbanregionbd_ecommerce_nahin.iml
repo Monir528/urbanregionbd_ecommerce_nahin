@@ -11,5 +11,6 @@
     <orderEntry type="module" module-name="urbanregionbd-commerce-front-end" />
     <orderEntry type="module" module-name="demo-commerce-react" />
     <orderEntry type="module" module-name="backend-urbanregionbd-ecommerce" />
+    <orderEntry type="module" module-name="test_deploy" />
   </component>
 </module>
