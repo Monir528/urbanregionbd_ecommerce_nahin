@@ -1,78 +1,60 @@
-"use client";
+import React from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Autoplay, Navigation } from 'swiper/modules';
+import Image from 'next/image';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
-import React from "react";
-import Slider from "react-slick";
-import Image from "next/image";
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+// Define the props interface for TypeScript
+interface ImageCarouselProps {
+    images: string[];
+}
 
-// Example array of images (you can update with your own image paths)
-const sliderImages = [
-    "/urbanregion.jpg",
-    "/urbanregion1.png",
-    "/urbanregion2.jpg",
-];
-
-const HeroCarousel = () => {
-    // Slider settings; adjust as needed
-    const settings = {
-        dots: true,
-        infinite: true,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        nextArrow: <SampleNextArrow />,
-        prevArrow: <SamplePrevArrow />,
-        speed: 500,
-        autoplay: true,
-        autoplaySpeed: 3000,
-        arrows: true,
-    };
-
+const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
     return (
-        <div className="w-full max-h-[82vh] overflow-hidden">
-            <div className="slider-container">
-                <Slider {...settings} appendDots={(dots: React.ReactNode) => (
-                    <div className="mt-4">
-                        <ul className="flex justify-center gap-2">{dots}</ul>
-                    </div>
-                )}>
-                    {sliderImages.map((src, index) => (
-                        <div key={index} className="relative">
+        <>
+            <Swiper
+                modules={[Pagination, Autoplay, Navigation]}
+                pagination={{ clickable: true }}
+                autoplay={{ delay: 3000 }}
+                loop={true}
+                spaceBetween={0}
+                slidesPerView={1}
+                navigation={true}
+            >
+                {images.map((image, index) => (
+                    <SwiperSlide key={index}>
+                        <div style={{ position: 'relative', width: '100%', height: '88vh' }}>
                             <Image
-                                src={src}
-                                width={580} height={920}
-                                alt={`Slide ${index + 1}`}
-                                className="w-full object-cover"
-                                unoptimized={true} // Remove if you want Next.js optimization
+                                src={image}
+                                alt={`Slide ${index + 1}`} // Update with descriptive alt text if needed
+                                layout="fill" objectFit="cover"
+                                // objectFit is no longer needed; it defaults to "cover"
                             />
                         </div>
-                    ))}
-                </Slider>
-            </div>
-        </div>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
+            <style jsx global>{`
+                .swiper-pagination-bullet {
+                    background-color: #807070; /* Inactive dot color */
+                }
+
+                .swiper-pagination-bullet-active {
+                    background-color: #000; /* Active dot color */
+                }
+
+                .swiper-button-next,
+                .swiper-button-prev {
+                    color: #fff; /* Arrow color */
+                    background-color: rgba(10, 10, 10, 0.28);
+                    padding: 6px;
+                    border-radius: 5px /* Inactive dot color */;
+                }
+            `}</style>
+        </>
     );
 };
 
-export default HeroCarousel;
-
-function SampleNextArrow(props) {
-    const { className, style, onClick } = props;
-    return (
-        <div
-            className={className}
-            style={{ ...style, display: "block", background: "red" }}
-            onClick={onClick}
-        />
-    );
-}
-
-function SamplePrevArrow(props) {
-    const { className, style, onClick } = props;
-    return (
-        <div
-            className={className}
-            style={{ ...style, display: "block", background: "green" }}
-            onClick={onClick}
-        />
-    );
-}
+export default ImageCarousel;

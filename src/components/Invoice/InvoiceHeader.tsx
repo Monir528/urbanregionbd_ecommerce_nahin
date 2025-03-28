@@ -6,7 +6,7 @@ interface InvoiceHeaderProps {
 }
 const InvoiceHeader = ({ details }: InvoiceHeaderProps) => {
   return (
-      <div className="w-[500px] mx-auto shadow-lg p-4 font-rajdhani text-[16px] font-normal">
+      <div className="w-[500px] mx-auto shadow-lg p-4 font-rajdhani text-[16px] font-normal text-black">
         {/* Invoice Top Section */}
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -30,10 +30,9 @@ const InvoiceHeader = ({ details }: InvoiceHeaderProps) => {
               <p>Address: Mirpur-11, Dhaka-1216</p>
             </div>
             <Image
-            width={16}
-            height={16}
+            width={58}
+            height={58}
             unoptimized
-                className="h-16"
                 src="https://i.ibb.co/7GVcKqq/347120619-205072055716972-7844522544708747971-n.jpg"
                 alt="Company Logo"
             />

@@ -4,10 +4,8 @@ import jerseyCombo from "../../../public/jersey-combo1.png";
 import cargoCombo from "../../../public/cargo_combo.png";
 import { useGetProductsQuery } from "@/components/api/productApi";
 import RightCart from "@/components/RightCart";
-import Hero from "@/components/Hero";
 import Notice from "@/components/Notice";
 import NewCategory from "@/components/NewCategory/NewCategory";
-// import CategoryItem from "@/components/NewCategory/CategoryItem";
 import CategoryItem2 from "@/components/CategoryItem/CategoryItem2";
 import CategoryItem3 from "@/components/CategoryItem/CategoryItem3";
 import Services from "@/components/Services";
@@ -16,13 +14,12 @@ import SampleProduct from "@/components/SampleProduct/SampleProduct";
 import Banner from "@/components/Banner";
 import Blogs from "@/components/Blogs";
 import Products from "@/components/Products/Products";
-// import FooterBanner from "@/components/FooterBanner";
 import ShoppingCartForm from "@/components/ShoppingCartForm";
 import Popup from "@/components/Popup";
 import Bars from "@/components/Bars";
 import { useState } from "react";
 import { BannerDataType } from "@/types/bannerData";
-import HeroCarousel from "@/components/Hero";
+import ImageCarousel from "@/components/Hero";
 
 const BannerData: BannerDataType = {
     discount: "২১ টি ভিন্ন ডিজাইন থেকে বেছে নিন আপনার পছন্দ মত জার্সি গুলো। ",
@@ -77,11 +74,17 @@ const HomePage = () => {
 
     // console.log("fetched products", data);
 
+    const images = [
+        "/urbanregion.jpg",
+    "/urbanregion1.png",
+    "/urbanregion2.jpg",
+    ];
+
     return (
         <main>
             <div>
                 <RightCart></RightCart>
-                <HeroCarousel />
+                <ImageCarousel images={images} />
                 <Notice></Notice>
                 <Bars item={bars[0]} id="new arrival"></Bars>
                 <NewCategory></NewCategory>

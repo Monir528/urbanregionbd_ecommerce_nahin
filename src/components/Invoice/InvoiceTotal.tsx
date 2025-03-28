@@ -4,7 +4,7 @@ interface InvoiceTotalProps {
 }
 const InvoiceTotal = ({ details }: InvoiceTotalProps) => {
     return (
-        <div className="font-rajdhani text-[16px] font-normal">
+        <div className="font-rajdhani text-[16px] font-normal text-black">
             {/* Invoice Content Section */}
             <div className="flex items-center justify-between m-2.5 mb-4">
                 <div>
@@ -13,13 +13,13 @@ const InvoiceTotal = ({ details }: InvoiceTotalProps) => {
                 <div className="flex gap-10">
                     <div>
                         <p>Subtotal:</p>
-                        <p>Paid:</p>
-                        <p>Total:</p>
+                        <p>Delivery Charge:</p>
+                        {/*<p>Total:</p>*/}
                     </div>
                     <div>
                         <p>{details.total} Taka</p>
-                        <p>00 Taka</p>
-                        <p>{details?.total} Taka</p>
+                        <p>{details.division == "osd" ? 120:60} Taka</p>
+                        {/*<p>{details?.total} Taka</p>*/}
                     </div>
                 </div>
             </div>
@@ -29,7 +29,7 @@ const InvoiceTotal = ({ details }: InvoiceTotalProps) => {
             {/* Invoice Payable Section */}
             <div className="flex justify-end">
                 <h2 className="bg-black/80 text-white inline-block mr-2.5 px-2 py-1">
-                    Total: {details?.total}
+                    Total: {(details?.total + (details.division == "osd" ? 120:60))}
                 </h2>
             </div>
         </div>

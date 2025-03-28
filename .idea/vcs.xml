@@ -2,6 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="D:/SOFTWARE DEV/FrontEnd/Next/urbanregionbd-commerce-front-end" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../NODE JS PROJECTS/backend-urbanregionbd-ecommerce" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../demo-commerce-react" vcs="Git" />
   </component>
 </project>

@@ -10,7 +10,7 @@ const Overview = () => {
 
     return (
         <main>
-            <div className='mainContent'>
+            <div className='mainContent text-black'>
                 <h2>Order Page:</h2>
                 <OrderTable></OrderTable>
                 <p className="h-10"></p>
