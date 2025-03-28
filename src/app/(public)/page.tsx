@@ -22,6 +22,7 @@ import Popup from "@/components/Popup";
 import Bars from "@/components/Bars";
 import { useState } from "react";
 import { BannerDataType } from "@/types/bannerData";
+import HeroCarousel from "@/components/Hero";
 
 const BannerData: BannerDataType = {
     discount: "২১ টি ভিন্ন ডিজাইন থেকে বেছে নিন আপনার পছন্দ মত জার্সি গুলো। ",
@@ -80,7 +81,7 @@ const HomePage = () => {
         <main>
             <div>
                 <RightCart></RightCart>
-                <Hero />
+                <HeroCarousel />
                 <Notice></Notice>
                 <Bars item={bars[0]} id="new arrival"></Bars>
                 <NewCategory></NewCategory>
