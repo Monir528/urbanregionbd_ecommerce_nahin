@@ -50,7 +50,7 @@ export default function SampleProduct({ data }: SampleProductProps) {
                           aria-hidden="true"
                           className="absolute inset-0 "
                         />
-                         {product?.description?.price}
+                         {product?.description?.price} taka
                       </h3>
                     </div>
                   </div>

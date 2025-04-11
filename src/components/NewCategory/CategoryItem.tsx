@@ -38,7 +38,7 @@ const CategoryItem = ({ item }: CategoryItemProps) => {
         </p>
 
         <p className="mb-1 md:mb-4 font-medium text-gray-700 font-blinker">
-          Offer Price: {discount}
+          Offer Price: {discount} Taka
         </p>
         <button onClick={quickView} className=" bg-black text-xs py-[2px] px-2 font-semibold text-white">Save Tk: {parseFloat(price) - parseFloat(discount)}</button>
       </div>

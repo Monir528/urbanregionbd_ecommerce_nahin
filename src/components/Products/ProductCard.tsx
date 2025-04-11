@@ -42,8 +42,8 @@ const ProductCard = ({ data, index }:ProductCardProps) => {
         </div>
         <div className="leading-7 text-black">
           <h2 className="font-semibold">{resizeName(productName,17)}</h2>
-          <h2 className="font-semi-bold line-through text-red-500">${price}</h2>
-          <h2 className="font-bold">${discount}</h2>
+          <h2 className="font-semi-bold line-through text-red-500">{price} Taka</h2>
+          <h2 className="font-bold">{discount} Taka</h2>
         </div>
       </div>
   );
