@@ -9,7 +9,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en">
         <head>
-            <title>Fenxobd</title>
+            <title>Urban Region BD</title>
             <meta name="description" content="Luxury designer bags for every occasion" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <link rel="icon" href="/favicon.ico" />
