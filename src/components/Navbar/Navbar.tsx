@@ -275,7 +275,7 @@ const Navbar: React.FC = () => {
                                               "relative z-10 -mb-px flex items-center border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out"
                                           )}
                                       >
-                                        {category.name}
+                                        {category.name} hello
                                       </Popover.Button>
                                     </div>
                                     <Transition

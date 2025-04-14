@@ -54,13 +54,15 @@ const OverviewComponent = ({ received, pending, failed, delivered } : OverviewCo
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-white">
         {/* // first column  */}
         <div className="rounded-md py-8 p-3 bg-gradient-to-r from-cyan-500 to-blue-500">
-            <div className="flex flex-col gap-1">
-                <p className="text-2xl">Order Success</p>
-                <p className="text-lg font-mont ">Total Percel : {delivered?.length} </p>
-                <p className="text-base opacity-60 font-mont">Total Product : {deliveredQuantity} </p>
-                <p className="text-xl font-abc">Total  : {deliveredTotal} Taka</p>
-            <HiArrowTrendingUp className="font-bold text-6xl opacity-40 "></HiArrowTrendingUp>
-            </div>
+            <Link href="/admin/orders?status=delivered">
+                <div className="flex flex-col gap-1">
+                    <p className="text-2xl">Order Success</p>
+                    <p className="text-lg font-mont ">Total Percel : {delivered?.length} </p>
+                    <p className="text-base opacity-60 font-mont">Total Product : {deliveredQuantity} </p>
+                    <p className="text-xl font-abc">Total  : {deliveredTotal} Taka</p>
+                <HiArrowTrendingUp className="font-bold text-6xl opacity-40 "></HiArrowTrendingUp>
+                </div>
+            </Link>
         </div>
         <div className="rounded-md py-8 p-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
             <Link href="/admin/orders?status=pending">

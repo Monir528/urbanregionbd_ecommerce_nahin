@@ -92,7 +92,7 @@ export default function EditForm({ data }: EditFormProps) {
 
   useEffect(() => {
     if (isSuccess) {
-      navigate.push('/dashboard/allProducts');
+      navigate.push('/admin/allProducts');
       alert("Edited Successfully");
     }
   }, [isSuccess, navigate]);

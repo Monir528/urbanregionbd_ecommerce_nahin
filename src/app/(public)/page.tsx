@@ -19,7 +19,7 @@ import Popup from "@/components/Popup";
 import Bars from "@/components/Bars";
 import { useState } from "react";
 import { BannerDataType } from "@/types/bannerData";
-import ImageCarousel from "@/components/Hero";
+import BannerCarousel from "@/components/Hero";
 
 const BannerData: BannerDataType = {
     discount: "২১ টি ভিন্ন ডিজাইন থেকে বেছে নিন আপনার পছন্দ মত জার্সি গুলো। ",
@@ -84,30 +84,32 @@ const HomePage = () => {
         <main>
             <div>
                 <RightCart></RightCart>
-                <ImageCarousel images={images} />
-                <Notice></Notice>
-                <Bars item={bars[0]} id="new arrival"></Bars>
-                <NewCategory></NewCategory>
-                {/*<CategoryItem />*/}
-                <CategoryItem2 />
-                <CategoryItem3/>
-                <Services />
-                <Bars item={bars[1]} id="top rated"></Bars>
-                {/* top rated  */}
-                {
-                    isLoading && <ProductListSkeleton/>
-                }
-                {
-                    !isLoading && isSuccess && data && <SampleProduct data={data}></SampleProduct>
-                }
-                <Banner data={BannerData} />
-                <Bars item={bars[2]} id="flash deals"></Bars>
-                {/* // flash deals   */}
-                {
-                    !isLoading && isSuccess && data && <Products data={data}></Products>
-                }
-                <Banner data={BannerData2} />
-                <Blogs />
+                <BannerCarousel images={images} />
+                <div className={"px-8"}>
+                    <Notice></Notice>
+                    <Bars item={bars[0]} id="new arrival"></Bars>
+                    <NewCategory></NewCategory>
+                    {/*<CategoryItem />*/}
+                    <CategoryItem2 />
+                    <CategoryItem3/>
+                    <Services />
+                    <Bars item={bars[1]} id="top rated"></Bars>
+                    {/* top rated  */}
+                    {
+                        isLoading && <ProductListSkeleton/>
+                    }
+                    {
+                        !isLoading && isSuccess && data && <SampleProduct data={data}></SampleProduct>
+                    }
+                    <Banner data={BannerData} />
+                    <Bars item={bars[2]} id="flash deals"></Bars>
+                    {/* // flash deals   */}
+                    {
+                        !isLoading && isSuccess && data && <Products data={data}></Products>
+                    }
+                    <Banner data={BannerData2} />
+                    <Blogs />
+                </div>
 
                 {/* <AppStore></AppStore> */}
                 {/*<FooterBanner></FooterBanner>*/}
