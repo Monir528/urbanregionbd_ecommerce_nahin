@@ -150,7 +150,7 @@ export function dateBetweenFilterFn(
 export const DateRangeColumnFilter: React.FC<DateRangeColumnFilterProps> = ({
     column: { filterValue = [undefined, undefined], preFilteredRows, setFilter, id }
 }) => {
-    const [min, max] = React.useMemo(() => {
+    React.useMemo(() => {
         if (!preFilteredRows.length) {
             return [new Date(0), new Date(0)];
         }
@@ -169,8 +169,6 @@ export const DateRangeColumnFilter: React.FC<DateRangeColumnFilterProps> = ({
 
         return [minDate, maxDate];
     }, [id, preFilteredRows]);
-
-    console.log(min, ' ', max, filterValue);
 
     return (
         <div className="flex flex-col sm:flex-row gap-2 p-2 bg-white rounded-lg shadow-sm">

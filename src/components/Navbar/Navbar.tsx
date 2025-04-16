@@ -2,7 +2,7 @@
 
 import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
-import { Bars3Icon, ShoppingBagIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, ChevronDownIcon, ShoppingBagIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Image from "next/image";
 import { PiPhoneCallLight } from "react-icons/pi";
@@ -275,7 +275,7 @@ const Navbar: React.FC = () => {
                                               "relative z-10 -mb-px flex items-center border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out"
                                           )}
                                       >
-                                        {category.name} hello
+                                          {category.name} <ChevronDownIcon className="size-5 mx-2 group-data-[open]:rotate-180" />
                                       </Popover.Button>
                                     </div>
                                     <Transition

@@ -6,6 +6,7 @@ import {NavBarProvider} from "@/context/NavBarContext";
 import Navbar from "@/components/Navbar/Navbar";
 import {ReduxProvider} from "@/reduxToolKit/providers/provider";
 import FooterBanner from "@/components/FooterBanner";
+import CartIcon from "@/components/icons/CartIcon";
 // import {useSelector} from "react-redux";
 // import FacebookChat from "@/components/FacebookChat";
 
@@ -37,7 +38,7 @@ export default function RootLayout({
 
                                     {/*{formCondition && <OrderForm></OrderForm>}*/}
                         {/*            <OrderForm></OrderForm>*/}
-                        {/*            <CartIcon></CartIcon>*/}
+                                    <CartIcon></CartIcon>
                         {/*            {children}*/}
 
                         {/*            /!*<FacebookChat></FacebookChat>*!/*/}
