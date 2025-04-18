@@ -22,6 +22,8 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
   const [phone, setPhone] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [division, setDivision] = useState<string>("osd");
+  const [paymentMethod, setPaymentMethod] = useState<string>("cod");
+  const [selectedGateway, setSelectedGateway] = useState<string>("");
   const [purchaseLoading, setPurchaseLoading] = useState<boolean>(false);
 
   const router = useRouter();
@@ -49,6 +51,8 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
       date: new Date().toLocaleString(),
       total: cart?.cartTotalAmount || 0,
       status: "pending",
+      paymentMethod,
+      selectedGateway,
     };
 
     try {
@@ -159,26 +163,72 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
             <div className="flex flex-col gap-2">
               <p className="font-bold text-black">শিপিং মেথড</p>
               <hr />
-              <label className="text-black">
-                <input
-                    onChange={(e) => setDivision(e.target.value)}
-                    type="radio"
-                    checked={division === "isd"}
-                    name="myRadio"
-                    value="isd"
-                />{" "}
-                ঢাকার ভিতর
+              <label className="text-black flex items-center justify-between">
+                <span>
+                  <input
+                      onChange={(e) => setDivision(e.target.value)}
+                      type="radio"
+                      checked={division === "isd"}
+                      name="myRadio"
+                      value="isd"
+                  />{" "}
+                  ঢাকার ভিতর
+                </span>
+                <span className="font-bold text-black ml-2">Tk 60.00</span>
               </label>
-              <label className="text-black">
-                <input
-                    onChange={(e) => setDivision(e.target.value)}
-                    type="radio"
-                    name="myRadio"
-                    checked={division === "osd"}
-                    value="osd"
-                />{" "}
-                ঢাকার বাহির
+              <label className="text-black flex items-center justify-between">
+                <span>
+                  <input
+                      onChange={(e) => setDivision(e.target.value)}
+                      type="radio"
+                      name="myRadio"
+                      checked={division === "osd"}
+                      value="osd"
+                  />{" "}
+                  ঢাকার বাহির
+                </span>
+                <span className="font-bold text-black ml-2">Tk 120.00</span>
               </label>
+            </div>
+          </div>
+
+          <div className="border my-4 p-4 rounded-md">
+            <div className="flex flex-col gap-2">
+              <p className="font-bold text-black">পেমেন্ট মেথড</p>
+              <hr />
+              <label className="text-black flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="cod"
+                  checked={paymentMethod === "cod"}
+                  onChange={() => setPaymentMethod("cod")}
+                />
+                ক্যাশ অন ডেলিভারি
+              </label>
+              <label className="text-black flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="online"
+                  checked={paymentMethod === "online"}
+                  onChange={() => setPaymentMethod("online")}
+                />
+                অনলাইন পেমেন্ট
+              </label>
+              {/* Show online payment gateways if selected */}
+              {paymentMethod === "online" && (
+                <div className="flex gap-4 mt-3">
+                  <div
+                    className={`border rounded-lg p-2 flex flex-col items-center cursor-pointer transition-all ${selectedGateway === "bkash" ? "border-indigo-600 ring-2 ring-indigo-200" : "border-gray-300"}`}
+                    onClick={() => setSelectedGateway("bkash")}
+                  >
+                    <img src="/assets/bkash-logo.png" alt="bkash" className="h-8 w-auto mb-1" />
+                    <span className="text-sm font-semibold text-black">bKash</span>
+                  </div>
+                  {/* Add more gateways here if needed */}
+                </div>
+              )}
             </div>
           </div>
 
