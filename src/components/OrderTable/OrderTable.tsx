@@ -1,6 +1,7 @@
 import OrderTableBody from "../OrderTableBody/OrderTableBody";
+import BulkDownloadButton from '../OrderTableBody/BulkDownloadButton';
 import { useGetAllOrderedQuery } from "@/components/api/confirmOrder/confirmOrder";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {Order} from "@/types/order";
 import {useSearchParams} from "next/navigation";
 
@@ -21,7 +22,7 @@ function parseOrderDate(dateString: string): Date {
     if (datePart.includes('/')) {
         const parts = datePart.split('/').map(Number);
         if (parts.length === 3) {
-            let day = parts[0], month = parts[1], year = parts[2];
+            const day = parts[0], month = parts[1], year = parts[2];
             if (day > 12) {
                 // Definitely dd/mm/yyyy
                 return new Date(year, month - 1, day);
@@ -44,10 +45,30 @@ const OrderTable = () => {
     const status = searchParams.get('status');
     console.log("query status", status);
     const { data, isLoading } = useGetAllOrderedQuery(undefined);
+    const [orders, setOrders] = useState<Order[]>([]);
+    useEffect(() => {
+      if (data) setOrders(data);
+    }, [data]);
     const [searchText, setSearchText] = useState("");
     const [showFilters, setShowFilters] = useState(false);
     const [startDate, setStartDate] = useState<string>("");
     const [endDate, setEndDate] = useState<string>("");
+
+    const [selectedOrderIds, setSelectedOrderIds] = useState<string[]>([]);
+
+    const handleSelectOrder = (orderId: string, checked: boolean) => {
+      setSelectedOrderIds(prev =>
+        checked ? [...prev, orderId] : prev.filter(id => id !== orderId)
+      );
+    };
+    const handleSelectAll = (checked: boolean) => {
+      if (checked) {
+        setSelectedOrderIds(orders.map(o => o._id));
+      } else {
+        setSelectedOrderIds([]);
+      }
+    };
+    const allSelected = orders.length > 0 && selectedOrderIds.length === orders.length;
 
     const handleClearFilters = () => {
         setStartDate("");
@@ -104,6 +125,9 @@ const OrderTable = () => {
                 >
                     {showFilters ? "Hide Filters" : "Show Filters"}
                 </button>
+                <span className="ml-2">
+                  <BulkDownloadButton selectedOrders={selectedOrderIds} orders={orders} />
+                </span>
             </div>
             {showFilters && (
                 <div className="flex gap-4 items-center mb-4">
@@ -138,6 +162,13 @@ const OrderTable = () => {
             <table className="border-collapse border border-gray-300 w-full">
                 <thead>
                 <tr>
+                    <th>
+                        <input
+                            type="checkbox"
+                            checked={allSelected}
+                            onChange={e => handleSelectAll(e.target.checked)}
+                        />
+                    </th>
                     <th className="border border-gray-300 p-2 text-left bg-purple-300/20">Order ID</th>
                     <th className="border border-gray-300 p-2 text-left bg-purple-300/20">Total</th>
                     <th className="border border-gray-300 p-2 text-left bg-purple-300/20">Advanced</th>
@@ -149,8 +180,8 @@ const OrderTable = () => {
                 </thead>
                 <tbody>
                 {!isLoading &&
-                  data?.length > 0 &&
-                  data
+                  orders.length > 0 &&
+                  orders
                     ?.filter((val: Order) => {
                       if (status) {
                         return val.status === status;
@@ -166,7 +197,15 @@ const OrderTable = () => {
                       }
                     })
                     ?.filter(filterByDateRange)
-                    ?.map((item: Order) => <OrderTableBody key={item._id} item={item} />)}
+                    ?.map((item: Order) => (
+                      <OrderTableBody
+                        key={item._id}
+                        item={item}
+                        onDelete={(_id: string) => setOrders((prev) => prev.filter((o) => o._id !== _id))}
+                        checked={selectedOrderIds.includes(item._id)}
+                        onSelect={checked => handleSelectOrder(item._id, checked)}
+                      />
+                    ))}
                 </tbody>
             </table>
         </div>

@@ -26,12 +26,21 @@ const TextArea = ({ value, onChange }: TextAreaProps) => {
 
     // Initial mount effect
     useEffect(() => {
+        let isMountedFlag = true;
         setIsMounted(true);
         const blocksFromHtml = htmlToDraft(value || '');
         const { contentBlocks, entityMap } = blocksFromHtml;
         const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
-        setEditorState(EditorState.createWithContent(contentState));
-        lastHtml.current = value;
+        // Only set state if still mounted
+        setTimeout(() => {
+            if (isMountedFlag) {
+                setEditorState(EditorState.createWithContent(contentState));
+                lastHtml.current = value;
+            }
+        }, 0);
+        return () => {
+            isMountedFlag = false;
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

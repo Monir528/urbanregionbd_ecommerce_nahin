@@ -1,21 +1,26 @@
 "use client";
 
 import { useState, FormEvent, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Radio } from "react-loader-spinner";
-import { orderFormClose } from "@/components/cartHandler";
-import { clearCart } from "@/components/api/cartSlice";
 import { usePurchaseOrderMutation } from "@/components/api/confirmOrder/confirmOrder"; // Adjust import path
 import { RootState } from "@/reduxToolKit/store";
+import { Dialog } from '@headlessui/react'; // For modal UI
+import Image from 'next/image';
 
 interface OrderedItem {
   id?: string;
   name?: string;
 }
 
-export default function CustomerAddress({ orderedItem }: { orderedItem?: OrderedItem }) {
-  const dispatch = useDispatch();
+interface Props {
+  orderedItem?: OrderedItem;
+  onOrderSuccess?: (orderId?: string) => void;
+  onShowBkash?: () => void;
+  dialogContent?: string;
+}
+
+export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBkash, dialogContent }: Props) {
   const cart = useSelector((state: RootState) => state.cart);
 
   const [name, setName] = useState<string>("");
@@ -23,10 +28,10 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
   const [address, setAddress] = useState<string>("");
   const [division, setDivision] = useState<string>("osd");
   const [paymentMethod, setPaymentMethod] = useState<string>("cod");
-  const [selectedGateway, setSelectedGateway] = useState<string>("");
+  const [selectedGateway] = useState<string>(""); // keep state if needed for API, but don't use setter
   const [purchaseLoading, setPurchaseLoading] = useState<boolean>(false);
 
-  const router = useRouter();
+  console.log('CustomerAddress rendered, paymentMethod:', paymentMethod);
 
   // Add the purchaseOrder mutation hook
   const [
@@ -38,63 +43,134 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
     },
   ] = usePurchaseOrderMutation();
 
+  const [bkashPhone, setBkashPhone] = useState('');
+  const [bkashTransId, setBkashTransId] = useState('');
+  const [bkashLoading, setBkashLoading] = useState(false);
+  const [bkashError, setBkashError] = useState('');
+
+  const [orderSuccessCalled, setOrderSuccessCalled] = useState(false);
+
+  // Reset orderSuccessCalled when a new order starts (when orderedItem changes)
+  useEffect(() => {
+    setOrderSuccessCalled(false);
+  }, [orderedItem]);
+
+  const deliveryCharge = division === 'isd' ? 70 : 120;
+  const totalPayable = (cart?.cartTotalAmount || 0) + deliveryCharge;
+
   const handleAddress = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setPurchaseLoading(true);
+    console.log('handleAddress called');
+    console.log('Form submitted. paymentMethod:', paymentMethod);
+    if (paymentMethod === 'cod') {
+      setPurchaseLoading(true);
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/addClient`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, phone, address, division }),
+        });
+        const orderStatus = {
+          name,
+          phone,
+          address,
+          division,
+          orderedItem,
+          date: new Date().toLocaleString(),
+          total: cart?.cartTotalAmount || 0,
+          status: "pending",
+          paymentMethod,
+          selectedGateway,
+        };
+        console.log('Calling purchaseOrder with', orderStatus);
+        const result = await purchaseOrder(orderStatus);
+        console.log('purchaseOrder result:', result);
+        console.log('CustomerAddress.handleAddress FULL RESPONSE:', result);
+        console.log('CustomerAddress: calling onOrderSuccess with', result?.data?.insertedId);
+        if (!orderSuccessCalled && onOrderSuccess) {
+          setOrderSuccessCalled(true);
+          onOrderSuccess(result?.data?.insertedId);
+        }
+      } catch (error) {
+        console.error("Order submission error:", error);
+      } finally {
+        setPurchaseLoading(false);
+      }
+    } else {
+      console.log('Calling onShowBkash from handleAddress');
+      if (onShowBkash) onShowBkash();
+    }
+  };
 
-    const orderStatus = {
-      name,
-      phone,
-      address,
-      division,
-      orderedItem,
-      date: new Date().toLocaleString(),
-      total: cart?.cartTotalAmount || 0,
-      status: "pending",
-      paymentMethod,
-      selectedGateway,
-    };
-
+  const handleBkashPayment = async () => {
+    console.log('handleBkashPayment called');
+    setBkashLoading(true);
+    setBkashError('');
     try {
-      // Create client
       await fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/addClient`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, phone, address, division }),
       });
-
-      // Submit order
-      await purchaseOrder(orderStatus);
-    } catch (error) {
-      console.error("Order submission error:", error);
+      const orderStatus = {
+        name,
+        phone,
+        address,
+        division,
+        orderedItem,
+        date: new Date().toLocaleString(),
+        total: cart?.cartTotalAmount || 0,
+        status: "pending",
+        paymentMethod,
+        selectedGateway,
+        payment: {
+          phone: bkashPhone,
+          transId: bkashTransId,
+        },
+        paid: deliveryCharge,
+      };
+      console.log('Calling purchaseOrder with', orderStatus);
+      const result = await purchaseOrder(orderStatus);
+      console.log('purchaseOrder result:', result);
+      console.log('CustomerAddress.handleBkashPayment FULL RESPONSE:', result);
+      console.log('CustomerAddress: calling onOrderSuccess with', result?.data?.insertedId);
+      if (!orderSuccessCalled && onOrderSuccess) {
+        setOrderSuccessCalled(true);
+        onOrderSuccess(result?.data?.insertedId);
+      }
+    } catch {
+      setBkashError('পেমেন্ট ভেরিফিকেশন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।');
     } finally {
-      setPurchaseLoading(false);
+      setBkashLoading(false);
     }
   };
 
-  // Add useEffect to handle navigation after successful order
   useEffect(() => {
-    if (successPurchase && successData) {
-      dispatch(orderFormClose());
-      dispatch(clearCart());
-      // Use query parameters in Next.js instead of state
-      router.push(`/paymentPage?division=${division}&insertedId=${successData.insertedId}`);
+    if (successPurchase && successData && paymentMethod === "cod") {
+      console.log('CustomerAddress.useEffect FULL RESPONSE:', successData);
+      console.log('CustomerAddress.useEffect orderId:', successData?.insertedId);
+      console.log('CustomerAddress: calling onOrderSuccess with', successData?.insertedId);
+      if (!orderSuccessCalled && onOrderSuccess) {
+        setOrderSuccessCalled(true);
+        onOrderSuccess(successData?.insertedId);
+      }
     }
-  }, [successPurchase, successData, division, dispatch, router]);
+  }, [successPurchase, successData, paymentMethod, onOrderSuccess, orderSuccessCalled]);
 
   return (
-      <div className="isolate bg-white px-6 lg:px-8">
-        {(purchaseLoading || purchaseLoadingMutation) && (
-            <Radio
-                visible={true}
-                height="80"
-                width="80"
-                colors={["#4fa94d", "#4fa94d", "#4fa94d"]}
-                ariaLabel="radio-loading"
-                wrapperStyle={{}}
-                wrapperClass=""
-            />
-        )}
+    <div className={`isolate bg-white px-6 lg:px-8${dialogContent === 'bkash' ? ' blur-sm pointer-events-none select-none' : ''}`}>
+      {(purchaseLoading || purchaseLoadingMutation) && (
+        <Radio
+          visible={true}
+          height="40"
+          width="40"
+          ariaLabel="radio-loading"
+          wrapperStyle={{}}
+          wrapperClass="radio-wrapper"
+          colors={["#6366f1", "#a5b4fc", "#a5b4fc"]}
+        />
+      )}
+      {dialogContent === 'form' && (
         <form onSubmit={handleAddress} className="mx-auto max-w-xl flex flex-col gap-4">
           <div>
             <label htmlFor="first-name" className="block text-md font-semibold leading-6 text-black">
@@ -102,13 +178,13 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
             </label>
             <div className="mt-2.5">
               <input
-                  type="text"
-                  name="full-name"
-                  id="full-name"
-                  autoComplete="given-name"
-                  required
-                  onChange={(e) => setName(e.target.value)}
-                  className="block w-full rounded-md border-0 px-3.5 py-2 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                type="text"
+                name="full-name"
+                id="full-name"
+                autoComplete="given-name"
+                required
+                onChange={(e) => setName(e.target.value)}
+                className="block w-full rounded-md border-0 px-3.5 py-2 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -123,21 +199,21 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
                   Country
                 </label>
                 <select
-                    id="country"
-                    name="country"
-                    className="h-full rounded-md border-0 bg-transparent bg-none py-0 pl-4 pr-6 text-black focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                  id="country"
+                  name="country"
+                  className="h-full rounded-md border-0 bg-transparent bg-none py-0 pl-4 pr-6 text-black focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
                 >
                   <option>Ban</option>
                 </select>
               </div>
               <input
-                  type="tel"
-                  name="phone-number"
-                  id="phone-number"
-                  autoComplete="tel"
-                  required
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="block w-full rounded-md border-0 px-3.5 py-2 pl-24 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                type="tel"
+                name="phone-number"
+                id="phone-number"
+                autoComplete="tel"
+                required
+                onChange={(e) => setPhone(e.target.value)}
+                className="block w-full rounded-md border-0 px-3.5 py-2 pl-24 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -148,13 +224,13 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
             </label>
             <div className="mt-2">
               <input
-                  onChange={(e) => setAddress(e.target.value)}
-                  type="text"
-                  name="street-address"
-                  id="street-address"
-                  autoComplete="street-address"
-                  className="block pl-4 w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  required
+                onChange={(e) => setAddress(e.target.value)}
+                type="text"
+                name="street-address"
+                id="street-address"
+                autoComplete="street-address"
+                className="block pl-4 w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                required
               />
             </div>
           </div>
@@ -166,11 +242,11 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
               <label className="text-black flex items-center justify-between">
                 <span>
                   <input
-                      onChange={(e) => setDivision(e.target.value)}
-                      type="radio"
-                      checked={division === "isd"}
-                      name="myRadio"
-                      value="isd"
+                    onChange={(e) => setDivision(e.target.value)}
+                    type="radio"
+                    checked={division === "isd"}
+                    name="myRadio"
+                    value="isd"
                   />{" "}
                   ঢাকার ভিতর
                 </span>
@@ -179,11 +255,11 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
               <label className="text-black flex items-center justify-between">
                 <span>
                   <input
-                      onChange={(e) => setDivision(e.target.value)}
-                      type="radio"
-                      name="myRadio"
-                      checked={division === "osd"}
-                      value="osd"
+                    onChange={(e) => setDivision(e.target.value)}
+                    type="radio"
+                    name="myRadio"
+                    checked={division === "osd"}
+                    value="osd"
                   />{" "}
                   ঢাকার বাহির
                 </span>
@@ -216,31 +292,58 @@ export default function CustomerAddress({ orderedItem }: { orderedItem?: Ordered
                 />
                 অনলাইন পেমেন্ট
               </label>
-              {/* Show online payment gateways if selected */}
-              {paymentMethod === "online" && (
-                <div className="flex gap-4 mt-3">
-                  <div
-                    className={`border rounded-lg p-2 flex flex-col items-center cursor-pointer transition-all ${selectedGateway === "bkash" ? "border-indigo-600 ring-2 ring-indigo-200" : "border-gray-300"}`}
-                    onClick={() => setSelectedGateway("bkash")}
-                  >
-                    <img src="/assets/bkash-logo.png" alt="bkash" className="h-8 w-auto mb-1" />
-                    <span className="text-sm font-semibold text-black">bKash</span>
-                  </div>
-                  {/* Add more gateways here if needed */}
-                </div>
-              )}
             </div>
           </div>
 
           <div className="mt-2">
             <button
-                type="submit"
-                className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mb-6 font-base text-xl"
+              type="submit"
+              onClick={() => console.log('Submit button clicked')}
+              className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mb-6 font-base text-xl"
             >
               অর্ডার কনফর্ম করুন
             </button>
           </div>
         </form>
-      </div>
+      )}
+      {dialogContent === 'bkash' && (
+        <Dialog open={true} onClose={() => {}} className="fixed z-50 inset-0 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="fixed inset-0 bg-black opacity-30" aria-hidden="true"></div>
+            <div className="relative bg-white rounded-lg p-6 w-full max-w-md mx-auto flex flex-col items-center">
+              <Image src="/bkash_logo.png" alt="Bkash Logo" width={96} height={96} className="mb-2" />
+              <p className="font-bold text-lg text-gray-900 mb-1">মোট পরিশোধযোগ্য: <span className="text-pink-600 text-2xl">{totalPayable} টাকা</span></p>
+              <div className="text-center mb-4">
+                <p className="font-bold text-xl text-pink-600">bKash Payment</p>
+                <div className="text-xs text-gray-800 mt-2 text-left bg-[#fce4ec] p-3 rounded-md divide-y divide-[#f8bbd0] w-full">
+                  <p className="mb-2"><span className="text-pink-600 font-bold">*247#</span> ডায়েল করে আপনার Bkash মোবাইল মেনু তে যান অথবা BKASH App এ যান।</p>
+                  <hr className="my-1 border-[#f8bbd0]" />
+                  <p className="mb-2"><span className="text-pink-600 font-bold">2. Payment</span> এ ক্লিক করুন।</p>
+                  <hr className="my-1 border-[#f8bbd0]" />
+                  <div className="flex items-center mb-2 gap-1">
+                    <span>প্রাপক নম্বর:</span>
+                    <span className="text-pink-600 font-bold select-all">01858124027</span>
+                    <button type="button" onClick={() => {navigator.clipboard.writeText('01858124027')}} className="ml-2 px-2 py-0.5 text-xs bg-gray-200 text-gray-700 rounded hover:bg-gray-300">Copy</button>
+                  </div>
+                  <hr className="my-1 border-[#f8bbd0]" />
+                  <p className="mb-2">সব কিছু ঠিক থাকলে BKASH থেকে একটি বার্তা পাবেন।</p>
+                  <hr className="my-1 border-[#f8bbd0]" />
+                  <p>আপনার বিকাশ নম্বর ও <span className="text-pink-600 font-bold">Transaction ID</span> নিচের ফর্মে দিন।</p>
+                </div>
+                <div className="text-xs mt-2 text-right">
+                  <a href="tel:01858124027" className="text-blue-600 underline hover:text-blue-800">Need help?</a>
+                </div>
+              </div>
+              <input type="text" value={bkashPhone} onChange={e => setBkashPhone(e.target.value)} placeholder="Bkash নম্বর" className="w-full border rounded-md p-2 mb-2 text-black" />
+              <input type="text" value={bkashTransId} onChange={e => setBkashTransId(e.target.value)} placeholder="Transaction ID" className="w-full border rounded-md p-2 mb-2 text-black" />
+              {bkashError && <p className="text-red-600 text-sm mb-2">{bkashError}</p>}
+              <button disabled={bkashLoading} onClick={handleBkashPayment} className="w-full bg-pink-600 text-white rounded-md p-2 font-bold mt-2 disabled:opacity-60">
+                {bkashLoading ? 'Processing...' : 'Verify & Confirm'}
+              </button>
+            </div>
+          </div>
+        </Dialog>
+      )}
+    </div>
   );
 }
