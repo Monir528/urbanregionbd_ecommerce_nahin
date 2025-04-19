@@ -4,6 +4,7 @@ import { CartItem } from "@/types/cart";
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { CartIcon, BagIcon } from "./cartToastIcons";
 
 const getInitialState = () => {
   if (typeof window !== 'undefined') {
@@ -36,14 +37,26 @@ const cartSlice = createSlice({
           ...state.cartItems[existingIndex],
           cartQuantity: state.cartItems[existingIndex].cartQuantity + 1,
         };
-        toast.info("Increased product quantity", {
+        toast.info("You have added another item of this product! 🛒", {
           position: "bottom-left",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          icon: CartIcon
         });
       } else {
         const tempProductItem = { ...action.payload, cartQuantity: 1 };
         state.cartItems.push(tempProductItem);
-        toast.success("Product added to cart", {
+        toast.success("Item successfully added to your cart! 🛍️", {
           position: "bottom-left",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          icon: BagIcon
         });
       }
       if (typeof window !== 'undefined') {
