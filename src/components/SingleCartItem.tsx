@@ -51,16 +51,16 @@ const SingleCartItem = ({product} : SingleCartItemProps) => {
 
   return (
     <div>
-      <div className="flex flex-col min-[500px]:flex-row min-[500px]:items-center gap-5 py-6  border-b border-gray-200">
+      <div className="flex flex-col min-[500px]:flex-row min-[500px]:items-center gap-2 py-4 px-4 border border-gray-300 rounded-md">
         <div className="w-full md:max-w-[126px]">
 
           <picture>
-            <img src={image} alt="Urban region product image" className="mx-auto" />
+            <img src={image} alt="Urban region product image" className="mx-auto rounded-md" />
           </picture>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-5 w-full">
           <div className="md:col-span-2">
-            <div className="flex flex-col max-[500px]:items-center gap-3">
+            <div className="flex flex-col max-[500px]:items-center gap-1">
               <h6 className="font-semibold text-base leading-7 text-black">
                 {modifiedName}
               </h6>
@@ -76,7 +76,7 @@ const SingleCartItem = ({product} : SingleCartItemProps) => {
 
           {/* flex items-center max-[500px]:justify-center md:justify-end max-md:mt-3 */}
 
-          <div className="flex items-center max-[500px]:justify-center md:justify-end max-md:mt-3t">
+          <div className="flex items-center max-[500px]:justify-center md:justify-end max-md:mt-2">
             <div className="flex">
               <span
                 onClick={minusCount}
@@ -102,14 +102,14 @@ const SingleCartItem = ({product} : SingleCartItemProps) => {
           </div>
 
           {/* size section  */}
-          <div className="flex items-center max-[500px]:justify-center md:justify-end max-md:mt-3 h-full">
+          <div className="flex items-center max-[500px]:justify-center md:justify-end max-md:mt-2 h-full">
             <div className="transition border cursor-pointer font-bold bg-gray-800 text-gray-100 px-4 py-1 duration-100">
               {subString?.toUpperCase()}
             </div>
           </div>
           
           {/* / */}
-          <div className="flex items-center max-[500px]:justify-center md:justify-end max-md:mt-3 h-full">
+          <div className="flex items-center max-[500px]:justify-center md:justify-end max-md:mt-2 h-full">
             <p className="text-lg leading-8 text-gray-600 text-center">
             {product?.cartQuantity && product?.price ? product.cartQuantity * parseFloat(product.price) : 0} Taka {""}
             </p>

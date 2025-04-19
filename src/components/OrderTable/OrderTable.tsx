@@ -162,20 +162,20 @@ const OrderTable = () => {
             <table className="border-collapse border border-gray-300 w-full">
                 <thead>
                 <tr>
-                    <th>
+                    <th className="border border-b-2 border-gray-300 p-3 text-center bg-white text-black align-middle">
                         <input
                             type="checkbox"
                             checked={allSelected}
                             onChange={e => handleSelectAll(e.target.checked)}
                         />
                     </th>
-                    <th className="border border-gray-300 p-2 text-left bg-purple-300/20">Order ID</th>
-                    <th className="border border-gray-300 p-2 text-left bg-purple-300/20">Total</th>
-                    <th className="border border-gray-300 p-2 text-left bg-purple-300/20">Advanced</th>
-                    <th className="border border-gray-300 p-2 text-left bg-purple-300/20">Transaction / Bkash</th>
-                    <th className="border border-gray-300 p-2 text-left bg-purple-300/20">Order Date</th>
-                    <th className="border border-gray-300 p-2 text-left bg-purple-300/20">Status</th>
-                    <th className="border border-gray-300 p-2 text-left bg-purple-300/20">Action</th>
+                    <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Order ID</th>
+                    <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Total</th>
+                    <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Advanced</th>
+                    <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Transaction / Bkash</th>
+                    <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Order Date</th>
+                    <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Status</th>
+                    <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Action</th>
                 </tr>
                 </thead>
                 <tbody>

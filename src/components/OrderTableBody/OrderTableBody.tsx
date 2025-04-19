@@ -44,27 +44,27 @@ const OrderTableBody = ({ item, onDelete, checked = false, onSelect }: OrderTabl
     };
 
     return (
-        <tr className="border-b border-gray-300">
-            <td>
+        <tr>
+            <td className="p-3 text-center align-middle border-r border-gray-300">
                 <input
                   type="checkbox"
                   checked={checked}
                   onChange={e => onSelect && onSelect(e.target.checked)}
                 />
             </td>
-            <td>
+            <td className="p-3 pl-5 text-black bg-white border-r border-gray-300 align-middle">
                 <Link target="_blank" href={`/admin/orders/${_id}`} className="text-purple-500">
                     {_id}
                 </Link>
             </td>
-            <th>{total}</th>
-            <td>Gap</td>
-            <td>
+            <th className="p-3 text-black bg-white border-r border-gray-300 align-middle">{total}</th>
+            <td className="p-3 text-black bg-white border-r border-gray-300 align-middle">Gap</td>
+            <td className="p-3 text-black bg-white border-r border-gray-300 align-middle">
                 <p>{payment?.phone}</p>
                 <p>{payment?.transId}</p>
             </td>
-            <td>{date}</td>
-            <td>
+            <td className="p-3 text-black bg-white border-r border-gray-300 align-middle">{date}</td>
+            <td className="p-3 text-black bg-white border-r border-gray-300 align-middle">
                 <select
                     name="category"
                     required
@@ -89,7 +89,7 @@ const OrderTableBody = ({ item, onDelete, checked = false, onSelect }: OrderTabl
                 </select>
             </td>
 
-            <td className="flex gap-1 justify-evenly text-purple-500">
+            <td className="flex gap-1 justify-evenly text-purple-500 align-middle">
                 <DownloadInvoice order={item} />
                 <Link href={`invoice/${_id}`} >
                     <TbEyeClosed />

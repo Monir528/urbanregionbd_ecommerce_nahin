@@ -7,7 +7,6 @@ import { getTotals } from "@/components/api/cartSlice";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import EmptyCart from "@/components/EmptyCart";
 import { useRouter } from "next/navigation";
-// import FooterBanner from "@/components/FooterBanner"
 import OrderForm from "@/components/OrderForm";
 import OrderSuccessModal from "@/components/OrderSuccessModal";
 import { RootState } from "@/reduxToolKit/store";
@@ -49,49 +48,26 @@ const HomePage = () => {
 
                 {cart?.cartItems?.length === 0 && (
                   <div className="flex flex-col items-center justify-center py-16">
-                    <img src="/assets/empty_cart.svg" alt="Empty Cart" className="w-32 h-32 mb-4 opacity-70" />
+                    <EmptyCart />
                     <p className="text-lg font-semibold text-gray-500">Your cart is empty!</p>
                   </div>
                 )}
 
                 {cart?.cartItems?.length > 0 && (
-                    <div className="flex flex-col md:flex-row gap-6 bg-transparent px-2 md:px-8">
+                    <div className="flex flex-col-reverse md:flex-row gap-6 bg-transparent px-2 md:px-8 w-full max-w-7xl mx-auto">
                         {/* Cart Items Section */}
-                        <div className="flex-1 bg-white rounded-lg shadow-lg p-4 mb-6">
-                            {/* Table Header */}
-                            <div className="grid grid-cols-12 bg-gray-100 font-semibold text-gray-700 rounded-t-lg sticky top-0 z-10 p-2 border-b">
-                                <div className="col-span-12 md:col-span-4">
-                                    <p className="text-base">Product Details</p>
-                                </div>
-                                <div className="col-span-12 md:col-span-8">
-                                    <div className="grid grid-cols-5">
-                                        <div className="col-span-2">
-                                            <p className="text-base text-center">Quantity</p>
-                                        </div>
-                                        <div className="col-span-2">
-                                            <p className="text-base text-center">Size</p>
-                                        </div>
-                                        <div className="col-span-1">
-                                            <p className="text-base text-center">Total</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {/* Cart Items */}
+                        <div className="flex-1 min-w-0">
                             <div className="divide-y divide-gray-200">
-                                {cart?.cartItems.map((item: CartItem) => (
-                                    <div className="py-4">
-                                        <SingleCartItem
-                                            key={item.id}
-                                            product={item}
-                                        />
-                                    </div>
-                                ))}
+                                <div className="flex flex-col gap-4">
+                                    {cart?.cartItems.map((item: CartItem) => (
+                                        <SingleCartItem key={item.id} product={item} />
+                                    ))}
+                                </div>
                             </div>
                         </div>
                         {/* Cart Summary & Actions Section */}
-                        <div className="w-full md:max-w-xs flex-shrink-0">
-                            <div className="bg-white shadow-md rounded-lg p-6 flex flex-col gap-4">
+                        <div className="w-full md:max-w-xs flex-shrink-0 mb-6 md:mb-0">
+                            <div className="bg-white rounded-lg p-6 flex flex-col gap-4 border border-gray-300">
                                 <div className="flex gap-2 text-black justify-between items-center border-b pb-2">
                                     <span className="text-xl font-medium">Subtotal</span>
                                     <span className="text-xl font-bold">{cart.cartTotalAmount} Taka</span>

@@ -1,0 +1,10 @@
+/* Custom Toastify center-right positioning */
+.Toastify__toast-container--top-center {
+  top: 50% !important;
+  left: unset !important;
+  right: 24px !important;
+  transform: translateY(-50%) !important;
+  width: auto !important;
+  z-index: 9999 !important;
+  align-items: flex-end !important;
+}

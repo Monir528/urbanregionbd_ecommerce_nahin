@@ -32,7 +32,22 @@ export default function RootLayout({
                         <ReduxProvider>
                             <NavBarProvider>
                             <div className="bg-white duration-200 overflow-hidden">
-                                <ToastContainer />
+                                <ToastContainer
+                                    position={undefined}
+                                    toastClassName=""
+                                    style={{
+                                        position: "fixed",
+                                        top: "52%",
+                                        right: 70,
+                                        left: "auto",
+                                        transform: "translateY(-50%)",
+                                        width: "auto",
+                                        zIndex: 9999,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "flex-end"
+                                    }}
+                                />
                                 <div>
                                     <Navbar></Navbar>
 

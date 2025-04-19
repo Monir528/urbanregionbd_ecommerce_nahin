@@ -54,13 +54,13 @@ const TableBody = ({ data }: TableBodyProps) => {
   };
 
   return (
-    <tr className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+    <tr className="bg-white text-black hover:bg-white">
       <th
         scope="row"
         className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
       >
         <div className="ps-3">
-          <div className="text-sm font-semibold">{productName}</div>
+          <div className="text-sm font-semibold text-black">{productName}</div>
           <div className="font-normal text-gray-500">{brand}</div>
         </div>
       </th>
