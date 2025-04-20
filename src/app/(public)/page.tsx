@@ -20,7 +20,6 @@ import Bars from "@/components/Bars";
 import { useState } from "react";
 import { BannerDataType } from "@/types/bannerData";
 import BannerCarousel from "@/components/Hero";
-import AppStore from "@/components/AppStore";
 
 const BannerData: BannerDataType = {
     discount: "২১ টি ভিন্ন ডিজাইন থেকে বেছে নিন আপনার পছন্দ মত জার্সি গুলো। ",
@@ -112,7 +111,7 @@ const HomePage = () => {
                     <Blogs />
                 </div>
 
-                 <AppStore></AppStore>
+                 {/* <AppStore></AppStore> */}
                 {/*<FooterBanner></FooterBanner>*/}
                 <ShoppingCartForm></ShoppingCartForm>
                 <Popup orderPopup={orderPopup} handleOrderPopup={handleOrderPopup} />

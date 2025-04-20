@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { TbEyeClosed } from "react-icons/tb";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { useEditOrderMutation } from "@/components/api/confirmOrder/confirmOrder";
 import { Order } from "@/types/order";
 import DownloadInvoice from './DownloadInvoice';
 import Link from "next/link";
@@ -16,14 +14,8 @@ interface OrderTableBodyProps {
 const OrderTableBody = ({ item, onDelete, checked = false, onSelect }: OrderTableBodyProps) => {
     const { _id, total, payment, date, status } = item || {};
 
-    const [orderStatus, setOrderStatus] = useState<string>(status);
-    const [editOrder] = useEditOrderMutation();
-
-    const handleEdit = (e: string) => {
-        setOrderStatus(e);
-        console.log(_id, e);
-        editOrder({ id: _id, status: e });
-    };
+    // Removed unused setOrderStatus and editOrder
+    const orderStatus = status;
 
     const handleDeleteOrder = async (orderId: string) => {
         if (!window.confirm("Are you sure you want to delete this order?")) return;
@@ -65,28 +57,21 @@ const OrderTableBody = ({ item, onDelete, checked = false, onSelect }: OrderTabl
             </td>
             <td className="p-3 text-black bg-white border-r border-gray-300 align-middle">{date}</td>
             <td className="p-3 text-black bg-white border-r border-gray-300 align-middle">
-                <select
-                    name="category"
-                    required
-                    id=""
-                    className={`border-none font-bold px-2 py-1 rounded-md 
-            ${
-                        orderStatus === "pending"
+                <span
+                    className={`font-bold px-2 py-1 rounded-md 
+                        ${orderStatus === "pending"
                             ? "bg-orange-500 text-white"
-                            : orderStatus === "failed"
+                            : orderStatus === "failed" || orderStatus === "cancelled"
                                 ? "bg-red-500 text-white"
                                 : orderStatus === "delivered"
                                     ? "bg-green-500 text-white"
-                                    : "bg-blue-500 text-white"
-                    }`}
-                    value={orderStatus}
-                    onChange={(e) => handleEdit(e.target.value)}
+                                    : orderStatus === "received"
+                                        ? "bg-blue-700 text-white"
+                                        : "bg-blue-500 text-white"}
+                    `}
                 >
-                    <option value="pending">Pending</option>
-                    <option value="failed">Failed</option>
-                    <option value="delivered">Delivered</option>
-                    <option value="received">Received</option>
-                </select>
+                    {orderStatus.charAt(0).toUpperCase() + orderStatus.slice(1)}
+                </span>
             </td>
 
             <td className="flex gap-1 justify-evenly text-purple-500 align-middle">

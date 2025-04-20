@@ -1,13 +1,15 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useGetSingleOrderQuery } from "@/components/api/confirmOrder/confirmOrder";
+import { useGetSingleOrderQuery, useEditOrderMutation } from "@/components/api/confirmOrder/confirmOrder";
 import Image from "next/image";
 import {OrderedItem} from "@/types/order";
+import OrderStepper from "@/components/OrderStepper";
 
 const ViewOrder = () => {
     const { id } = useParams();
     const { data, isLoading } = useGetSingleOrderQuery(id);
+    const [editOrder] = useEditOrderMutation();
 
     const {
         // _id,
@@ -23,8 +25,20 @@ const ViewOrder = () => {
         payment,
     } = data || {};
 
+    // Handler for timeline status changes
+    async function handleChangeStatus(nextStatus: string) {
+        if (!id) return;
+        try {
+            await editOrder({ id, status: nextStatus }).unwrap();
+        } catch {
+            alert("Failed to update order status");
+        }
+    }
+
     return (
         <div className="max-w-6xl mx-auto p-4 sm:p-6 bg-gray-50 min-h-screen">
+            {/* Order Timeline (MUI Stepper) */}
+            <OrderStepper status={status} onChangeStatus={handleChangeStatus} />
             {/* Page Title */}
             <h2 className="text-lg font-semibold text-gray-700 border-b pb-2">Order Details</h2>
 
