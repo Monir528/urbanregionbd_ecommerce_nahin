@@ -4,7 +4,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { usersApi } from "@/components/api/userApi";
 import { productApi } from "@/components/api/productApi";
 import { categoryApi } from "@/components/api/categoryApi";
-import { subCategoryApi } from "@/components/api/subCategoryApi"; // Add this import
+import { subCategoryApi } from "@/components/api/subCategoryApi"; 
 import orderProductSlice from "@/components/api/orderProductSlice";
 import cartHandler from "@/components/cartHandler";
 import productSlice from "@/components/api/productSlice";
@@ -17,6 +17,7 @@ import totalCount from "@/components/api/reviewSlice";
 import { apiSlice } from "@/components/api/apiSlice";
 import { confirmOrder } from "@/components/api/confirmOrder/confirmOrder";
 import authReducer from "@/reduxToolKit/authSlice";
+import carouselImagesReducer from "@/reduxToolKit/carouselImagesSlice";
 
 export const store = configureStore({
     reducer: {
@@ -24,7 +25,7 @@ export const store = configureStore({
         [usersApi.reducerPath]: usersApi.reducer,
         [productApi.reducerPath]: productApi.reducer,
         [categoryApi.reducerPath]: categoryApi.reducer,
-        [subCategoryApi.reducerPath]: subCategoryApi.reducer, // Add this line
+        [subCategoryApi.reducerPath]: subCategoryApi.reducer, 
         [confirmOrder.reducerPath]: confirmOrder.reducer,
         auth: authReducer,
         cardOrder: cardOrderSlice,
@@ -36,13 +37,14 @@ export const store = configureStore({
         popUp: popUpSlice,
         size: sizeModal,
         totalCount,
+        carouselImages: carouselImagesReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware()
             .concat(usersApi.middleware)
             .concat(productApi.middleware)
             .concat(categoryApi.middleware)
-            .concat(subCategoryApi.middleware) // Add this line
+            .concat(subCategoryApi.middleware) 
             .concat(confirmOrder.middleware),
 });
 

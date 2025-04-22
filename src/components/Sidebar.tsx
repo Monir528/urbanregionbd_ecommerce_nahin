@@ -13,6 +13,7 @@ import {
     MdCategory,
     MdOutlineAdminPanelSettings,
     MdOutlineBorderColor,
+    MdSlideshow,
 } from "react-icons/md";
 import { GrOrderedList } from "react-icons/gr";
 import { IoIosCreate } from "react-icons/io";
@@ -42,6 +43,7 @@ const Sidebar = () => {
         { title: "Orders", icon: <MdOutlineBorderColor />, link: "/admin/orders" },
         { title: "Products", icon: <GrOrderedList />, link: "/admin/allProducts" },
         { title: "Upload", icon: <IoIosCreate />, link: "/admin/upload" },
+        { title: "Carousel Images", icon: <MdSlideshow />, link: "/admin/carousel-images" },
         { title: "Control", icon: <MdOutlineAdminPanelSettings />, link: "/admin/control" },
         { title: "Garbage", icon: <MdAutoDelete />, link: "/admin/garbage" },
         { title: "Category", icon: <MdCategory />, link: "/admin/categories" },

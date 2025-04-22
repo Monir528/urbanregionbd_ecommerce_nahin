@@ -20,6 +20,7 @@ import Bars from "@/components/Bars";
 import { useState } from "react";
 import { BannerDataType } from "@/types/bannerData";
 import BannerCarousel from "@/components/Hero";
+import useCarouselImages from "@/hooks/useCarouselImages";
 
 const BannerData: BannerDataType = {
     discount: "২১ টি ভিন্ন ডিজাইন থেকে বেছে নিন আপনার পছন্দ মত জার্সি গুলো। ",
@@ -67,24 +68,23 @@ const bars = [
 const HomePage = () => {
     const [orderPopup, setOrderPopup] = useState(false);
     const { data, isSuccess, isLoading } = useGetProductsQuery(undefined);
+    const { images: carouselImages, loading: carouselLoading, error: carouselError } = useCarouselImages();
 
     const handleOrderPopup = () => {
         setOrderPopup(false);
     };
 
-    // console.log("fetched products", data);
-
-    const images = [
-        "/urbanregion.jpg",
-    "/urbanregion1.png",
-    "/urbanregion2.jpg",
-    ];
-
     return (
         <main>
             <div>
                 <RightCart></RightCart>
-                <BannerCarousel images={images} />
+                {carouselLoading ? (
+                  <div className="h-[88vh] flex items-center justify-center">Loading carousel...</div>
+                ) : carouselError ? (
+                  <div className="h-[88vh] flex items-center justify-center text-red-500">{carouselError}</div>
+                ) : (
+                  <BannerCarousel images={carouselImages} />
+                )}
                 <div className={"px-8"}>
                     <Notice></Notice>
                     <Bars item={bars[0]} id="new arrival"></Bars>
