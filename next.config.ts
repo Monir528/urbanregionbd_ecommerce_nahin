@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
                 hostname: "backend.urbanregionbd.com",
                 pathname: "/Images/**", // ✅ Allow only images from `/Images/`
             },
+            {
+                protocol: "http",
+                hostname: "localhost",
+                pathname: "/carousel_images/**", // ✅ Allow only images from `/Images/`
+            },
         ],
     },
 };

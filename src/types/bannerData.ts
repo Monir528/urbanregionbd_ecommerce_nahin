@@ -8,5 +8,6 @@ export interface BannerDataType {
     title3: string;
     title4: string;
     bgColor: string;
-    date: string
+    date: string;
+    href: string;
 }

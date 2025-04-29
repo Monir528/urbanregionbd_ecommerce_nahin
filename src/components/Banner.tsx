@@ -58,8 +58,8 @@ const Banner = ({ data }: BannerTypeDef) => {
                 <a
                   target="_blank"
                   rel="noreferrer"
-                  href="https://www.facebook.com/urbanregionbd/"
-                >ইনবক্স করুন</a>
+                  href={data.href}
+                >অর্ডার করুন</a>
               </button>
             </div>
           </div>

@@ -30,7 +30,8 @@ const BannerData: BannerDataType = {
     title3: "৫ টি জার্সি মাত্র ৯৫০ টাকা",
     title4: "২১ টি ভিন্ন ভিন্ন ডিজাইনের জার্সি পছন্দ করে নিতে এখনই ক্লিক করুন।",
     bgColor: "#777",
-    date: ''
+    date: '',
+    href: '/category/jersey'
 };
 
 const BannerData2: BannerDataType = {
@@ -41,7 +42,8 @@ const BannerData2: BannerDataType = {
     title3: "3 টি কার্গো মাত্র ১৯৫০ টাকা",
     title4: "১১ টি ভিন্ন ভিন্ন ডিজাইনের কার্গো পছন্দ করে নিতে এখনই ক্লিক করুন।",
     bgColor: "#E5D3B3",
-    date: ''
+    date: '',
+    href: '/category/Cargo Pants'
 };
 
 const bars = [
