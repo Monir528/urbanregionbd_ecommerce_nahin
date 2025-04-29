@@ -32,6 +32,7 @@ const DetailsContent = ({ desc, img } : DetailsContentTypeDef) => {
 
   const {
     // brand,
+    
     category,
     // description,
     shortDescription,
@@ -66,6 +67,7 @@ const DetailsContent = ({ desc, img } : DetailsContentTypeDef) => {
       dispatch(
         addToCart({
           id: `${id}>>>${selectSize}`,
+
           name: desc?.productName,
           image: `${process.env.NEXT_PUBLIC_ROOT_API}/Images/${img[0]?.filename}`,
           price: desc?.discount,
