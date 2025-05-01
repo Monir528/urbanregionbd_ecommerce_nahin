@@ -30,6 +30,7 @@ export default function ProductUploadForm() {
   const [price, setPrice] = useState<string>("");
   const [videoLink, setVideoLink] = useState<string>("");
   const [otherLink, setOtherLink] = useState<string>("");
+  const [otherLinkFile, setOtherLinkFile] = useState<File | null>(null);
   const [category, setCategory] = useState<string>(getCatData?.[0]?.category || "");
   const [subcategory, setSubcategory] = useState<string[]>([]);
   const [description, setDescription] = useState<string>("");
@@ -41,6 +42,7 @@ export default function ProductUploadForm() {
   const [shortDescription, setShortDescription] = useState<string>("");
   const [files, setFiles] = useState<File[]>([]);
   const [message, setMessage] = useState<string>("");
+  const [otherLinkMessage, setOtherLinkMessage] = useState<string>("");
   const [error, setError] = useState<boolean>(true);
   const [stock, setStock] = useState<boolean>(true);
 
@@ -58,6 +60,24 @@ export default function ProductUploadForm() {
     setError(false);
   };
 
+  // Other Link File Handling
+  const handleOtherLinkFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setOtherLinkMessage("");
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      if (["image/gif", "image/jpeg", "image/png"].includes(file.type)) {
+        setOtherLinkFile(file);
+      } else {
+        setOtherLinkMessage("Only GIF, JPEG, and PNG files are accepted.");
+      }
+    }
+  };
+
+  // Remove Other Link Image
+  const removeOtherLinkImage = () => {
+    setOtherLinkFile(null);
+  };
+
   const removeImage = (fileName: string) => {
     setFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
     // Removed: if (files.length <= 1) setError(true);
@@ -73,13 +93,19 @@ export default function ProductUploadForm() {
     }
     const formData = new FormData();
     files.forEach((file) => formData.append("files", file));
+    
+    // Add the other link file if it exists
+    if (otherLinkFile) {
+      formData.append("otherLinkFile", otherLinkFile);
+    }
+    
     formData.append("details", JSON.stringify({
       productName,
       brand,
       review,
       price,
       videoLink,
-      otherLink,
+      otherLink, // This will be updated by the backend with the file URL
       category,
       description,
       variants,
@@ -98,6 +124,7 @@ export default function ProductUploadForm() {
     if (addSuccess) {
       dispatch(modalOpen());
       setFiles([]);
+      setOtherLinkFile(null);
       setError(true);
     }
   }, [addSuccess, dispatch]);
@@ -290,19 +317,59 @@ export default function ProductUploadForm() {
             />
           </div>
 
-          {/* Other Links */}
+          {/* Other Links - Converted to Image Upload */}
           <div className="md:col-span-2">
             <label htmlFor="otherLink" className="block text-sm font-medium text-gray-700 mb-1">
-              Other Links
+              Size Guide Image
             </label>
-            <input
-                value={otherLink}
-                onChange={(e) => setOtherLink(e.target.value)}
-                type="text"
-                id="otherLink"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-gray-900"
-                placeholder="Enter other URLs"
-            />
+            <div className="flex flex-col items-center justify-center w-full">
+              <label
+                  htmlFor="other-link-upload"
+                  className={`flex flex-col items-center justify-center w-full h-32 border-2 ${otherLinkFile ? 'border-solid border-green-500' : 'border-dashed border-gray-300'} bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors`}
+              >
+                {!otherLinkFile ? (
+                  <><svg
+                      className="w-8 h-8 text-gray-500 mb-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
+                    <p className="text-sm text-gray-600">Click to upload size guide image</p></>
+                ) : (
+                  <div className="relative w-full h-full flex items-center justify-center">
+                    <picture>
+                      <img
+                        src={URL.createObjectURL(otherLinkFile)}
+                        alt="Size guide preview"
+                        className="max-h-28 max-w-full object-contain"
+                      />
+                    </picture>
+                    <button
+                      onClick={(e) => { e.preventDefault(); removeOtherLinkImage(); }}
+                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                    >
+                      ×
+                    </button>
+                  </div>
+                )}
+                <input
+                  id="other-link-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleOtherLinkFile}
+                  className="hidden"
+                />
+              </label>
+            </div>
+            {otherLinkMessage && <p className="text-sm text-red-600 mt-2">{otherLinkMessage}</p>}
           </div>
 
           {/* File Upload Section */}
@@ -399,16 +466,17 @@ export default function ProductUploadForm() {
           <div className="mt-6 flex justify-end gap-4">
             <button
                 type="button"
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+                className="px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                onClick={() => window.location.reload()}
             >
-              Cancel
+              Reset
             </button>
             <button
                 type="submit"
-                disabled={isLoading || error}
-                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-400"
+                disabled={isLoading}
+                className="px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-300"
             >
-              {isLoading ? "Uploading..." : "Save"}
+              {isLoading ? "Uploading..." : "Upload Product"}
             </button>
           </div>
         </div>

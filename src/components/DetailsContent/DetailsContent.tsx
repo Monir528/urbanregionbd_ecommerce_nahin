@@ -119,7 +119,7 @@ const DetailsContent = ({ desc, img } : DetailsContentTypeDef) => {
   const { isOpen } = useSelector((state: RootState) => state.size);
 
   function openModal() {
-    dispatch(sizeModalOpen(otherLink));
+    dispatch(sizeModalOpen(`${process.env.NEXT_PUBLIC_ROOT_API}${otherLink}`));
   }
 
   return (
