@@ -85,7 +85,7 @@ const Payment2 = () => {
                         </p>
                         <p>
                             ৩. প্রাপক নম্বর হিসেবে লিখুন{' '}
-                            <span className="text-yellow-300 font-bold">01858124027</span>
+                            <span className="te0xt-yellow-300 font-bold">01858124027</span>
                         </p>
                         <p>৪. ডেলিভারি চার্জ পরিশোধ করে অর্ডার কনফর্ম করুন।</p>
                         <p>৫. সব কিছু ঠিক থাকলে BKASH থেকে একটি বার্তা পাবেন।</p>
