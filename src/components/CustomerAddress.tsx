@@ -25,6 +25,7 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
 
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
+  const [phoneError, setPhoneError] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [division, setDivision] = useState<string>("osd");
   const [paymentMethod, setPaymentMethod] = useState<string>("cod");
@@ -58,11 +59,17 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
   const deliveryCharge = division === 'isd' ? 70 : 120;
   const totalPayable = (cart?.cartTotalAmount || 0) + deliveryCharge;
 
-  const handleAddress = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log('handleAddress called');
-    console.log('Form submitted. paymentMethod:', paymentMethod);
-    if (paymentMethod === 'cod') {
+          const handleAddress = async (e: FormEvent<HTMLFormElement>) => {
+            e.preventDefault();
+            const phoneInput = document.getElementById('phone-number') as HTMLInputElement;
+            if (!phoneInput.checkValidity()) {
+              setPhoneError('ফোন নম্বর 11 ডিজিট হতে হবে');
+              return;
+            }
+            setPhoneError('');
+            console.log('handleAddress called');
+            console.log('Form submitted. paymentMethod:', paymentMethod);
+            if (paymentMethod === 'cod') {
       setPurchaseLoading(true);
       try {
         await fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/addClient`, {
@@ -212,9 +219,12 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
                 id="phone-number"
                 autoComplete="tel"
                 required
+                pattern="[0-9]{11}"
+                maxLength={11}
                 onChange={(e) => setPhone(e.target.value)}
                 className="block w-full rounded-md border-0 px-3.5 py-2 pl-24 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
+              {phoneError && <p className="mt-1 text-sm text-red-600 text-left ml-10">{phoneError}</p>}
             </div>
           </div>
 
