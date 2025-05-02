@@ -87,7 +87,7 @@ export default function OrderStepper({ status, onChangeStatus }: OrderStepperPro
             status === "delivered" ? "bg-green-500" : 
             status === "returned" ? "bg-red-400" : "bg-gray-400"
           }`}>
-            {status?.charAt(0).toUpperCase() + status?.slice(1)}
+            {typeof status === 'string' ? status.charAt(0).toUpperCase() + status.slice(1) : 'Unknown'}
           </span>
         </h3>
         

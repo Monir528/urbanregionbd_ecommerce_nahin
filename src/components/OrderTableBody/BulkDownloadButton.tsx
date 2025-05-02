@@ -70,24 +70,22 @@ const BulkDownloadButton: React.FC<BulkDownloadButtonProps> = ({ selectedOrders,
   };
 
   return (
-    <button
-      onClick={handleBulkDownload}
-      disabled={!selectedOrders.length || isProcessing}
-      className={`bg-indigo-600 text-white rounded-full p-2 flex items-center justify-center text-xl transition ${isProcessing ? 'opacity-60 cursor-not-allowed' : ''}`}
-      title="Download Selected"
-    >
+    <div onClick={handleBulkDownload} className="flex items-center justify-center w-full">
       {isProcessing ? (
-        <span className="flex items-center gap-1">
+        <>
           <svg className="animate-spin h-5 w-5 mr-1" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
           </svg>
-          <span className="sr-only">Processing...</span>
-        </span>
+          <span>Processing...</span>
+        </>
       ) : (
-        <FiDownload />
+        <>
+          <FiDownload className="mr-1" />
+          <span>Download</span>
+        </>
       )}
-    </button>
+    </div>
   );
 };
 

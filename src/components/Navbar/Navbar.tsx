@@ -80,10 +80,15 @@ const Navbar: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const cart = useSelector((state: RootState) => state.cart);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     dispatch(getTotals());
   }, [cart, dispatch]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Sticky Navbar state (removed SCSS dependency)
   const [stickyClass, setStickyClass] = useState("relative");
@@ -371,13 +376,13 @@ const Navbar: React.FC = () => {
                               className="h-8 w-8 text-indigo-500 flex-shrink-0 group-hover:text-red-500"
                               aria-hidden="true"
                           />
-                          {cart?.cartItems?.length > 0 && (
+                          {mounted && cart?.cartItems?.length > 0 && (
                               <span className="relative mt-[-18px] ml-[-10px] flex h-4 w-4">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500"></span>
-                          </span>
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500"></span>
+                              </span>
                           )}
-                          <span className="text-gray-400 font-semibold">{cart?.cartTotalQuantity}</span>
+                          <span className="text-gray-400 font-semibold">{mounted ? cart?.cartTotalQuantity : 0}</span>
                           <span className="sr-only">items in cart, view bag</span>
                         </a>
                       </div>

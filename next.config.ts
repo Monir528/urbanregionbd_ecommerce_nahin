@@ -18,7 +18,12 @@ const nextConfig: NextConfig = {
             {
                 protocol: "http",
                 hostname: "localhost",
-                pathname: "/carousel_images/**", // ✅ Allow only images from `/Images/`
+                pathname: "/carousel_images/**", // ✅ Allow only images from `/carousel_images/`
+            },
+            {
+                protocol: "http",
+                hostname: "192.168.0.104",
+                pathname: "/carousel_images/**", // ✅ Allow images from your LAN backend
             },
         ],
     },

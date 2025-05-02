@@ -1,23 +1,21 @@
 'use client';
-// import {useGetProductsQuery} from "@/components/api/productApi";
-// import TableBody from "@/components/TableBody/TableBody";
 import OrderTable from "@/components/OrderTable/OrderTable";
 
-const Overview = () => {
-
-    // const {data, isSuccess, isError, isLoading}=useGetProductsQuery()
-    // console.log(data);
-
+const OrdersPage = () => {
     return (
-        <main>
-            <div className='mainContent text-black'>
-                <h2>Order Page:</h2>
-                <OrderTable></OrderTable>
-                <p className="h-10"></p>
+        <div className="space-y-6">
+            <div className="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm">
+                <h1 className="text-xl md:text-2xl font-semibold text-gray-800">Order Management</h1>
+                <div className="text-sm text-gray-500">
+                    Manage all customer orders
+                </div>
             </div>
-        </main>
-
+            
+            <div className="bg-white rounded-lg shadow-sm p-4 md:p-6">
+                <OrderTable />
+            </div>
+        </div>
     );
 };
 
-export default Overview;
+export default OrdersPage;
