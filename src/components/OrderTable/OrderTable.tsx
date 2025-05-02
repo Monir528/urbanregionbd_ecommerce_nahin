@@ -4,6 +4,7 @@ import { useGetAllOrderedQuery } from "@/components/api/confirmOrder/confirmOrde
 import { useState, useEffect } from "react";
 import {Order} from "@/types/order";
 import {useSearchParams} from "next/navigation";
+import Link from "next/link";
 
 // Hybrid parser: handles dd/mm/yyyy, mm/dd/yyyy, and ambiguous cases
 function parseOrderDate(dateString: string): Date {
@@ -109,48 +110,75 @@ const OrderTable = () => {
         );
     };
 
+    // Filter the orders
+    const filteredOrders = orders
+        ?.filter((val: Order) => {
+            if (status) {
+                return val.status === status;
+            } else {
+                return val;
+            }
+        })
+        ?.filter((val: Order) => {
+            if (searchText === "") {
+                return val;
+            } else if (val?._id?.toLowerCase()?.includes(searchText.toLowerCase())) {
+                return val;
+            }
+        })
+        ?.filter(filterByDateRange);
+
     return (
         <div className="mt-[30px] mx-[20px] sm:mt-[20px] sm:mx-0 font-abc text-sm">
-            <div className="flex gap-4 items-center mb-4">
-                <h2>Search By Order ID:</h2>
-                <input
-                    onChange={(e) => setSearchText(e.target.value)}
-                    value={searchText}
-                    type="text"
-                    className="p-0 text-sm border border-gray-300 rounded-md"
-                />
-                <button
-                    className="ml-4 px-3 py-1 bg-purple-200 rounded hover:bg-purple-300 transition"
-                    onClick={() => setShowFilters((v) => !v)}
-                >
-                    {showFilters ? "Hide Filters" : "Show Filters"}
-                </button>
-                <span className="ml-2">
-                  <BulkDownloadButton selectedOrders={selectedOrderIds} orders={orders} />
-                </span>
-            </div>
-            {showFilters && (
-                <div className="flex gap-4 items-center mb-4">
-                    <label>
-                        Start Date:
-                        <input
-                            type="date"
-                            value={startDate}
-                            onChange={e => setStartDate(e.target.value)}
-                            className="ml-1 p-0 text-sm border border-gray-300 rounded-md"
-                        />
-                    </label>
-                    <label>
-                        End Date:
-                        <input
-                            type="date"
-                            value={endDate}
-                            onChange={e => setEndDate(e.target.value)}
-                            className="ml-1 p-0 text-sm border border-gray-300 rounded-md"
-                        />
-                    </label>
+            {/* Search and Filters Section - Responsive Layout */}
+            <div className="flex flex-col sm:flex-row sm:gap-4 sm:items-center mb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center w-full gap-2 mb-2 sm:mb-0">
+                    <h2 className="whitespace-nowrap">Search By Order ID:</h2>
+                    <input
+                        onChange={(e) => setSearchText(e.target.value)}
+                        value={searchText}
+                        type="text"
+                        className="p-1 w-full text-sm border border-gray-300 rounded-md"
+                    />
+                </div>
+                <div className="flex gap-2 items-center">
                     <button
-                        className="ml-2 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition"
+                        className="px-3 py-1 bg-purple-200 rounded hover:bg-purple-300 transition whitespace-nowrap"
+                        onClick={() => setShowFilters((v) => !v)}
+                    >
+                        {showFilters ? "Hide Filters" : "Show Filters"}
+                    </button>
+                    <span className="">
+                        <BulkDownloadButton selectedOrders={selectedOrderIds} orders={orders} />
+                    </span>
+                </div>
+            </div>
+
+            {/* Date Filter Controls - Responsive Layout */}
+            {showFilters && (
+                <div className="flex flex-col sm:flex-row sm:gap-4 sm:items-center mb-4">
+                    <div className="flex flex-col sm:flex-row gap-2 sm:items-center mb-2 sm:mb-0 w-full">
+                        <label className="flex flex-col sm:flex-row sm:items-center gap-1">
+                            <span className="whitespace-nowrap">Start Date:</span>
+                            <input
+                                type="date"
+                                value={startDate}
+                                onChange={e => setStartDate(e.target.value)}
+                                className="p-1 text-sm border border-gray-300 rounded-md w-full"
+                            />
+                        </label>
+                        <label className="flex flex-col sm:flex-row sm:items-center gap-1">
+                            <span className="whitespace-nowrap">End Date:</span>
+                            <input
+                                type="date"
+                                value={endDate}
+                                onChange={e => setEndDate(e.target.value)}
+                                className="p-1 text-sm border border-gray-300 rounded-md w-full"
+                            />
+                        </label>
+                    </div>
+                    <button
+                        className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition"
                         onClick={handleClearFilters}
                         disabled={!startDate && !endDate}
                     >
@@ -159,55 +187,90 @@ const OrderTable = () => {
                 </div>
             )}
             {renderCurrentRange()}
-            <table className="border-collapse border border-gray-300 w-full">
-                <thead>
-                <tr>
-                    <th className="border border-b-2 border-gray-300 p-3 text-center bg-white text-black align-middle">
-                        <input
-                            type="checkbox"
-                            checked={allSelected}
-                            onChange={e => handleSelectAll(e.target.checked)}
-                        />
-                    </th>
-                    <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Order ID</th>
-                    <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Total</th>
-                    <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Advanced</th>
-                    <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Transaction / Bkash</th>
-                    <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Order Date</th>
-                    <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Status</th>
-                    <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {!isLoading &&
-                  orders.length > 0 &&
-                  orders
-                    ?.filter((val: Order) => {
-                      if (status) {
-                        return val.status === status;
-                      } else {
-                        return val;
-                      }
-                    })
-                    ?.filter((val: Order) => {
-                      if (searchText === "") {
-                        return val;
-                      } else if (val?._id?.toLowerCase()?.includes(searchText.toLowerCase())) {
-                        return val;
-                      }
-                    })
-                    ?.filter(filterByDateRange)
-                    ?.map((item: Order) => (
-                      <OrderTableBody
-                        key={item._id}
-                        item={item}
-                        onDelete={(_id: string) => setOrders((prev) => prev.filter((o) => o._id !== _id))}
-                        checked={selectedOrderIds.includes(item._id)}
-                        onSelect={checked => handleSelectOrder(item._id, checked)}
-                      />
-                    ))}
-                </tbody>
-            </table>
+
+            {/* Table Header - Hidden on Mobile */}
+            <div className="hidden sm:block w-full overflow-x-auto pb-2">
+                <table className="border-collapse border border-gray-300 w-full">
+                    <thead>
+                    <tr>
+                        <th className="border border-b-2 border-gray-300 p-3 text-center bg-white text-black align-middle">
+                            <input
+                                type="checkbox"
+                                checked={allSelected}
+                                onChange={e => handleSelectAll(e.target.checked)}
+                            />
+                        </th>
+                        <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Order ID</th>
+                        <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Total</th>
+                        <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Advanced</th>
+                        <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Transaction / Bkash</th>
+                        <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Order Date</th>
+                        <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Status</th>
+                        <th className="border border-b-2 border-gray-300 p-2 text-left bg-white text-black">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {!isLoading &&
+                        filteredOrders?.map((item: Order) => (
+                            <OrderTableBody
+                                key={item._id}
+                                item={item}
+                                onDelete={(_id: string) => setOrders((prev) => prev.filter((o) => o._id !== _id))}
+                                checked={selectedOrderIds.includes(item._id)}
+                                onSelect={checked => handleSelectOrder(item._id, checked)}
+                            />
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="block sm:hidden">
+                {!isLoading && filteredOrders?.map((item: Order) => (
+                    <div key={item._id} className="border border-gray-300 rounded-lg mb-4 p-3 shadow-sm">
+                        <div className="flex justify-between items-center mb-2">
+                            <div className="flex items-center">
+                                <input
+                                    type="checkbox"
+                                    checked={selectedOrderIds.includes(item._id)}
+                                    onChange={e => handleSelectOrder(item._id, e.target.checked)}
+                                    className="mr-2"
+                                />
+                                <Link href={`/admin/orders/${item._id}`} className="font-medium text-purple-500">
+                                    Order ID: {item._id}
+                                </Link>
+                            </div>
+                            <span className={`text-xs px-2 py-1 rounded-full ${item.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                item.status === 'shipped' ? 'bg-blue-100 text-blue-800' : 
+                                item.status === 'cancelled' ? 'bg-red-100 text-red-800' : 
+                                item.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                                item.status === 'received' ? 'bg-purple-100 text-purple-800' :
+                                'bg-gray-100 text-gray-800'}`}>
+                                {item.status}
+                            </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 text-sm mb-2">
+                            <div><span className="font-medium">Total:</span> {item.total}</div>
+                            <div><span className="font-medium">Payment:</span> {item.payment?.phone}</div>
+                            <div><span className="font-medium">Transaction:</span> {item.payment?.transId}</div>
+                            <div><span className="font-medium">Date:</span> {item.date}</div>
+                        </div>
+                        <div className="flex justify-end mt-2">
+                            <OrderTableBody
+                                key={item._id}
+                                item={item}
+                                onDelete={(_id: string) => setOrders((prev) => prev.filter((o) => o._id !== _id))}
+                                checked={selectedOrderIds.includes(item._id)}
+                                onSelect={checked => handleSelectOrder(item._id, checked)}
+                                mobileView={true}
+                            />
+                        </div>
+                    </div>
+                ))}
+                {filteredOrders?.length === 0 && (
+                    <div className="text-center py-4 text-gray-500">No orders found</div>
+                )}
+            </div>
         </div>
     );
 };

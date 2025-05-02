@@ -4,14 +4,15 @@ import { Order } from "@/types/order";
 import DownloadInvoice from './DownloadInvoice';
 import Link from "next/link";
 
-interface OrderTableBodyProps {
+export interface OrderTableBodyProps {
     item: Order
     onDelete?: (_id: string) => void
     checked?: boolean
     onSelect?: (checked: boolean) => void
+    mobileView?: boolean
 }
 
-const OrderTableBody = ({ item, onDelete, checked = false, onSelect }: OrderTableBodyProps) => {
+const OrderTableBody = ({ item, onDelete, checked = false, onSelect, mobileView = false }: OrderTableBodyProps) => {
     const { _id, total, payment, date, status } = item || {};
 
     // Removed unused setOrderStatus and editOrder
@@ -34,6 +35,29 @@ const OrderTableBody = ({ item, onDelete, checked = false, onSelect }: OrderTabl
             alert("Error deleting order.");
         }
     };
+
+    // Render only action buttons for mobile view
+    if (mobileView) {
+        return (
+            <div className="flex gap-2 items-center">
+                <DownloadInvoice order={item} />
+                <Link href={`invoice/${_id}`} className="text-purple-500 p-2">
+                    <TbEyeClosed />
+                </Link>
+                <Link href="" className="text-purple-500 p-2">
+                    <FaEdit />
+                </Link>
+                <button 
+                    onClick={() => handleDeleteOrder(item._id)} 
+                    title="Delete Order" 
+                    className="text-purple-500 p-2"
+                    style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                >
+                    <FaTrash />
+                </button>
+            </div>
+        );
+    }
 
     return (
         <tr>

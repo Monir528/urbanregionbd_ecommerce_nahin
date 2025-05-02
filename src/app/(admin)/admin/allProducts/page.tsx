@@ -2,144 +2,113 @@
 import {useGetProductsQuery} from "@/components/api/productApi";
 import TableBody from "@/components/TableBody/TableBody";
 import {Product} from "@/types/product";
-
+import ProductCard from "@/components/TableBody/ProductCard";
+import { useState } from 'react';
 
 const Overview = () => {
-
-    const {data, isSuccess, isLoading}=useGetProductsQuery(undefined)
-    console.log(data);
+    const [searchTerm, setSearchTerm] = useState("");
+    const {data, isSuccess, isLoading} = useGetProductsQuery(undefined);
+    
+    // Filter products based on search term
+    const filteredProducts = data?.filter((product: Product) => {
+        return product.description.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+               product.description.category.toLowerCase().includes(searchTerm.toLowerCase());
+    });
 
     return (
-        <main>
-            <div className="productTable container pb-8">
-
-                {isLoading && "Loading..."}
-                {!isLoading && (
-                    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                        <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
-                            <div>
-                                <p className="text-indigo-600 font-abc">Total Product : {data?.length}</p>
-                                {/* <!-- Dropdown menu -->  */}
-                                <div
-                                    id="dropdownAction"
-                                    className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
-                                >
-                                    <ul
-                                        className="py-1 text-sm text-gray-700 dark:text-gray-200"
-                                        aria-labelledby="dropdownActionButton"
-                                    >
-                                        <li>
-                                            <a
-                                                href="#"
-                                                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                            >
-                                                Reward
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a
-                                                href="#"
-                                                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                            >
-                                                Promote
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a
-                                                href="#"
-                                                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                            >
-                                                Activate account
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <div className="py-1">
-                                        <a
-                                            href="#"
-                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                                        >
-                                            Delete User
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <label htmlFor="table-search" className="sr-only">
-                                Search
-                            </label>
-                            <div className="relative">
-                                <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                                    <svg
-                                        className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                                        aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 20 20"
-                                    >
-                                        <path
-                                            stroke="currentColor"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                                        />
-                                    </svg>
-                                </div>
-                                <input
-                                    type="text"
-                                    id="table-search-users"
-                                    className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Search for users"
-                                />
-                            </div>
+        <main className="bg-gray-50 min-h-screen">
+            <div className="container mx-auto p-5">
+                {/* Header Section */}
+                <div className="bg-white rounded-lg shadow-md p-4 mb-6">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h1 className="text-lg font-semibold text-gray-800">Products</h1>
+                            <p className="text-indigo-600 font-abc text-sm mt-1">Total Product : {data?.length}</p>
                         </div>
+                        
+                        <div className="relative w-full sm:w-auto">
+                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg
+                                    className="w-4 h-4 text-gray-500"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 20 20"
+                                >
+                                    <path
+                                        stroke="currentColor"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                                    />
+                                </svg>
+                            </div>
+                            <input
+                                type="text"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="block w-full sm:w-80 p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-indigo-500 focus:border-indigo-500"
+                                placeholder="Search products by name or category"
+                            />
+                        </div>
+                    </div>
+                </div>
 
-                        {/* // table start  */}
-                        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                            <tr>
+                {/* Loading State */}
+                {isLoading && (
+                    <div className="text-center py-10">
+                        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-indigo-500 border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+                        <p className="mt-2 text-gray-600">Loading products...</p>
+                    </div>
+                )}
 
-                                <th scope="col" className="px-6 py-3">
-                                    Product
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Category
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Subcategory
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Price
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Discount
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Image
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Available
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Size
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Action
-                                </th>
-                            </tr>
+                {/* Desktop Table View */}
+                {!isLoading && isSuccess && (
+                    <div className="hidden md:block relative overflow-x-auto shadow-md sm:rounded-lg bg-white">
+                        <table className="w-full text-sm text-left text-gray-500">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th scope="col" className="px-6 py-3">Product</th>
+                                    <th scope="col" className="px-6 py-3">Category</th>
+                                    <th scope="col" className="px-6 py-3">Subcategory</th>
+                                    <th scope="col" className="px-6 py-3">Price</th>
+                                    <th scope="col" className="px-6 py-3">Discount</th>
+                                    <th scope="col" className="px-6 py-3">Image</th>
+                                    <th scope="col" className="px-6 py-3">Available</th>
+                                    <th scope="col" className="px-6 py-3">Size</th>
+                                    <th scope="col" className="px-6 py-3">Action</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            {!isLoading &&
-                                isSuccess &&
-                                data?.map((row: Product) => <TableBody data={row} key={row._id} />)}
-                            {isLoading && "Sorry For loading..."}
+                                {filteredProducts?.map((row: Product) => (
+                                    <TableBody data={row} key={row._id} />
+                                ))}
+                                {filteredProducts?.length === 0 && (
+                                    <tr>
+                                        <td colSpan={9} className="px-6 py-4 text-center text-gray-500">No products found</td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     </div>
                 )}
 
+                {/* Mobile Card View */}
+                {!isLoading && isSuccess && (
+                    <div className="md:hidden grid grid-cols-1 gap-4">
+                        {filteredProducts?.map((product: Product) => (
+                            <ProductCard key={product._id} data={product} />
+                        ))}
+                        {filteredProducts?.length === 0 && (
+                            <div className="bg-white rounded-lg shadow p-4 text-center text-gray-500">
+                                No products found
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
         </main>
-
     );
 };
 
