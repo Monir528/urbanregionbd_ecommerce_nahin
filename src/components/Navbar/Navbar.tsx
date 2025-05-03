@@ -12,6 +12,7 @@ import { getTotals } from "@/components/api/cartSlice";
 import { FaFacebookSquare, FaInstagramSquare } from "react-icons/fa";
 import { useNavBarContext } from "@/context/NavBarContext";
 import { RootState } from "@/reduxToolKit/store";
+import { CartBadge } from "@/components/CartBadge";
 
 // Navigation configuration (unchanged)
 const navigation = {
@@ -376,6 +377,8 @@ const Navbar: React.FC = () => {
                               className="h-8 w-8 text-indigo-500 flex-shrink-0 group-hover:text-red-500"
                               aria-hidden="true"
                           />
+                          <CartBadge />
+                          <span className="text-gray-400 font-semibold">{cart?.cartTotalQuantity}</span>
                           {mounted && cart?.cartItems?.length > 0 && (
                               <span className="relative mt-[-18px] ml-[-10px] flex h-4 w-4">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>

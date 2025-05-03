@@ -1,6 +1,7 @@
 import { MdDeleteForever } from "react-icons/md";
 import { RiFileEditFill } from "react-icons/ri";
 import { useRouter } from "next/navigation";
+import Image from 'next/image';
 import { Product } from "@/types/product";
 
 interface ProductCardProps {
@@ -71,10 +72,12 @@ const ProductCard = ({ data }: ProductCardProps) => {
                 <div className="flex items-center justify-between mt-3">
                     <div className="w-16 h-16 bg-gray-100 rounded overflow-hidden">
                         {images && images.length > 0 && (
-                            <img
-                                className="w-full h-full object-cover"
+                            <Image
                                 src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${images[0]?.filename}`}
                                 alt={productName}
+                                width={64}
+                                height={64}
+                                objectFit="cover"
                             />
                         )}
                     </div>

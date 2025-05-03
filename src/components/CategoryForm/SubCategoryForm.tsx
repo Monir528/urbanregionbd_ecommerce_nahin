@@ -9,7 +9,11 @@ import {
 import Modal from "@/components/CategoryForm/update_modal";
 import {SubCategory} from "@/types/SubCateogry";
 
-const SubCategoryForm = () => {
+interface SubCategoryFormProps {
+    searchTerm: string;
+}
+
+const SubCategoryForm: React.FC<SubCategoryFormProps> = ({ searchTerm }) => {
     const [subCategoryName, setSubCategoryName] = useState("");
     const [editingSubCategory, setEditingSubCategory] = useState<SubCategory>();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -86,7 +90,9 @@ const SubCategoryForm = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {subCategories?.map((subCat: SubCategory) => (
+                    {subCategories?.filter((subCat: SubCategory) => 
+                        subCat.name.toLowerCase().includes(searchTerm.toLowerCase())
+                    ).map((subCat: SubCategory) => (
                         <tr key={subCat._id} className="border">
                             <td className="p-2">{subCat.name}</td>
                             <td className="p-2 flex space-x-2">

@@ -41,7 +41,6 @@ export default function EditForm({ data }: EditFormProps) {
   const [review, setReview] = useState(eReview || "");
   const [price, setPrice] = useState(ePrice || "");
   const [videoLink, setVideoLink] = useState(eVideoLink || "");
-  const [otherLink, setOtherLink] = useState(eOtherLink || "");
   const [otherLinkFile, setOtherLinkFile] = useState<File | null>(null);
   const [otherLinkMessage, setOtherLinkMessage] = useState<string>(""); // Added state for otherLinkMessage
   const [otherLinkPreview, setOtherLinkPreview] = useState<string>(eOtherLink || ""); // Added state for otherLinkPreview
@@ -90,7 +89,7 @@ export default function EditForm({ data }: EditFormProps) {
     review,
     price,
     videoLink,
-    otherLink,
+    otherLink: otherLinkPreview,
     category,
     description,
     variants,
@@ -302,7 +301,7 @@ export default function EditForm({ data }: EditFormProps) {
             value={stock.toString()}
             onChange={(e) => setStock(e.target.value === "true")}
             id="stock"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-gray-900"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-sm text-gray-900"
           >
             <option value="true">Available</option>
             <option value="false">Not Available</option>

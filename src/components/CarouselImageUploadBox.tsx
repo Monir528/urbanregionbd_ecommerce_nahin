@@ -14,7 +14,7 @@ export default function CarouselImageUploadBox() {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<unknown>(null);
   const fileInput = useRef<HTMLInputElement>(null);
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,7 +28,7 @@ export default function CarouselImageUploadBox() {
     }
   };
 
-  const onCropComplete = (_: any, croppedAreaPixels: any) => {
+  const onCropComplete = (_: unknown, croppedAreaPixels: unknown) => {
     setCroppedAreaPixels(croppedAreaPixels);
   };
 
@@ -135,22 +135,22 @@ export default function CarouselImageUploadBox() {
 }
 
 // Utility to crop image in browser
-async function getCroppedImg(imageSrc: string, crop: any): Promise<Blob> {
+async function getCroppedImg(imageSrc: string, crop: unknown): Promise<Blob> {
   const image = await createImage(imageSrc);
   const canvas = document.createElement("canvas");
-  canvas.width = crop.width;
-  canvas.height = crop.height;
+  canvas.width = (crop as { width: number }).width;
+  canvas.height = (crop as { height: number }).height;
   const ctx = canvas.getContext("2d")!;
   ctx.drawImage(
     image,
-    crop.x,
-    crop.y,
-    crop.width,
-    crop.height,
+    (crop as { x: number }).x,
+    (crop as { y: number }).y,
+    (crop as { width: number }).width,
+    (crop as { height: number }).height,
     0,
     0,
-    crop.width,
-    crop.height
+    (crop as { width: number }).width,
+    (crop as { height: number }).height
   );
   return new Promise((resolve) => {
     canvas.toBlob((blob) => {

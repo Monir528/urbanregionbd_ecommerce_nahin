@@ -29,7 +29,6 @@ export default function ProductUploadForm() {
   const [review, setReview] = useState<number>(5);
   const [price, setPrice] = useState<string>("");
   const [videoLink, setVideoLink] = useState<string>("");
-  const [otherLink, setOtherLink] = useState<string>("");
   const [otherLinkFile, setOtherLinkFile] = useState<File | null>(null);
   const [category, setCategory] = useState<string>(getCatData?.[0]?.category || "");
   const [subcategory, setSubcategory] = useState<string[]>([]);
@@ -105,7 +104,6 @@ export default function ProductUploadForm() {
       review,
       price,
       videoLink,
-      otherLink, // This will be updated by the backend with the file URL
       category,
       description,
       variants,

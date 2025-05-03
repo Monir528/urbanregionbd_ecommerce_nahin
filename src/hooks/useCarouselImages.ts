@@ -8,12 +8,16 @@ export default function useCarouselImages() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  interface CarouselImageResponse {
+    filename: string;
+  }
+
   useEffect(() => {
     setLoading(true);
     axios
       .get(`${BASE_URL}/api/carousel-images`)
-      .then((res) => {
-        setImages(res.data.map((img: any) => `${BASE_URL}/carousel_images/${img.filename}`));
+      .then((res: { data: CarouselImageResponse[] }) => {
+        setImages(res.data.map((img) => `${BASE_URL}/carousel_images/${img.filename}`));
         setLoading(false);
       })
       .catch((err) => {

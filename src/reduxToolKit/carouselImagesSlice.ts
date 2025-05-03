@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export interface CarouselImage {
@@ -30,8 +30,12 @@ export const fetchCarouselImages = createAsyncThunk(
     try {
       const res = await axios.get(`${BASE_URL}/api/carousel-images`);
       return res.data;
-    } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || "Fetch failed");
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        return rejectWithValue((err.response?.data as { message?: string })?.message || "Fetch failed");
+      } else {
+        return rejectWithValue("Fetch failed");
+      }
     }
   }
 );
@@ -44,8 +48,12 @@ export const uploadCarouselImage = createAsyncThunk(
         headers: { "Content-Type": "multipart/form-data" },
       });
       return res.data.image;
-    } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || "Upload failed");
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        return rejectWithValue(err.response?.data?.message || "Upload failed");
+      } else {
+        return rejectWithValue("Upload failed");
+      }
     }
   }
 );
@@ -56,8 +64,12 @@ export const deleteCarouselImage = createAsyncThunk(
     try {
       await axios.delete(`${BASE_URL}/api/carousel-images/${id}`);
       return id;
-    } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || "Delete failed");
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        return rejectWithValue(err.response?.data?.message || "Delete failed");
+      } else {
+        return rejectWithValue("Delete failed");
+      }
     }
   }
 );
@@ -68,8 +80,12 @@ export const reorderCarouselImages = createAsyncThunk(
     try {
       await axios.patch(`${BASE_URL}/api/carousel-images/order`, { ids });
       return ids;
-    } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || "Reorder failed");
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        return rejectWithValue(err.response?.data?.message || "Reorder failed");
+      } else {
+        return rejectWithValue("Reorder failed");
+      }
     }
   }
 );
@@ -92,9 +108,13 @@ const carouselImagesSlice = createSlice({
         state.images = action.payload;
         state.loading = false;
       })
-      .addCase(fetchCarouselImages.rejected, (state, action) => {
+      .addCase(fetchCarouselImages.rejected, (state, action: PayloadAction<unknown>) => {
         state.loading = false;
-        state.error = action.payload as string;
+        if (typeof action.payload === 'string') {
+          state.error = action.payload;
+        } else {
+          state.error = 'Unknown error occurred';
+        }
       })
       .addCase(uploadCarouselImage.pending, (state) => {
         state.loading = true;
@@ -104,9 +124,13 @@ const carouselImagesSlice = createSlice({
         state.images.push(action.payload);
         state.loading = false;
       })
-      .addCase(uploadCarouselImage.rejected, (state, action) => {
+      .addCase(uploadCarouselImage.rejected, (state, action: PayloadAction<unknown>) => {
         state.loading = false;
-        state.error = action.payload as string;
+        if (typeof action.payload === 'string') {
+          state.error = action.payload;
+        } else {
+          state.error = 'Unknown error occurred';
+        }
       })
       .addCase(deleteCarouselImage.pending, (state) => {
         state.loading = true;

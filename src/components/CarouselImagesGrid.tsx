@@ -1,19 +1,37 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/reduxToolKit/store";
-import { deleteCarouselImage, reorderCarouselImages, setImages } from "@/reduxToolKit/carouselImagesSlice";
+import { deleteCarouselImage, reorderCarouselImages } from "@/reduxToolKit/carouselImagesSlice";
 import { useDrop, useDrag, DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { MdDelete } from "react-icons/md";
+import Image from "next/image";
 
 const ItemType = "CAROUSEL_IMAGE";
 const BASE_URL = process.env.NEXT_PUBLIC_ROOT_API || "";
 
-function CarouselImageItem({ image, index, moveImage, onDelete }: any) {
+interface CarouselImage {
+  _id: string;
+  filename: string;
+  originalname: string;
+}
+
+interface CarouselImageItemProps {
+  image: CarouselImage;
+  index: number;
+  moveImage: (from: number, to: number) => void;
+  onDelete: (id: string) => void;
+}
+
+function CarouselImageItem({ image, index, moveImage, onDelete }: CarouselImageItemProps) {
   const ref = React.useRef<HTMLDivElement>(null);
+  interface DragItem {
+    index: number;
+  }
+
   const [, drop] = useDrop({
     accept: ItemType,
-    hover(item: any) {
+    hover(item: DragItem) {
       if (item.index === index) return;
       moveImage(item.index, index);
       item.index = index;
@@ -31,10 +49,12 @@ function CarouselImageItem({ image, index, moveImage, onDelete }: any) {
       className={`relative border rounded-lg overflow-hidden group transition-shadow duration-200 shadow-md ${isDragging ? "opacity-50" : ""}`}
       style={{ width: 320, height: 200, margin: 8, background: "#fafafa" }}
     >
-      <img
+      <Image
         src={image.filename.startsWith("http") ? image.filename : `${BASE_URL}/carousel_images/${image.filename}`}
         alt={image.originalname}
-        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        width={320}
+        height={200}
+        objectFit="cover"
       />
       <button
         className="absolute top-2 right-2 bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition"
@@ -49,8 +69,8 @@ function CarouselImageItem({ image, index, moveImage, onDelete }: any) {
 
 const CarouselImagesGrid = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { images, loading } = useSelector((state: RootState) => state.carouselImages);
-  const [dragImages, setDragImages] = React.useState(images);
+  const { images } = useSelector((state: RootState) => state.carouselImages);
+  const [dragImages, setDragImages] = React.useState<CarouselImage[]>(images);
 
   React.useEffect(() => {
     setDragImages(images);
@@ -64,8 +84,8 @@ const CarouselImagesGrid = () => {
   };
 
   const handleDrop = () => {
-    if (JSON.stringify(dragImages.map((img: any) => img._id)) !== JSON.stringify(images.map((img: any) => img._id))) {
-      dispatch(reorderCarouselImages(dragImages.map((img: any) => img._id)));
+    if (JSON.stringify(dragImages.map((img) => img._id)) !== JSON.stringify(images.map((img) => img._id))) {
+      dispatch(reorderCarouselImages(dragImages.map((img) => img._id)));
     }
   };
 
@@ -84,7 +104,7 @@ const CarouselImagesGrid = () => {
         style={{ minHeight: 220 }}
         onMouseUp={handleDrop}
       >
-        {dragImages.map((image: any, idx: number) => (
+        {dragImages.map((image, idx: number) => (
           <CarouselImageItem
             key={image._id}
             image={image}
