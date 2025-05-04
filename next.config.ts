@@ -35,6 +35,11 @@ const nextConfig: NextConfig = {
                 hostname: "192.168.0.101",
                 pathname: "/**", // ✅ Allow only images from `/Images/`
             },
+            {
+                protocol: "http",
+                hostname: "192.168.8.93",
+                pathname: "/**", // ✅ Allow only images from `/Images/`
+            },
         ],
     },
 };
