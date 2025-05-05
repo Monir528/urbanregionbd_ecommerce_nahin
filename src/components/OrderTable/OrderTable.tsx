@@ -3,7 +3,7 @@ import BulkDownloadButton from '../OrderTableBody/BulkDownloadButton';
 import { useGetAllOrderedQuery } from "@/components/api/confirmOrder/confirmOrder";
 import { useState, useEffect } from "react";
 import {Order} from "@/types/order";
-import {useRouter, useSearchParams} from "next/navigation";
+import {useSearchParams} from "next/navigation";
 import Link from "next/link";
 
 // Hybrid parser: handles dd/mm/yyyy, mm/dd/yyyy, and ambiguous cases
@@ -43,7 +43,6 @@ function parseOrderDate(dateString: string): Date {
 
 const OrderTable = () => {
     const searchParams = useSearchParams();
-     const router = useRouter();
     const status = searchParams.get('status');
     const { data, isLoading } = useGetAllOrderedQuery(undefined);
     const [orders, setOrders] = useState<Order[]>([]);
@@ -353,7 +352,7 @@ const OrderTable = () => {
                             </div>
                             
                             <div className="bg-gray-50 px-4 py-3 flex justify-between items-center">
-                                <div className="flex space-x-2">
+                                {/* <div className="flex space-x-2">
                                     <button
                                         onClick={() => router.push(`/admin/orders/${item._id}`)}
                                         className="flex items-center justify-center rounded-full bg-gray-200 text-gray-700 p-2 hover:bg-gray-300 transition-colors"
@@ -372,7 +371,7 @@ const OrderTable = () => {
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                                         </svg>
                                     </button>
-                                </div>
+                                </div> */}
                                 
                                 <OrderTableBody
                                     key={item._id}

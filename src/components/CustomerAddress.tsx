@@ -180,8 +180,8 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
       {dialogContent === 'form' && (
         <form onSubmit={handleAddress} className="mx-auto max-w-xl flex flex-col gap-4">
           <div>
-            <label htmlFor="first-name" className="block text-md font-semibold leading-6 text-black">
-              আপনার নাম <span className="text-red-600 text-md">*</span>
+            <label htmlFor="first-name" className="block  text-left font-semibold leading-6 text-black">
+              আপনার নাম <span className="text-red-600 text-md text-left">*</span>
             </label>
             <div className="mt-2.5">
               <input
@@ -197,8 +197,8 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
           </div>
 
           <div className="sm:col-span-2">
-            <label htmlFor="phone-number" className="block text-md font-semibold leading-6 text-black">
-              ফোন নম্বর <span className="text-red-600 text-md font-bold">*</span>
+            <label htmlFor="phone-number" className="block text-md text-left font-semibold leading-6 text-black">
+              ফোন নম্বর <span className="text-red-600 text-md text-left font-bold">*</span>
             </label>
             <div className="relative mt-2.5">
               <div className="absolute inset-y-0 left-0 flex items-center">
@@ -229,8 +229,8 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
           </div>
 
           <div className="col-span-full">
-            <label htmlFor="street-address" className="block text-md font-bold leading-6 text-black">
-              ঠিকানা <span className="font-bold text-lg text-red-600">*</span>
+            <label htmlFor="street-address" className="block text-md text-left font-bold leading-6 text-black">
+              ঠিকানা <span className="font-bold text-lg text-left text-red-600">*</span>
             </label>
             <div className="mt-2">
               <input
@@ -247,7 +247,7 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
 
           <div className="border my-4 p-4 rounded-md">
             <div className="flex flex-col gap-2">
-              <p className="font-bold text-black">শিপিং মেথড</p>
+              <p className="font-bold text-black text-left">শিপিং মেথড</p>
               <hr />
               <label className="text-black flex items-center justify-between">
                 <span>
@@ -280,7 +280,7 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
 
           <div className="border my-4 p-4 rounded-md">
             <div className="flex flex-col gap-2">
-              <p className="font-bold text-black">পেমেন্ট মেথড</p>
+              <p className="font-bold text-black text-left">পেমেন্ট মেথড</p>
               <hr />
               <label className="text-black flex items-center gap-2">
                 <input

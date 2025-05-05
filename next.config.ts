@@ -16,6 +16,11 @@ const nextConfig: NextConfig = {
                 pathname: "/Images/**", // ✅ Allow only images from `/Images/`
             },
             {
+                protocol: "https",
+                hostname: "backend.urbanregionbd.com",
+                pathname: "/carousel_images/**", // ✅ Allow only images from `/Images/`
+            },
+            {
                 protocol: "http",
                 hostname: "localhost",
                 pathname: "/carousel_images/**", // ✅ Allow only images from `/carousel_images/`
@@ -39,6 +44,11 @@ const nextConfig: NextConfig = {
                 protocol: "http",
                 hostname: "192.168.8.93",
                 pathname: "/**", // ✅ Allow only images from `/Images/`
+            },
+            {
+                protocol: "http",
+                hostname: "192.168.0.105",
+                pathname: "/**", // ✅ Allow images from this LAN IP
             },
         ],
     },

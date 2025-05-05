@@ -117,7 +117,7 @@ const FooterBanner = () => {
       <Partners></Partners>
 
       <div className="bg-[#58595B]">
-        <div className="container mx-auto py-16 flex justify-between gap-4 flex-wrap text-gray-200">
+        <div className="container mx-auto py-16 px-8 flex justify-between gap-4 flex-wrap text-gray-200">
           <div className="">
             <p className="text-orange-400 text-xl tracking-wider font-bold mb-6">
               URBAN REGION

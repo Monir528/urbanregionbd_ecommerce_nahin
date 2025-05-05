@@ -1,8 +1,8 @@
-import { TbEyeClosed } from "react-icons/tb";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Order } from "@/types/order";
 import DownloadInvoice from './DownloadInvoice';
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export interface OrderTableBodyProps {
     item: Order
@@ -15,6 +15,7 @@ export interface OrderTableBodyProps {
 const OrderTableBody = ({ item, onDelete, checked = false, onSelect, mobileView = false }: OrderTableBodyProps) => {
     const { _id, total, payment, date, status } = item || {};
 
+    const router = useRouter();
     // Removed unused setOrderStatus and editOrder
     const orderStatus = status;
 
@@ -41,9 +42,19 @@ const OrderTableBody = ({ item, onDelete, checked = false, onSelect, mobileView 
         return (
             <div className="flex gap-2 items-center">
                 <DownloadInvoice order={item} />
-                <Link href={`invoice/${_id}`} className="text-purple-500 p-2">
+                {/* <Link href={`invoice/${_id}`} className="text-purple-500 p-2">
                     <TbEyeClosed />
-                </Link>
+                </Link> */}
+                <button
+                    onClick={() => router.push(`/admin/orders/${_id}`)}
+                    className="flex items-center justify-center rounded-full bg-gray-200 text-gray-700 p-2 hover:bg-gray-300 transition-colors"
+                    title="View Details"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                </button>
                 <Link href="" className="text-purple-500 p-2">
                     <FaEdit />
                 </Link>
@@ -100,13 +111,30 @@ const OrderTableBody = ({ item, onDelete, checked = false, onSelect, mobileView 
 
             <td className="flex gap-1 justify-evenly text-purple-500 align-middle">
                 <DownloadInvoice order={item} />
-                <Link href={`invoice/${_id}`} >
-                    <TbEyeClosed />
-                </Link>
-                <Link href="">
+                {/* <Link className="flex items-center justify-center rounded-full bg-gray-200 text-gray-700 p-2 hover:bg-gray-300 transition-colors" href={`invoice/${_id}`} >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                </Link> */}
+                <button
+                    onClick={() => router.push(`/admin/orders/${_id}`)}
+                    className="flex items-center justify-center rounded-full bg-gray-200 text-gray-700 p-2 hover:bg-gray-300 transition-colors"
+                    title="View Details"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                </button>
+                {/* <Link  href="">
                     <FaEdit />
-                </Link>
-                <button onClick={() => handleDeleteOrder(item._id)} title="Delete Order" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit' }}>
+                </Link> */}
+                <button
+                    className="flex items-center justify-center rounded-full bg-gray-200 text-gray-700 p-2 hover:bg-gray-300 transition-colors"
+                    onClick={() => handleDeleteOrder(item._id)} 
+                    title="Delete Order" 
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit' }}>
                   <FaTrash />
                 </button>
             </td>

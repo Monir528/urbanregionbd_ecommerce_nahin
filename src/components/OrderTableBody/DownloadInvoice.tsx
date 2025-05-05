@@ -5,7 +5,6 @@ import InvoiceHeader from '@/components/Invoice/InvoiceHeader';
 import InvoiceDetails from '@/components/Invoice/InvoiceDetails';
 import InvoiceTotal from '@/components/Invoice/InvoiceTotal';
 import { Order } from '@/types/order';
-import { IoMdDownload } from 'react-icons/io';
 
 interface DownloadInvoiceProps {
   order: Order;
@@ -37,8 +36,10 @@ const DownloadInvoice: React.FC<DownloadInvoiceProps> = ({ order }) => {
 
   return (
     <>
-      <button onClick={handleDownload} title="Download Invoice" type="button">
-        <IoMdDownload />
+      <button onClick={handleDownload} className="flex items-center justify-center rounded-full bg-gray-200 text-gray-700 p-2 hover:bg-gray-300 transition-colors" title="Download Invoice" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                        </svg>
       </button>
       {/* Hidden printable invoice */}
       <div

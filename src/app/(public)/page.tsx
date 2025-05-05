@@ -81,7 +81,9 @@ const HomePage = () => {
             <div>
                 <RightCart></RightCart>
                 {carouselLoading ? (
-                  <div className="h-[88vh] flex items-center justify-center">Loading carousel...</div>
+<div className="h-[88vh] flex items-center justify-center">
+  <div className="w-full max-w-md rounded-lg bg-gradient-to-r from-gray-200 to-gray-100 animate-pulse h-48"></div>
+</div>
                 ) : carouselError ? (
                   <div className="h-[88vh] flex items-center justify-center text-red-500">{carouselError}</div>
                 ) : (
