@@ -55,7 +55,7 @@ const SingleCartItem = ({product} : SingleCartItemProps) => {
         <div className="w-full md:max-w-[126px]">
 
           <picture>
-            <img src={image} alt="Urban region product image" className="mx-auto rounded-md" />
+            <img src={process.env.NEXT_PUBLIC_ROOT_API + image} alt="Urban region product image" className="mx-auto rounded-md" />
           </picture>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-5 w-full">

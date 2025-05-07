@@ -96,14 +96,14 @@ const ViewOrder = () => {
                     <h3 className="text-sm font-semibold text-gray-700 border-b pb-2">Ordered Items</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 mt-3 md:mt-4">
                         {orderedItem.map((item: OrderedItem, index: number) => (
-                            <div key={index} className="bg-white shadow-md rounded-lg p-3 md:p-4 flex flex-col items-center">
+                            <div key={index} className="bg-white shadow-md round ed-lg p-3 md:p-4 flex flex-col items-center">
                                 <div className="relative w-full flex items-center justify-center mb-2">
                                     <Image 
                                         height={20} 
                                         width={20} 
                                         unoptimized 
                                         className="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg" 
-                                        src={item?.image} 
+                                        src={process.env.NEXT_PUBLIC_ROOT_API + item?.image} 
                                         alt={item?.name} 
                                     />
                                 </div>

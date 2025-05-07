@@ -69,7 +69,7 @@ const DetailsContent = ({ desc, img } : DetailsContentTypeDef) => {
           id: `${id}>>>${selectSize}`,
 
           name: desc?.productName,
-          image: `${process.env.NEXT_PUBLIC_ROOT_API}/Images/${img[0]?.filename}`,
+          image: `/Images/${img[0]?.filename}`,
           price: desc?.discount,
           cartQuantity: count,
         })

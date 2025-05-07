@@ -50,6 +50,11 @@ const nextConfig: NextConfig = {
                 hostname: "192.168.0.105",
                 pathname: "/**", // ✅ Allow images from this LAN IP
             },
+            {
+                protocol: "http",
+                hostname: "192.168.0.105",
+                pathname: "/carousel_images/**", // ✅ Allow images from this LAN IP
+            },
         ],
     },
 };
