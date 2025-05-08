@@ -16,7 +16,7 @@ export interface Order {
     address: string;
     division: string;
     orderedItem: OrderedItem[];
-    date: string; // You might want to use Date type if you parse the string in your app
+    date: Date; // Always use Date type (ISO string or Date object)
     total: number;
     status: "received" | "pending" | "shipped" | "delivered" | "cancelled" | "failed";
     payment:Payment

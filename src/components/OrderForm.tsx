@@ -22,7 +22,14 @@ export default function OrderForm() {
     dispatch(getTotals());
   }, [cart, dispatch]);
 
-  const orderedItem = cart?.cartItems
+  // Transform cartItems to ensure id is only the product ID (not undefined or composite)
+  const orderedItem = cart?.cartItems?.map(item => ({
+    id: item.id && item.id.includes('>>>') ? item.id.split('>>>')[0] : item.id,
+    name: item.name,
+    cartQuantity: item.cartQuantity,
+    price: item.price,
+    // Add other fields if needed by backend
+  }));
 
   const [dialogContent, setDialogContent] = useState<'form' | 'bkash' | 'success'>('form');
   const [orderId, setOrderId] = useState<string | undefined>(undefined);

@@ -34,10 +34,10 @@ const HomePage = () => {
     // console.log(totalPrice);
     return (
         <main>
-            <OrderSuccessModal open={showSuccess} onClose={() => {
-        setShowSuccess(false);
-        navigate.push("/");
-      }} />
+            {/* <OrderSuccessModal open={showSuccess} onClose={() => {
+                setShowSuccess(false);
+                navigate.push("/");
+            }} /> */}
             {formCondition && <OrderForm />}
             <div>
                 <div className="flex cursor-cell hover:bg-gray-200 hover:text-gray-500 flex-col items-center justify-center w-full pb-4 bg-gray-500 text-gray-200 h-32 lg:h-52 duration-300 rounded-t-lg shadow-md mb-4">

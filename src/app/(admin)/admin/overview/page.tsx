@@ -14,7 +14,7 @@ const Overview = () => {
         () => [
             {
                 Header: "Date",
-                accessor: "date",
+                accessor: (row: Order) => row.date ? new Date(row.date).toLocaleString() : '',
                 Filter: DateRangeColumnFilter,
                 filter: dateBetweenFilterFn,
             },

@@ -14,11 +14,16 @@ interface OrderedItem {
 }
 
 interface Props {
-  orderedItem?: OrderedItem;
+  // orderedItem should be an array of objects with correct id and name for each cart item
+  orderedItem?: OrderedItem[];
   onOrderSuccess?: (orderId?: string) => void;
   onShowBkash?: () => void;
   dialogContent?: string;
 }
+
+// NOTE: Ensure that the parent component passes orderedItem as an array of objects like:
+// [ { id: string, name: string }, ... ]
+// where id is the product id and name is the product name.
 
 export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBkash, dialogContent }: Props) {
   const cart = useSelector((state: RootState) => state.cart);
@@ -29,7 +34,21 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
   const [address, setAddress] = useState<string>("");
   const [division, setDivision] = useState<string>("osd");
   const [paymentMethod, setPaymentMethod] = useState<string>("cod");
-  const [selectedGateway] = useState<string>(""); // keep state if needed for API, but don't use setter
+
+  // Handler for payment method change - updates both paymentMethod and selectedGateway
+  const handlePaymentMethodChange = (method: string) => {
+    setPaymentMethod(method);
+    // selectedGateway will be updated by the useEffect below
+  }
+  // Keep selectedGateway in sync with paymentMethod
+  useEffect(() => {
+    if (paymentMethod === 'online') {
+      setSelectedGateway('bkash');
+    } else {
+      setSelectedGateway('cod');
+    }
+  }, [paymentMethod]);
+  const [selectedGateway, setSelectedGateway] = useState<string>("cod"); // default to 'cod' for cash on delivery
   const [purchaseLoading, setPurchaseLoading] = useState<boolean>(false);
 
   console.log('CustomerAddress rendered, paymentMethod:', paymentMethod);
@@ -61,34 +80,50 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
 
           const handleAddress = async (e: FormEvent<HTMLFormElement>) => {
             e.preventDefault();
+            
+            // Form validation
+            if (!name.trim()) {
+              alert('আপনার নাম দিন');
+              return;
+            }
+            
+            if (!address.trim()) {
+              alert('আপনার ঠিকানা দিন');
+              return;
+            }
+            
             const phoneInput = document.getElementById('phone-number') as HTMLInputElement;
-            if (!phoneInput.checkValidity()) {
+            if (!phoneInput.checkValidity() || !phone.trim() || phone.length !== 11) {
               setPhoneError('ফোন নম্বর 11 ডিজিট হতে হবে');
               return;
             }
+            
             setPhoneError('');
             console.log('handleAddress called');
             console.log('Form submitted. paymentMethod:', paymentMethod);
+            
             if (paymentMethod === 'cod') {
-      setPurchaseLoading(true);
-      try {
-        await fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/addClient`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, phone, address, division }),
-        });
-        const orderStatus = {
-          name,
-          phone,
-          address,
-          division,
-          orderedItem,
-          date: new Date().toLocaleString(),
-          total: cart?.cartTotalAmount || 0,
-          status: "pending",
-          paymentMethod,
-          selectedGateway,
-        };
+              setPurchaseLoading(true);
+              try {
+                await fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/addClient`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ name, phone, address, division }),
+                });
+                
+                // Ensure selectedGateway is 'cod' for cash on delivery
+                const orderStatus = {
+                  name,
+                  phone,
+                  address,
+                  division,
+                  orderedItem,
+                  date: new Date().toISOString(),
+                  total: cart?.cartTotalAmount || 0,
+                  status: "pending",
+                  paymentMethod: 'cod',
+                  selectedGateway: 'cod',
+                };
         console.log('Calling purchaseOrder with', orderStatus);
         const result = await purchaseOrder(orderStatus);
         console.log('purchaseOrder result:', result);
@@ -111,25 +146,55 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
 
   const handleBkashPayment = async () => {
     console.log('handleBkashPayment called');
+    
+    // Form validation for bKash payment
+    if (!name.trim()) {
+      alert('আপনার নাম দিন');
+      return;
+    }
+    
+    if (!address.trim()) {
+      alert('আপনার ঠিকানা দিন');
+      return;
+    }
+    
+    if (!phone.trim() || phone.length !== 11) {
+      setPhoneError('ফোন নম্বর 11 ডিজিট হতে হবে');
+      return;
+    }
+    
+    if (!bkashPhone.trim()) {
+      setBkashError('বিকাশ নম্বর দিন');
+      return;
+    }
+    
+    if (!bkashTransId.trim()) {
+      setBkashError('ট্রানজেকশন আইডি দিন');
+      return;
+    }
+    
     setBkashLoading(true);
     setBkashError('');
+    
     try {
       await fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/addClient`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, phone, address, division }),
       });
+      
+      // Ensure paymentMethod is 'online' and selectedGateway is 'bkash' for online payment
       const orderStatus = {
         name,
         phone,
         address,
         division,
         orderedItem,
-        date: new Date().toLocaleString(),
+        date: new Date().toISOString(),
         total: cart?.cartTotalAmount || 0,
         status: "pending",
-        paymentMethod,
-        selectedGateway,
+        paymentMethod: 'online',
+        selectedGateway: 'bkash',
         payment: {
           phone: bkashPhone,
           transId: bkashTransId,
@@ -288,7 +353,7 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
                   name="paymentMethod"
                   value="cod"
                   checked={paymentMethod === "cod"}
-                  onChange={() => setPaymentMethod("cod")}
+                  onChange={() => handlePaymentMethodChange("cod")}
                 />
                 ক্যাশ অন ডেলিভারি
               </label>
@@ -298,7 +363,7 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
                   name="paymentMethod"
                   value="online"
                   checked={paymentMethod === "online"}
-                  onChange={() => setPaymentMethod("online")}
+                  onChange={() => handlePaymentMethodChange("online")}
                 />
                 অনলাইন পেমেন্ট
               </label>

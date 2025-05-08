@@ -12,7 +12,7 @@ const InvoiceHeader = ({ details }: InvoiceHeaderProps) => {
           <div>
             <h1 className="text-blueviolet text-[16px]">Urban Region BD</h1>
             <p className="text-gray-700">Invoice Id: {details?._id}</p>
-            <p className="text-gray-700">Date: {details?.date}</p>
+            <p className="text-gray-700">Date: {details?.date ? new Date(details.date).toLocaleString() : ''}</p>
           </div>
           <div className="bg-black text-white px-8 py-2 rounded-md">
             <h1 className="text-[16px] font-normal">Invoice</h1>

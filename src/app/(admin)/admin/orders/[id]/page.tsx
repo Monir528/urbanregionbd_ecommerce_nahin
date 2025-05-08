@@ -55,7 +55,7 @@ const ViewOrder = () => {
                         <div className="space-y-2 text-sm text-gray-600">
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                                 <p><span className="font-medium">Full Name:</span> {name}</p>
-                                <p className="sm:text-right"><span className="font-medium">Order Date:</span> {date}</p>
+                                <p className="sm:text-right"><span className="font-medium">Order Date:</span> {date ? new Date(date).toLocaleString() : ''}</p>
                             </div>
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                                 <p><span className="font-medium">Phone:</span> {phone}</p>
@@ -110,7 +110,7 @@ const ViewOrder = () => {
                                 <h4 className="text-xs font-medium text-gray-800 text-center line-clamp-2">{item.name}</h4>
                                 <div className="w-full mt-2 space-y-1">
                                     <p className="text-gray-500 text-xs">Size: {item.id?.split(">>>")[1]}</p>
-                                    <p className="text-gray-500 text-xs truncate">Order ID: {item.id?.split(">>>")[0]}</p>
+                                    <p className="text-gray-500 text-xs truncate">Order ID: {id}</p>
                                     <div className="w-full flex justify-between text-xs text-gray-600">
                                         <p><span className="font-semibold">Unit Price:</span> {item.price} Taka</p>
                                         <p><span className="font-semibold">Qty:</span> {item.cartQuantity}</p>
