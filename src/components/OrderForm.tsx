@@ -9,6 +9,7 @@ import { getTotals, clearCart } from "@/components/api/cartSlice";
 import CustomerAddress from "@/components/CustomerAddress";
 import { RootState } from "@/reduxToolKit/store";
 import OrderSuccessContent from "@/components/OrderSuccessModal";
+import { CartItem } from "@/types/cart";
 
 export default function OrderForm() {
   console.log('OrderForm render. dialogContent:', 'orderId:', 'at', new Date().toISOString());
@@ -23,11 +24,12 @@ export default function OrderForm() {
   }, [cart, dispatch]);
 
   // Transform cartItems to ensure id is only the product ID (not undefined or composite)
-  const orderedItem = cart?.cartItems?.map(item => ({
+  const orderedItem = cart?.cartItems?.map((item: CartItem) => ({
     id: item.id && item.id.includes('>>>') ? item.id.split('>>>')[0] : item.id,
     name: item.name,
     cartQuantity: item.cartQuantity,
     price: item.price,
+    image: item.image
     // Add other fields if needed by backend
   }));
 
@@ -54,7 +56,7 @@ export default function OrderForm() {
         initialFocus={cancelButtonRef}
         onClose={() => dispatch(orderFormClose())}
       >
-        <Transition.Child
+        {/* <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0"
@@ -64,7 +66,7 @@ export default function OrderForm() {
           leaveTo="opacity-0"
         >
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-        </Transition.Child>
+        </Transition.Child> */}
 
         <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
           <div className="flex min-h-full  justify-center p-4 text-center items-center sm:p-0">

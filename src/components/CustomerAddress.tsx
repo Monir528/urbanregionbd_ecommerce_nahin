@@ -1,12 +1,25 @@
 "use client";
 
-import { useState, FormEvent, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { Radio } from "react-loader-spinner";
-import { usePurchaseOrderMutation } from "@/components/api/confirmOrder/confirmOrder"; // Adjust import path
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/reduxToolKit/store";
-import { Dialog } from '@headlessui/react'; // For modal UI
-import Image from 'next/image';
+import { useState, useEffect } from "react";
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+
+import { 
+  setCustomerName, 
+  setCustomerPhone, 
+  setCustomerAddress, 
+  setPaymentMethod,
+  resetCustomerInfo,
+  setSelectedGateway,
+  setCustomerDivision
+} from "@/components/api/customerSlice";
+import { usePurchaseOrderMutation } from "./api/confirmOrder/confirmOrder";
+
+
+
+
 
 interface OrderedItem {
   id?: string;
@@ -21,35 +34,22 @@ interface Props {
   dialogContent?: string;
 }
 
-// NOTE: Ensure that the parent component passes orderedItem as an array of objects like:
-// [ { id: string, name: string }, ... ]
-// where id is the product id and name is the product name.
+import { Dialog } from "@headlessui/react";
+import Image from "next/image";
+import { Radio } from 'react-loader-spinner';
 
 export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBkash, dialogContent }: Props) {
+  const dispatch = useDispatch();
   const cart = useSelector((state: RootState) => state.cart);
-
-  const [name, setName] = useState<string>("");
-  const [phone, setPhone] = useState<string>("");
+  const { name, phone, address, division, paymentMethod } = useSelector((state: RootState) => state.customer);
+  
   const [phoneError, setPhoneError] = useState<string>("");
-  const [address, setAddress] = useState<string>("");
-  const [division, setDivision] = useState<string>("osd");
-  const [paymentMethod, setPaymentMethod] = useState<string>("cod");
 
-  // Handler for payment method change - updates both paymentMethod and selectedGateway
+  // Handler for payment method change - updates payment method and gateway in Redux
   const handlePaymentMethodChange = (method: string) => {
-    setPaymentMethod(method);
-    // selectedGateway will be updated by the useEffect below
+    dispatch(setPaymentMethod(method));
+    dispatch(setSelectedGateway(method === 'online' ? 'bkash' : 'cod'));
   }
-  // Keep selectedGateway in sync with paymentMethod
-  useEffect(() => {
-    if (paymentMethod === 'online') {
-      setSelectedGateway('bkash');
-    } else {
-      setSelectedGateway('cod');
-    }
-  }, [paymentMethod]);
-  const [selectedGateway, setSelectedGateway] = useState<string>("cod"); // default to 'cod' for cash on delivery
-  const [purchaseLoading, setPurchaseLoading] = useState<boolean>(false);
 
   console.log('CustomerAddress rendered, paymentMethod:', paymentMethod);
 
@@ -78,52 +78,72 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
   const deliveryCharge = division === 'isd' ? 70 : 120;
   const totalPayable = (cart?.cartTotalAmount || 0) + deliveryCharge;
 
-          const handleAddress = async (e: FormEvent<HTMLFormElement>) => {
-            e.preventDefault();
-            
-            // Form validation
-            if (!name.trim()) {
-              alert('আপনার নাম দিন');
-              return;
-            }
-            
-            if (!address.trim()) {
-              alert('আপনার ঠিকানা দিন');
-              return;
-            }
-            
-            const phoneInput = document.getElementById('phone-number') as HTMLInputElement;
-            if (!phoneInput.checkValidity() || !phone.trim() || phone.length !== 11) {
-              setPhoneError('ফোন নম্বর 11 ডিজিট হতে হবে');
-              return;
-            }
-            
-            setPhoneError('');
-            console.log('handleAddress called');
-            console.log('Form submitted. paymentMethod:', paymentMethod);
-            
-            if (paymentMethod === 'cod') {
-              setPurchaseLoading(true);
-              try {
-                await fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/addClient`, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ name, phone, address, division }),
-                });
-                
-                // Ensure selectedGateway is 'cod' for cash on delivery
-                const orderStatus = {
-                  name,
-                  phone,
-                  address,
-                  division,
-                  orderedItem,
-                  date: new Date().toISOString(),
-                  total: cart?.cartTotalAmount || 0,
-                  status: "pending",
-                  paymentMethod: 'cod',
-                  selectedGateway: 'cod',
-                };
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setCustomerName(e.target.value));
+  };
+
+  const handlePhoneChange = (value: string ) => {
+    const fullNumber = `+${value}`;
+    dispatch(setCustomerPhone(fullNumber));
+
+    // Only check for a minimum length (8 digits for any country)
+    if (value.replace(/\D/g, '').length < 11) {
+      setPhoneError('কমপক্ষে ১১ সংখ্যার একটি বৈধ নম্বর দিন');
+    } else {
+      setPhoneError('');
+    }
+  };
+
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setCustomerAddress(e.target.value));
+  };
+
+  // removed unused handleDivisionChange
+
+  const handleAddress = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    // Form validation
+    if (!name.trim()) {
+      alert('আপনার নাম দিন');
+      return;
+    }
+    
+    if (!address.trim()) {
+      alert('আপনার ঠিকানা দিন');
+      return;
+    }
+    
+    if (!phone.trim() || phoneError) {
+      setPhoneError('দয়া করে সঠিক ফোন নম্বর দিন');
+      return;
+    }
+    
+    setPhoneError('');
+    console.log('handleAddress called');
+    console.log('Form submitted. paymentMethod:', paymentMethod);
+    
+    if (paymentMethod === 'cod') {
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/addClient`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, phone, address, division }),
+        });
+        
+        // Ensure selectedGateway is 'cod' for cash on delivery
+        const orderStatus = {
+          name,
+          phone,
+          address,
+          division,
+          orderedItem,
+          date: new Date().toISOString(),
+          total: cart?.cartTotalAmount || 0,
+          status: "pending",
+          paymentMethod: 'cod',
+          selectedGateway: 'cod',
+        };
         console.log('Calling purchaseOrder with', orderStatus);
         const result = await purchaseOrder(orderStatus);
         console.log('purchaseOrder result:', result);
@@ -135,8 +155,6 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
         }
       } catch (error) {
         console.error("Order submission error:", error);
-      } finally {
-        setPurchaseLoading(false);
       }
     } else {
       console.log('Calling onShowBkash from handleAddress');
@@ -145,6 +163,7 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
   };
 
   const handleBkashPayment = async () => {
+    setBkashLoading(true);
     console.log('handleBkashPayment called');
     
     // Form validation for bKash payment
@@ -158,7 +177,11 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
       return;
     }
     
-    if (!phone.trim() || phone.length !== 11) {
+    console.log('phone:', phone);
+    console.log('phone length:', phone.length);
+    console.log('phone trim:', phone.trim());
+    console.log('phone trim length:', phone.trim().length);
+    if (!phone.trim() || phone.trim().length !== 14) {
       setPhoneError('ফোন নম্বর 11 ডিজিট হতে হবে');
       return;
     }
@@ -209,6 +232,8 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
       if (!orderSuccessCalled && onOrderSuccess) {
         setOrderSuccessCalled(true);
         onOrderSuccess(result?.data?.insertedId);
+        // Reset customer info in Redux after successful order
+        dispatch(resetCustomerInfo());
       }
     } catch {
       setBkashError('পেমেন্ট ভেরিফিকেশন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।');
@@ -231,7 +256,7 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
 
   return (
     <div className={`isolate bg-white px-6 lg:px-8${dialogContent === 'bkash' ? ' blur-sm pointer-events-none select-none' : ''}`}>
-      {(purchaseLoading || purchaseLoadingMutation) && (
+      {purchaseLoadingMutation && (
         <Radio
           visible={true}
           height="40"
@@ -255,7 +280,7 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
                 id="full-name"
                 autoComplete="given-name"
                 required
-                onChange={(e) => setName(e.target.value)}
+                onChange={handleNameChange}
                 className="block w-full rounded-md border-0 px-3.5 py-2 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -265,31 +290,32 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
             <label htmlFor="phone-number" className="block text-md text-left font-semibold leading-6 text-black">
               ফোন নম্বর <span className="text-red-600 text-md text-left font-bold">*</span>
             </label>
-            <div className="relative mt-2.5">
-              <div className="absolute inset-y-0 left-0 flex items-center">
-                <label htmlFor="country" className="sr-only">
-                  Country
-                </label>
-                <select
-                  id="country"
-                  name="country"
-                  className="h-full rounded-md border-0 bg-transparent bg-none py-0 pl-4 pr-6 text-black focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-                >
-                  <option>Ban</option>
-                </select>
-              </div>
-              <input
-                type="tel"
-                name="phone-number"
-                id="phone-number"
-                autoComplete="tel"
-                required
-                pattern="[0-9]{11}"
-                maxLength={11}
-                onChange={(e) => setPhone(e.target.value)}
-                className="block w-full rounded-md border-0 px-3.5 py-2 pl-24 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            <div className="mt-2.5">
+              <PhoneInput
+                country={'bd'}
+                value={phone}
+                onChange={handlePhoneChange}
+                inputProps={{
+                  name: 'phone-number',
+                  id: 'phone-number',
+                  required: true,
+                  autoComplete: 'tel',
+                  maxLength: 17 // reasonable max for international numbers
+                }}
+                containerClass="phone-input-container"
+                inputClass="block w-full rounded-md border-0 px-3.5 py-2 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                buttonClass="country-dropdown"
+                dropdownClass="country-dropdown-list"
+                searchClass="country-search"
+                enableSearch={true}
+                disableSearchIcon={false}
+                searchPlaceholder="Search country"
+                preferredCountries={['bd', 'us', 'gb', 'in']}
+                disableCountryCode={false} // allow country code to be changed via dropdown
+                disableDropdown={false} // allow dropdown
+                countryCodeEditable={false} // true would allow editing by keyboard, but not supported
               />
-              {phoneError && <p className="mt-1 text-sm text-red-600 text-left ml-10">{phoneError}</p>}
+              {phoneError && <p className="mt-1 text-sm text-red-600 text-left">{phoneError}</p>}
             </div>
           </div>
 
@@ -299,7 +325,7 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
             </label>
             <div className="mt-2">
               <input
-                onChange={(e) => setAddress(e.target.value)}
+                onChange={handleAddressChange}
                 type="text"
                 name="street-address"
                 id="street-address"
@@ -317,7 +343,7 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
               <label className="text-black flex items-center justify-between">
                 <span>
                   <input
-                    onChange={(e) => setDivision(e.target.value)}
+                    onChange={(e) => dispatch(setCustomerDivision(e.target.value))}
                     type="radio"
                     checked={division === "isd"}
                     name="myRadio"
@@ -330,7 +356,7 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
               <label className="text-black flex items-center justify-between">
                 <span>
                   <input
-                    onChange={(e) => setDivision(e.target.value)}
+                    onChange={(e) => dispatch(setCustomerDivision(e.target.value))}
                     type="radio"
                     name="myRadio"
                     checked={division === "osd"}

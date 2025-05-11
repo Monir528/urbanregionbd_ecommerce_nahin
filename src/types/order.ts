@@ -2,9 +2,9 @@
 export interface OrderedItem {
     id: string;
     name: string;
-    image: string;
-    price: string; // Note: price is a string in the JSON, but you might want to convert it to a number in your app
     cartQuantity: number;
+    price: string | number;
+    image: string;
 }
 
 // Interface for the main order object

@@ -66,7 +66,7 @@ const DetailsContent = ({ desc, img } : DetailsContentTypeDef) => {
       setWarning(false);
       dispatch(
         addToCart({
-          id: `${id}>>>${selectSize}`,
+          id: `${id?.toString()}>>>${selectSize}`,
 
           name: desc?.productName,
           image: `/Images/${img[0]?.filename}`,

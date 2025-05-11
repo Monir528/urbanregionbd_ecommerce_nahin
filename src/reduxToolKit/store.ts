@@ -18,6 +18,7 @@ import { apiSlice } from "@/components/api/apiSlice";
 import { confirmOrder } from "@/components/api/confirmOrder/confirmOrder";
 import authReducer from "@/reduxToolKit/authSlice";
 import carouselImagesReducer from "@/reduxToolKit/carouselImagesSlice";
+import customerReducer from "@/components/api/customerSlice";
 
 export const store = configureStore({
     reducer: {
@@ -38,6 +39,7 @@ export const store = configureStore({
         size: sizeModal,
         totalCount,
         carouselImages: carouselImagesReducer,
+        customer: customerReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware()

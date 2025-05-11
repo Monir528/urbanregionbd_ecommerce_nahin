@@ -49,6 +49,8 @@ const SingleCartItem = ({product} : SingleCartItemProps) => {
   //   dispatch(clearCart());
   // };
 
+  console.log('product', product)
+
   return (
     <div>
       <div className="flex flex-col min-[500px]:flex-row min-[500px]:items-center gap-2 py-4 px-4 border border-gray-300 rounded-md">

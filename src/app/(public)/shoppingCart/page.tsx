@@ -8,7 +8,6 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import EmptyCart from "@/components/EmptyCart";
 import { useRouter } from "next/navigation";
 import OrderForm from "@/components/OrderForm";
-import OrderSuccessModal from "@/components/OrderSuccessModal";
 import { RootState } from "@/reduxToolKit/store";
 import { CartItem } from "@/types/cart";
 import React from "react";
@@ -18,7 +17,6 @@ const HomePage = () => {
     const dispatch = useDispatch();
     const cart = useSelector((state: RootState) => state.cart);
     const navigate= useRouter()
-    const [showSuccess, setShowSuccess] = React.useState(false);
 
     useEffect(() => {
         dispatch(getTotals());

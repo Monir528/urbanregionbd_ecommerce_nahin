@@ -1,7 +1,7 @@
 import OrderTableBody from "../OrderTableBody/OrderTableBody";
 import BulkDownloadButton from '../OrderTableBody/BulkDownloadButton';
 import { useGetAllOrderedQuery } from "@/components/api/confirmOrder/confirmOrder";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {Order} from "@/types/order";
 import {useSearchParams} from "next/navigation";
 import Link from "next/link";
@@ -23,15 +23,13 @@ function parseOrderDate(dateString: string): Date {
     if (datePart.includes('/')) {
         const parts = datePart.split('/').map(Number);
         if (parts.length === 3) {
-            const day = parts[0], month = parts[1], year = parts[2];
-            if (day > 12) {
-                // Definitely dd/mm/yyyy
+            if (dateString.includes(',')) {
+                // If the date string contains a comma (time part), treat as mm/dd/yyyy (US-style)
+                const month = parts[0], day = parts[1], year = parts[2];
                 return new Date(year, month - 1, day);
-            } else if (month > 12) {
-                // Definitely mm/dd/yyyy
-                return new Date(year, day - 1, month);
             } else {
-                // Both ≤ 12, default to dd/mm/yyyy (admin's intent)
+                // Otherwise, treat as dd/mm/yyyy
+                const day = parts[0], month = parts[1], year = parts[2];
                 return new Date(year, month - 1, day);
             }
         }
@@ -79,25 +77,42 @@ const OrderTable = () => {
     };
 
     // Filtering logic for date range
+    function normalizeDate(d: Date) {
+        return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    }
+
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 100; // Show 100 items per page as requested
+    
     const filterByDateRange = (order: Order) => {
         if (!startDate && !endDate) return true;
-        const orderDate = parseOrderDate(order.date || "");
+        const orderDate = parseOrderDate(order.date instanceof Date ? order.date.toString() : order.date || "");
         if (isNaN(orderDate.getTime())) return false;
+
+        // If both dates are set and are the same, match only that day
+        if (startDate && endDate && startDate === endDate) {
+            const target = normalizeDate(new Date(startDate));
+            const normalizedOrderDate = normalizeDate(orderDate);
+            return normalizedOrderDate.getTime() === target.getTime();
+        }
+
+        // Range logic (inclusive)
+        if (startDate && endDate) {
+            const from = normalizeDate(new Date(startDate));
+            const to = normalizeDate(new Date(endDate));
+            const normalizedOrderDate = normalizeDate(orderDate);
+            return normalizedOrderDate >= from && normalizedOrderDate <= to;
+        }
         if (startDate && !endDate) {
-            // Only startDate: show orders on or after startDate
-            return orderDate >= new Date(startDate);
+            const from = normalizeDate(new Date(startDate));
+            const normalizedOrderDate = normalizeDate(orderDate);
+            return normalizedOrderDate >= from;
         }
         if (!startDate && endDate) {
-            // Only endDate: show orders on or before endDate (inclusive)
-            const inclusiveEnd = new Date(endDate);
-            inclusiveEnd.setDate(inclusiveEnd.getDate() + 1);
-            return orderDate < inclusiveEnd;
-        }
-        if (startDate && endDate) {
-            // Both set: show orders in range (inclusive)
-            const inclusiveEnd = new Date(endDate);
-            inclusiveEnd.setDate(inclusiveEnd.getDate() + 1);
-            return orderDate >= new Date(startDate) && orderDate < inclusiveEnd;
+            const to = normalizeDate(new Date(endDate));
+            const normalizedOrderDate = normalizeDate(orderDate);
+            return normalizedOrderDate <= to;
         }
         return true;
     };
@@ -129,6 +144,22 @@ const OrderTable = () => {
             }
         })
         ?.filter(filterByDateRange);
+    
+    // Calculate total pages and paginate data
+    const totalOrders = filteredOrders?.length || 0;
+    const totalPages = Math.ceil(totalOrders / itemsPerPage);
+    
+    // Reset to first page when filters change
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchText, startDate, endDate, status]);
+    
+    // Get current page data
+    const currentOrders = useMemo(() => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        return filteredOrders?.slice(startIndex, endIndex) || [];
+    }, [filteredOrders, currentPage, itemsPerPage]);
     
     // Loading state
     if (isLoading) {
@@ -232,7 +263,9 @@ const OrderTable = () => {
             {/* Results Summary */}
             <div className="flex justify-between items-center mb-4">
                 <p className="text-sm text-gray-600">
-                    {filteredOrders?.length ? `Showing ${filteredOrders.length} order${filteredOrders.length !== 1 ? 's' : ''}` : 'No orders found'}
+                    {filteredOrders?.length ? 
+                      `Showing ${(currentPage - 1) * itemsPerPage + 1}-${Math.min(currentPage * itemsPerPage, totalOrders)} of ${totalOrders} order${totalOrders !== 1 ? 's' : ''}` : 
+                      'No orders found'}
                 </p>
                 {filteredOrders?.length > 0 && (
                     <div className="flex items-center">
@@ -272,8 +305,8 @@ const OrderTable = () => {
                     </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 bg-white">
-                    {filteredOrders?.length > 0 ? (
-                        filteredOrders.map((item: Order) => (
+                    {currentOrders?.length > 0 ? (
+                        currentOrders.map((item: Order) => (
                             <OrderTableBody
                                 key={item._id}
                                 item={item}
@@ -295,8 +328,8 @@ const OrderTable = () => {
 
             {/* Mobile Card View */}
             <div className="block sm:hidden space-y-4">
-                {filteredOrders?.length > 0 ? (
-                    filteredOrders.map((item: Order) => (
+                {currentOrders?.length > 0 ? (
+                    currentOrders.map((item: Order) => (
                         <div key={item._id} className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
                             <div className="p-4 border-b border-gray-100 flex justify-between items-center">
                                 <div className="flex items-center space-x-3">
@@ -314,7 +347,7 @@ const OrderTable = () => {
                                             </Link>
                                         </div>
                                         <div className="text-xs text-gray-500 mt-1">
-                                            {item.date}
+                                            {item.date.toString()}
                                         </div>
                                     </div>
                                 </div>
@@ -399,8 +432,126 @@ const OrderTable = () => {
                     </div>
                 )}
             </div>
+            
+            {/* Pagination Controls - Mobile Friendly */}
+            {totalPages > 1 && (
+                <div className="mt-6 px-2">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div className="text-sm text-gray-600">
+                            Page {currentPage} of {totalPages}
+                        </div>
+                        
+                        <div className="flex justify-center items-center gap-2">
+                            {/* Mobile-friendly pagination controls */}
+                            <button
+                                onClick={() => setCurrentPage(1)}
+                                disabled={currentPage === 1}
+                                className="hidden sm:inline-flex items-center px-3 py-1.5 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                                </svg>
+                            </button>
+                            
+                            <button
+                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                disabled={currentPage === 1}
+                                className="inline-flex items-center px-3 py-1.5 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                </svg>
+                                <span className="ml-1 hidden sm:inline">Previous</span>
+                            </button>
+                            
+                            {/* Page number buttons - desktop only */}
+                            <div className="hidden sm:flex">{
+                                getPaginationRange(currentPage, totalPages).map(page => {
+                                    // Check if the page is an ellipsis object
+                                    if (typeof page === 'object' && page.ellipsis) {
+                                        return (
+                                            <div 
+                                                key={page.key} 
+                                                className="inline-flex items-center justify-center h-8 w-8 text-sm text-gray-500"
+                                            >
+                                                ...
+                                            </div>
+                                        );
+                                    }
+                                    
+                                    // Regular page number button
+                                    return (
+                                        <button 
+                                            key={typeof page === 'object' ? page.key : page.toString()} 
+                                            onClick={() => setCurrentPage(Number(page))}
+                                            className={`inline-flex items-center justify-center h-8 w-8 rounded-md text-sm ${
+                                                currentPage === page
+                                                ? 'bg-purple-600 text-white'
+                                                : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
+                                            }`}
+                                        >
+                                            {typeof page === 'object' ? page.key : page.toString()}
+                                        </button>
+                                    );
+                                })
+                            }</div>
+                            
+                            {/* Compact selector for mobile */}
+                            <select 
+                                value={currentPage}
+                                onChange={(e) => setCurrentPage(Number(e.target.value))}
+                                className="sm:hidden px-2 py-1 border border-gray-300 rounded-md text-sm bg-white"
+                            >
+                                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                                    <option key={page} value={page}>
+                                        Page {page}
+                                    </option>
+                                ))}
+                            </select>
+                            
+                            <button
+                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                disabled={currentPage === totalPages}
+                                className="inline-flex items-center px-3 py-1.5 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <span className="mr-1 hidden sm:inline">Next</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                            
+                            <button
+                                onClick={() => setCurrentPage(totalPages)}
+                                disabled={currentPage === totalPages}
+                                className="hidden sm:inline-flex items-center px-3 py-1.5 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
+
+// Helper function to determine which page numbers to show
+function getPaginationRange(current: number, total: number) {
+    if (total <= 7) {
+        return Array.from({ length: total }, (_, i) => i + 1);
+    }
+    
+    if (current <= 3) {
+        return [1, 2, 3, 4, 5, { ellipsis: true, key: 'ellipsis-end' }, total];
+    }
+    
+    if (current >= total - 2) {
+        return [1, { ellipsis: true, key: 'ellipsis-start' }, total - 4, total - 3, total - 2, total - 1, total];
+    }
+    
+    return [1, { ellipsis: true, key: 'ellipsis-start' }, current - 1, current, current + 1, { ellipsis: true, key: 'ellipsis-end' }, total];
+}
 
 export default OrderTable;
