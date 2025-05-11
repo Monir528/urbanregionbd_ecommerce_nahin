@@ -18,7 +18,7 @@ const InvoiceTotal = ({ details }: InvoiceTotalProps) => {
                     </div>
                     <div>
                         <p>{details.total} Taka</p>
-                        <p>{details.division == "osd" ? 120:60} Taka</p>
+                        <p>{details.division == "osd" ? 120:70} Taka</p>
                         {/*<p>{details?.total} Taka</p>*/}
                     </div>
                 </div>
@@ -29,7 +29,7 @@ const InvoiceTotal = ({ details }: InvoiceTotalProps) => {
             {/* Invoice Payable Section */}
             <div className="flex justify-end">
                 <h2 className="bg-black/80 text-white inline-block mr-2.5 px-2 py-1">
-                    Total: {(details?.total + (details.division == "osd" ? 120:60))}
+                    Total: {(details?.total + (details.division == "osd" ? 120:70))}
                 </h2>
             </div>
         </div>

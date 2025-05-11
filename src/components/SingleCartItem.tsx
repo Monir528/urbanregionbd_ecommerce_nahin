@@ -10,12 +10,10 @@ interface SingleCartItemProps {
 
 const SingleCartItem = ({product} : SingleCartItemProps) => {
 
-  const {cartQuantity, image, name, price, id} = product || {}
+  const {cartQuantity, image, name, price} = product || {}
   const cart = useSelector((state: RootState) => state.cart);
   const dispatch= useDispatch()
   const [count, setCount] = useState(cartQuantity);
-
-  const subString= id?.split(">>>")[1]
 
   let modifiedName;
   if (name.length > 22) {
@@ -106,7 +104,7 @@ const SingleCartItem = ({product} : SingleCartItemProps) => {
           {/* size section  */}
           <div className="flex items-center max-[500px]:justify-center md:justify-end max-md:mt-2 h-full">
             <div className="transition border cursor-pointer font-bold bg-gray-800 text-gray-100 px-4 py-1 duration-100">
-              {subString?.toUpperCase()}
+              {product.size}
             </div>
           </div>
           

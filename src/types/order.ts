@@ -5,6 +5,7 @@ export interface OrderedItem {
     cartQuantity: number;
     price: string | number;
     image: string;
+    size: string;
 }
 
 // Interface for the main order object

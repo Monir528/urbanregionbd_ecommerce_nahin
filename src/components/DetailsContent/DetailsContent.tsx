@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { MdOutlineStar } from "react-icons/md";
 import { makeSizes } from "@/utils/sizes";
 import { useDispatch, useSelector } from "react-redux";
-import {  useParams } from "next/navigation";
 // import { orderFormOpen } from "@/components/api/cartHandler";
 import { addToCart, decreaseCart, getTotals } from "@/components/api/cartSlice";
 import { PiToiletPaperLight } from "react-icons/pi";
@@ -18,16 +17,16 @@ import {ProductImage, ProductDescription} from "@/types/product";
 interface DetailsContentTypeDef {
     desc: ProductDescription;
     img: ProductImage[];
+    id: string;
 }
 
-const DetailsContent = ({ desc, img } : DetailsContentTypeDef) => {
+const DetailsContent = ({ desc, img, id } : DetailsContentTypeDef) => {
   // const [rotate, setRotate] = useState(false);
   const [count, setCount] = useState(0);
   const [selectSize, setSelectSize] = useState<string>();
   const [selectedIndex, setSelectedIndex] = useState<number>();
   const [warning, setWarning] = useState(false);
   // const [amountWarning, setAmountWarning] = useState(false);
-  const { id } = useParams();
   // const navigate = useRouter();
 
   const {
@@ -59,6 +58,7 @@ const DetailsContent = ({ desc, img } : DetailsContentTypeDef) => {
   const dispatch = useDispatch();
 
   const addCount = () => {
+    console.log("profuid", id);
     if (!selectSize) {
       setWarning(true);
     } else {
@@ -66,8 +66,8 @@ const DetailsContent = ({ desc, img } : DetailsContentTypeDef) => {
       setWarning(false);
       dispatch(
         addToCart({
-          id: `${id?.toString()}>>>${selectSize}`,
-
+          id: id,
+          size: selectSize,
           name: desc?.productName,
           image: `/Images/${img[0]?.filename}`,
           price: desc?.discount,

@@ -25,11 +25,12 @@ export default function OrderForm() {
 
   // Transform cartItems to ensure id is only the product ID (not undefined or composite)
   const orderedItem = cart?.cartItems?.map((item: CartItem) => ({
-    id: item.id && item.id.includes('>>>') ? item.id.split('>>>')[0] : item.id,
+    id: item.id,
     name: item.name,
     cartQuantity: item.cartQuantity,
     price: item.price,
-    image: item.image
+    image: item.image,
+    size: item.size,
     // Add other fields if needed by backend
   }));
 

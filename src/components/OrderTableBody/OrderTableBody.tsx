@@ -22,7 +22,7 @@ const OrderTableBody = ({ item, onDelete, checked = false, onSelect, mobileView 
     const handleDeleteOrder = async (orderId: string) => {
         if (!window.confirm("Are you sure you want to delete this order?")) return;
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/deleteOrder/${orderId}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/deleteOrder/${orderId}`, {
                 method: "DELETE",
             });
             const data = await res.json();

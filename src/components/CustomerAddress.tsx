@@ -75,7 +75,7 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
     setOrderSuccessCalled(false);
   }, [orderedItem]);
 
-  const deliveryCharge = division === 'isd' ? 70 : 120;
+  const deliveryCharge = division === 'isd' ? 60 : 120;
   const totalPayable = (cart?.cartTotalAmount || 0) + deliveryCharge;
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {

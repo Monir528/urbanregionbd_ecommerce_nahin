@@ -61,7 +61,7 @@ const ViewOrder = () => {
                                 <p><span className="font-medium">Phone:</span> {phone}</p>
                                 <p className="sm:text-right"><span className="font-medium">Email:</span> {email}</p>
                             </div>
-                            <p><span className="font-medium">Address:</span> {address}, {division}</p>
+                            <p><span className="font-medium">Address:</span> {address}, {division == 'osd' ? 'Outside Dhaka' : 'Inside Dhaka'}</p>
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                                 <p><span className="font-medium">Payment Phone:</span> {payment?.phone}</p>
                                 <p className="sm:text-right"><span className="font-medium">Transaction ID:</span> {payment?.transId}</p>
@@ -75,6 +75,10 @@ const ViewOrder = () => {
                         <div className="flex justify-between text-sm text-gray-600">
                             <p><span className="font-medium">Total Amount:</span></p>
                             <p className="font-semibold text-indigo-600">{total} Taka</p>
+                        </div>
+                        <div className="flex justify-between text-sm text-gray-600">
+                            <p><span className="font-medium">Shipping:</span></p>
+                            <p className="font-semibold text-indigo-600">{division == 'osd' ? '120' : '60'} Taka</p>
                         </div>
                         <div className="flex justify-between text-sm text-gray-600 mt-3">
                             <p><span className="font-medium">Order Status:</span></p>
@@ -109,8 +113,8 @@ const ViewOrder = () => {
                                 </div>
                                 <h4 className="text-xs font-medium text-gray-800 text-center line-clamp-2">{item.name}</h4>
                                 <div className="w-full mt-2 space-y-1">
-                                    <p className="text-gray-500 text-xs">Size: {item.id?.split(">>>")[1]}</p>
-                                    <p className="text-gray-500 text-xs truncate">Order ID: {id}</p>
+                                    <p className="text-gray-500 text-xs">Size: {item.size}</p>
+                                    <p className="text-gray-500 text-xs truncate">Product ID: {item.id}</p>
                                     <div className="w-full flex justify-between text-xs text-gray-600">
                                         <p><span className="font-semibold">Unit Price:</span> {item.price} Taka</p>
                                         <p><span className="font-semibold">Qty:</span> {item.cartQuantity}</p>

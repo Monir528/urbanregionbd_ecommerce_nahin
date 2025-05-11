@@ -65,7 +65,7 @@ const ProductDetailsPage = () => {
             <div className="2xl:container 2xl:mx-auto lg:py-8 lg:px-20 md:py-12 md:px-6 py-4 px-4">
                 <div className="flex justify-center items-center lg:items-start lg:flex-row flex-col gap-8">
                     <DetailsImage images={product?.images} />
-                    <DetailsContent desc={product?.description} img={product?.images} />
+                    <DetailsContent id={productId} desc={product?.description} img={product?.images} />
                 </div>
 
                 {/* Embedded YouTube Video */}
