@@ -8,13 +8,7 @@ import Navbar from "@/components/Navbar/Navbar";
 import { ReduxProvider } from "@/reduxToolKit/providers/provider";
 import FooterBanner from "@/components/FooterBanner";
 import CartIcon from "@/components/icons/CartIcon";
-import dynamic from 'next/dynamic';
-
-// Dynamically import FacebookPixelProvider with no SSR
-const FacebookPixelProvider = dynamic(
-  () => import('@/components/FacebookPixelProvider'),
-  { ssr: false }
-);
+import FacebookPixel from "@/components/FacebookPixel";
 
 export default function RootLayout({
     children,
@@ -67,9 +61,9 @@ export default function RootLayout({
                             </div>
                             <FooterBanner></FooterBanner>
                         </div>
-                        {/* Add Facebook Pixel Provider */}
+                        {/* Add Facebook Pixel */}
                         <Suspense fallback={null}>
-                            <FacebookPixelProvider />
+                            <FacebookPixel />
                         </Suspense>
                     </NavBarProvider>
                 </ReduxProvider>

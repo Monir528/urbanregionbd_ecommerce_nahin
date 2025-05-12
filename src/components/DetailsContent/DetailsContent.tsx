@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { MdOutlineStar } from "react-icons/md";
+import { events } from "@/utils/facebookPixel";
 import { makeSizes } from "@/utils/sizes";
 import { useDispatch, useSelector } from "react-redux";
 // import { orderFormOpen } from "@/components/api/cartHandler";
@@ -64,16 +65,26 @@ const DetailsContent = ({ desc, img, id } : DetailsContentTypeDef) => {
     } else {
       setCount((prev) => prev + 1);
       setWarning(false);
-      dispatch(
-        addToCart({
-          id: id,
-          size: selectSize,
-          name: desc?.productName,
-          image: `/Images/${img[0]?.filename}`,
-          price: desc?.discount,
-          cartQuantity: count,
-        })
-      );
+      const cartItem = {
+        id: id,
+        size: selectSize,
+        name: desc?.productName,
+        image: `/Images/${img[0]?.filename}`,
+        price: desc?.discount,
+        cartQuantity: count,
+      };
+      
+      dispatch(addToCart(cartItem));
+      
+      // Track AddToCart event
+      events.addToCart({
+        content_ids: [id],
+        content_name: desc?.productName,
+        content_type: 'product',
+        value: Number(desc?.discount) || 0,
+        currency: 'BDT',
+        quantity: 1,
+      });
     }
   };
 

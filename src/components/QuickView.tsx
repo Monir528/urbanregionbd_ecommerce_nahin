@@ -7,6 +7,7 @@ import { popUpClose } from "@/components/api/quickViewSlice";
 import { addToCart } from "@/components/api/cartSlice";
 import { makeSizes } from "@/utils/sizes";
 import {RootState} from "@/reduxToolKit/store";
+import { events } from "@/utils/facebookPixel";
 
 // function classNames(...classes) {
 //   return classes.filter(Boolean).join(" ");
@@ -35,17 +36,23 @@ export default function QuickView() {
     } else {
       setCount((prev) => prev + 1);
       setWarning(false);
-      dispatch(
-        addToCart({
-          id: `${_id}>>>${selectSize}`,
-          name: description?.productName,
-          image: `${process.env.NEXT_PUBLIC_ROOT_API}/Images/${
-            images?.[0]?.filename
-          }`,
-          price: description?.discount,
-          cartQuantity: count,
-        })
-      );
+      const cartItem = {
+        id: _id,
+        size: selectSize,
+        name: description?.productName,
+        image: `/Images/${images[0]?.filename}`,
+        price: description?.discount,
+        cartQuantity: count,
+      };
+      dispatch(addToCart(cartItem));
+      events.addToCart({
+        content_ids: [_id],
+        content_name: description?.productName,
+        content_type: 'product',
+        value: Number(description?.discount) || 0,
+        currency: 'BDT',
+        quantity: 1,
+      });
     }
   };
 

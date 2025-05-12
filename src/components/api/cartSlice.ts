@@ -5,23 +5,13 @@ import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { CartIcon, BagIcon } from "./cartToastIcons";
+import { getLocalStorage, setLocalStorage } from "@/utils/storage";
 
-const getInitialState = () => {
-  if (typeof window !== 'undefined') {
-    const savedItems = localStorage.getItem("cartItems");
-    console.log("saved items", savedItems)
-    return {
-      cartItems: savedItems ? JSON.parse(savedItems) : [],
-      cartTotalQuantity: 0,
-      cartTotalAmount: 0,
-    };
-  }
-  return {
-    cartItems: [],
-    cartTotalQuantity: 0,
-    cartTotalAmount: 0,
-  };
-};
+const getInitialState = () => ({
+  cartItems: getLocalStorage<CartItem[]>("cartItems", []),
+  cartTotalQuantity: 0,
+  cartTotalAmount: 0,
+});
 
 const cartSlice = createSlice({
   name: "cart",
@@ -61,9 +51,7 @@ const cartSlice = createSlice({
           icon: BagIcon
         });
       }
-      if (typeof window !== 'undefined') {
-        localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
-      }
+      setLocalStorage("cartItems", state.cartItems);
     },
     decreaseCart(state, action) {
       const itemIndex = state.cartItems.findIndex(
@@ -92,17 +80,13 @@ const cartSlice = createSlice({
         });
       }
 
-      if (typeof window !== 'undefined') {
-        localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
-      }
+      setLocalStorage("cartItems", state.cartItems);
     },
     removeFromCart(state, action) {
       state.cartItems = state.cartItems.filter(
           (item: CartItem) => item.id !== action.payload.id
       );
-      if (typeof window !== 'undefined') {
-        localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
-      }
+      setLocalStorage("cartItems", state.cartItems);
       toast.error("Product removed from cart", {
         autoClose: 2000,
         hideProgressBar: false,
@@ -128,9 +112,7 @@ const cartSlice = createSlice({
     clearCart(state) {
       state.cartItems = [];
       state.cartTotalQuantity = 0;
-      if (typeof window !== 'undefined') {
-        localStorage.setItem("cartItems", JSON.stringify([]));
-      }
+      setLocalStorage("cartItems", []);
       toast.error("Cart cleared", {});
     },
   },

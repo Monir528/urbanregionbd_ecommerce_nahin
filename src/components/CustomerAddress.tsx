@@ -5,6 +5,7 @@ import { RootState } from "@/reduxToolKit/store";
 import { useState, useEffect } from "react";
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
+import { events } from "@/utils/facebookPixel";
 
 import { 
   setCustomerName, 
@@ -20,6 +21,12 @@ import { usePurchaseOrderMutation } from "./api/confirmOrder/confirmOrder";
 
 
 
+
+interface CartItem {
+  id: string;
+  cartQuantity?: number;
+  // Add other properties that might be on the cart item
+}
 
 interface OrderedItem {
   id?: string;
@@ -131,7 +138,25 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
           body: JSON.stringify({ name, phone, address, division }),
         });
         
-        // Ensure selectedGateway is 'cod' for cash on delivery
+        // Track Purchase event for COD
+        const totalValue = cart?.cartTotalAmount || 0;
+        const contentIds = cart?.cartItems?.map((item: { id: string }) => item.id) || [];
+        const numItems = cart?.cartItems?.reduce((total: number, item: { cartQuantity?: number }) => {
+          return total + (item.cartQuantity || 1);
+        }, 0) || 0;
+        
+        events.purchase(totalValue, 'BDT', {
+          content_ids: contentIds,
+          content_type: 'product',
+          num_items: numItems,
+          contents: cart?.cartItems?.map((item: { id: string; cartQuantity?: number }) => ({
+            id: item.id,
+            quantity: item.cartQuantity || 1,
+          })) || [],
+          payment_method: 'cod',
+          order_id: `order_${Date.now()}`,
+        });
+        
         const orderStatus = {
           name,
           phone,
@@ -144,11 +169,13 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
           paymentMethod: 'cod',
           selectedGateway: 'cod',
         };
+        
         console.log('Calling purchaseOrder with', orderStatus);
         const result = await purchaseOrder(orderStatus);
         console.log('purchaseOrder result:', result);
         console.log('CustomerAddress.handleAddress FULL RESPONSE:', result);
         console.log('CustomerAddress: calling onOrderSuccess with', result?.data?.insertedId);
+        
         if (!orderSuccessCalled && onOrderSuccess) {
           setOrderSuccessCalled(true);
           onOrderSuccess(result?.data?.insertedId);
@@ -177,10 +204,6 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
       return;
     }
     
-    console.log('phone:', phone);
-    console.log('phone length:', phone.length);
-    console.log('phone trim:', phone.trim());
-    console.log('phone trim length:', phone.trim().length);
     if (!phone.trim() || phone.trim().length !== 14) {
       setPhoneError('ফোন নম্বর 11 ডিজিট হতে হবে');
       return;
@@ -206,7 +229,25 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
         body: JSON.stringify({ name, phone, address, division }),
       });
       
-      // Ensure paymentMethod is 'online' and selectedGateway is 'bkash' for online payment
+      // Track Purchase event for bKash payment
+      const totalValue = cart?.cartTotalAmount || 0;
+      const contentIds = cart?.cartItems?.map((item: { id: string }) => item.id) || [];
+      const numItems = cart?.cartItems?.reduce((total: number, item: { cartQuantity?: number }) => {
+        return total + (item.cartQuantity || 1);
+      }, 0) || 0;
+      
+      events.purchase(totalValue, 'BDT', {
+        content_ids: contentIds,
+        content_type: 'product',
+        num_items: numItems,
+        contents: cart?.cartItems?.map((item: CartItem) => ({
+          id: item.id,
+          quantity: item.cartQuantity || 1,
+        })) || [],
+        payment_method: 'bkash',
+        order_id: `order_${Date.now()}`,
+      });
+      
       const orderStatus = {
         name,
         phone,
@@ -224,11 +265,13 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
         },
         paid: deliveryCharge,
       };
+      
       console.log('Calling purchaseOrder with', orderStatus);
       const result = await purchaseOrder(orderStatus);
       console.log('purchaseOrder result:', result);
       console.log('CustomerAddress.handleBkashPayment FULL RESPONSE:', result);
       console.log('CustomerAddress: calling onOrderSuccess with', result?.data?.insertedId);
+      
       if (!orderSuccessCalled && onOrderSuccess) {
         setOrderSuccessCalled(true);
         onOrderSuccess(result?.data?.insertedId);

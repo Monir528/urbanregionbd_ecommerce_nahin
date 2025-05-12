@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { initFacebookPixel, events } from '@/utils/facebookPixel';
+import { events } from '@/utils/facebookPixel';
 
 export default function FacebookPixelProvider() {
   const pathname = usePathname();
@@ -14,7 +14,7 @@ export default function FacebookPixelProvider() {
       import('react-facebook-pixel')
         .then((mod) => mod.default)
         .then((ReactPixel) => {
-          ReactPixel.init(process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID!, null, {
+          ReactPixel.init(process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID!, undefined, {
             autoConfig: true,
             debug: process.env.NODE_ENV === 'development',
           });

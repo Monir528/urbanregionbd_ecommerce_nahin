@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useSelector } from "react-redux";
 import { useNavBarContext } from "@/context/NavBarContext";
+import { events } from "@/utils/facebookPixel";
 import QuickView from "@/components/QuickView";
 import DetailsSkeleton from "@/components/DetailsSkeleton/DetailsSkeleton";
 import DetailsImage from "@/components/DetialsImage/DetailsImage";
@@ -44,6 +45,19 @@ const ProductDetailsPage = () => {
             productCategory.update(product.category.name);
         }
     }, [product, productCategory]);
+
+    // Track ViewContent event when product data is loaded
+    useEffect(() => {
+        if (product) {
+            events.viewContent('product', {
+                content_name: product.productName,
+                content_ids: [product._id],
+                content_type: 'product',
+                value: product.discount || product.price,
+                currency: 'BDT',
+            });
+        }
+    }, [product]);
 
     if (isLoading) {
         return <DetailsSkeleton />;
