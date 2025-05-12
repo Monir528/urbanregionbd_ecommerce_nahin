@@ -2,13 +2,19 @@ import "../globals.css";
 import { ToastContainer } from "react-toastify";
 // import CartIcon from "@/components/icons/CartIcon";
 // import OrderForm from "@/components/OrderForm";
-import {NavBarProvider} from "@/context/NavBarContext";
+import { Suspense } from 'react';
+import { NavBarProvider } from "@/context/NavBarContext";
 import Navbar from "@/components/Navbar/Navbar";
-import {ReduxProvider} from "@/reduxToolKit/providers/provider";
+import { ReduxProvider } from "@/reduxToolKit/providers/provider";
 import FooterBanner from "@/components/FooterBanner";
 import CartIcon from "@/components/icons/CartIcon";
-// import {useSelector} from "react-redux";
-// import FacebookChat from "@/components/FacebookChat";
+import dynamic from 'next/dynamic';
+
+// Dynamically import FacebookPixelProvider with no SSR
+const FacebookPixelProvider = dynamic(
+  () => import('@/components/FacebookPixelProvider'),
+  { ssr: false }
+);
 
 export default function RootLayout({
     children,
@@ -29,40 +35,44 @@ export default function RootLayout({
             </head>
             <body className="flex flex-col min-h-screen">
 
-                        <ReduxProvider>
-                            <NavBarProvider>
-                            <div className="bg-white duration-200 overflow-hidden">
-                                <ToastContainer
-                                    position={undefined}
-                                    toastClassName=""
-                                    style={{
-                                        position: "fixed",
-                                        top: "52%",
-                                        right: 70,
-                                        left: "auto",
-                                        transform: "translateY(-50%)",
-                                        width: "auto",
-                                        zIndex: 9999,
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        alignItems: "flex-end"
-                                    }}
-                                />
-                                <div>
-                                    <Navbar></Navbar>
+                <ReduxProvider>
+                    <NavBarProvider>
+                        <div className="bg-white duration-200 overflow-hidden">
+                            <ToastContainer
+                                position={undefined}
+                                toastClassName=""
+                                style={{
+                                    position: "fixed",
+                                    top: "52%",
+                                    right: 70,
+                                    left: "auto",
+                                    transform: "translateY(-50%)",
+                                    width: "auto",
+                                    zIndex: 9999,
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "flex-end"
+                                }}
+                            />
+                            <div>
+                                <Navbar></Navbar>
 
-                                    {/*{formCondition && <OrderForm></OrderForm>}*/}
+                                {/*{formCondition && <OrderForm></OrderForm>}*/}
                         {/*            <OrderForm></OrderForm>*/}
-                                    <CartIcon></CartIcon>
+                                <CartIcon></CartIcon>
                         {/*            {children}*/}
 
                         {/*            /!*<FacebookChat></FacebookChat>*!/*/}
-                                    {children}
-                                </div>
-                                <FooterBanner></FooterBanner>
+                                {children}
                             </div>
-                            </NavBarProvider>
-                        </ReduxProvider>
+                            <FooterBanner></FooterBanner>
+                        </div>
+                        {/* Add Facebook Pixel Provider */}
+                        <Suspense fallback={null}>
+                            <FacebookPixelProvider />
+                        </Suspense>
+                    </NavBarProvider>
+                </ReduxProvider>
 
             </body>
         </html>
