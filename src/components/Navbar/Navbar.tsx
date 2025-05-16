@@ -51,7 +51,8 @@ const navigation = {
           name: "Male",
           items: [
             { name: "Drop Shoulder", href: "/category/drop shoulder" },
-            { name: "Cargo Pants", href: "/category/Cargo Pants" },
+            { name: "Denim Pants", href: "/category/denim pants" },
+            { name: "Gabardine Pants", href: "/category/gabardine pants" },
             { name: "Jersey", href: "/category/jersey" },
             { name: "T-Shirt", href: "/category/t-shirt" },
             { name: "Hoodie", href: "/category/hoodie" },

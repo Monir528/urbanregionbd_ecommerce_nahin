@@ -34,7 +34,7 @@ const DetailsContent = ({ desc, img, id } : DetailsContentTypeDef) => {
     // brand,
     
     category,
-    // description,
+    description,
     shortDescription,
     discount,
     extra,
@@ -145,9 +145,9 @@ const DetailsContent = ({ desc, img, id } : DetailsContentTypeDef) => {
 
       {/* // total start  */}
       <div className=" flex flex-row justify-between  mt-5">
-        <div className=" flex flex-row space-x-3 text-xl">
+        <div className=" flex flex-row space-x-1 text-xl">
           {newArr.map((val) => (
-            <MdOutlineStar className="mr-[-14px]" key={val} />
+            <MdOutlineStar key={val} />
           ))}
         </div>
         <p className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 font-normal text-base leading-4 text-gray-700 hover:underline hover:text-gray-800 duration-100 font-abc cursor-pointer">
@@ -268,7 +268,12 @@ const DetailsContent = ({ desc, img, id } : DetailsContentTypeDef) => {
         dangerouslySetInnerHTML={{ __html: shortDescription }}
       ></div>
 
-      <hr className=" bg-gray-200 w-full mt-4" />
+      <hr className=" bg-gray-200 w-full my-6" />
+
+      <div
+        className=" leading-6 text-gray-600 mt-7 dark:text-gray-400 font-normal text-sm font-mont"
+        dangerouslySetInnerHTML={{ __html: description }}
+      ></div>
     </div>
   );
 };

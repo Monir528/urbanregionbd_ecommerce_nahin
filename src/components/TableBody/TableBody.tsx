@@ -2,6 +2,7 @@ import { MdDeleteForever } from "react-icons/md";
 import { RiFileEditFill } from "react-icons/ri";
 import { useRouter } from "next/navigation";
 import {Product} from "@/types/product";
+import Link from "next/link";
 // import {useDeleteProductMutation} from "@/components/api/productApi";
 
 interface TableBodyProps {
@@ -10,7 +11,7 @@ interface TableBodyProps {
 
 const TableBody = ({ data }: TableBodyProps) => {
   const { description: productDetails, images,
-      // _id
+      _id
   } = data || {};
   let { productName } = productDetails;
   const { category, brand, stock, price, discount, subcategory, extra } = productDetails;
@@ -60,7 +61,7 @@ const TableBody = ({ data }: TableBodyProps) => {
         className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
       >
         <div className="ps-3">
-          <div className="text-sm font-semibold text-black">{productName}</div>
+          <Link href={`/productDetails/${_id}`} className="text-sm font-semibold text-black">{productName}</Link>
           <div className="font-normal text-gray-500">{brand}</div>
         </div>
       </th>
