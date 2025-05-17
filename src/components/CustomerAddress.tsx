@@ -92,9 +92,12 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
   const handlePhoneChange = (value: string ) => {
     const fullNumber = `+${value}`;
     dispatch(setCustomerPhone(fullNumber));
+    console.log('Full number:', fullNumber);
 
     // Only check for a minimum length (8 digits for any country)
-    if (value.replace(/\D/g, '').length < 11) {
+    if (value[3] === '0') {
+      setPhoneError('ফোন নম্বরের শুরুতে 0 ব্যবহার করবেন না');
+    }else if(value.length < 13) {
       setPhoneError('কমপক্ষে ১১ সংখ্যার একটি বৈধ নম্বর দিন');
     } else {
       setPhoneError('');
