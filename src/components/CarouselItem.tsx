@@ -34,6 +34,11 @@ const CarouselItem = ({ data }: CarouselItemProps) => {
                   '/fallback-image.jpg'}
               alt={productName || "Product Image"}
               className="object-cover object-center"
+              onError={(e) => {
+                const target = e.currentTarget;
+                target.onerror = null; // prevent infinite loop
+                target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+              }}
           />
         </div>
         <div className="text-center text-black">
@@ -41,9 +46,9 @@ const CarouselItem = ({ data }: CarouselItemProps) => {
             {resizeName(productName, 15)?.toUpperCase()}
           </h3>
           <div className="flex justify-center items-center gap-2">
-            <p className="text-lg font-bold text-primary">৳ {price}</p>
-            {discount && (
-                <p className="text-sm text-gray-400 line-through">৳ {discount}</p>
+            <p className="text-lg font-bold text-primary">৳ {discount}</p>
+            {price && (
+                <p className="text-sm text-gray-400 line-through">৳ {price}</p>
             )}
           </div>
         </div>

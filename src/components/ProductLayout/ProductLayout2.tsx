@@ -1,7 +1,8 @@
-import { useRouter } from "next/navigation";
+'use client'
 import {  useDispatch } from "react-redux";
 import { popUpOpen} from "@/components/api/quickViewSlice"
 import {Product} from "@/types/product";
+import Link from "next/link";
 
 interface  ProductLayout2 {
   data: Product
@@ -10,15 +11,8 @@ interface  ProductLayout2 {
 const ProductLayout2 = ({ data }: ProductLayout2) => {
   const { images, _id } = data || {};
 
-  const navigate = useRouter();
-
   const dispatch= useDispatch()
   const { price, discount } = data?.description || {};
-
-  const handleDetails = (id: string) => {
-    navigate.push(`/productDetails/${id}`);
-    window.scrollTo(0, 0);
-  };
 
   const handlePopUp=(data: Product)=>{
     dispatch(popUpOpen(data))
@@ -28,20 +22,27 @@ const ProductLayout2 = ({ data }: ProductLayout2) => {
     <div>
       {data && (
         <div>
-          <div className="relative flex flex-col items-center">
-            <picture>
-              <img
-                  src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${images[0]?.filename}`}
-                  alt=""
-                  className="cursor-pointer h-[180px] sm:h-[220px] w-full object-cover hover:opacity-70 duration-75"
-                  onClick={() => handleDetails(_id)}
-              />
-            </picture>
-            <div className="flex items-center text-black bg-white w-[120px] rounded-md absolute bottom-[-10px] justify-center gap-2 shadow-lg">
-              <p className="font-semibold">৳{discount}</p>
-              <p className="font-thin line-through">৳{price}</p>
+          <Link href={`/productDetails/${_id}`}>
+            <div className="relative flex flex-col items-center">
+              <picture>
+                <img
+                    src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${images[0]?.filename}`}
+                    alt=""
+                    className="cursor-pointer h-[180px] sm:h-[220px] w-full object-cover hover:opacity-70 duration-75"
+                    // onClick={() => handleDetails(_id)}
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      target.onerror = null; // prevent infinite loop
+                      target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+                    }}
+                />
+              </picture>
+              <div className="flex items-center text-black bg-white w-[120px] rounded-md absolute bottom-[-10px] justify-center gap-2 shadow-lg">
+                <p className="font-semibold">৳{discount}</p>
+                <p className="font-thin line-through">৳{price}</p>
+              </div>
             </div>
-          </div>
+          </Link>
           <div>
             {/* {
               console.log(data)

@@ -31,6 +31,11 @@ const CategoryItem2 = () => {
               src={Image1}
               alt=""
               className="w-[144px] mr-12 absolute top-1/2 -translate-y-1/2 -right-0"
+              onError={(e) => {
+                const target = e.currentTarget;
+                target.onerror = null; // prevent infinite loop
+                target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+              }}
             />
           </div>
           {/* Second col */}
@@ -48,7 +53,13 @@ const CategoryItem2 = () => {
                 >Browse</button></Link>
               </div>
             </div>
-            <img src={Image2} alt="" className="w-[320px] absolute bottom-0 ml-12" />
+            <img src={Image2} alt="" className="w-[320px] absolute bottom-0 ml-12" 
+            onError={(e) => {
+                const target = e.currentTarget;
+                target.onerror = null; // prevent infinite loop
+                target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+              }}
+            />
           </div>
           {/* Third col */}
           
@@ -75,6 +86,11 @@ const CategoryItem2 = () => {
               src={Image4}
               alt=""
               className="w-[210px] absolute bottom-0 right-[0rem]"
+              onError={(e) => {
+                const target = e.currentTarget;
+                target.onerror = null; // prevent infinite loop
+                target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+              }}
             />
           </div>
         </div>

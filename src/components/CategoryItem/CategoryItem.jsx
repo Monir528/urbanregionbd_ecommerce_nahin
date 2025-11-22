@@ -33,6 +33,11 @@ const CategoryItem = () => {
               src={Image4}
               alt=""
               className="w-[210px] absolute bottom-0 right-0"
+              onError={(e) => {
+                const target = e.currentTarget;
+                target.onerror = null; // prevent infinite loop
+                target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+              }}
             />
           </div>
           
@@ -59,6 +64,11 @@ const CategoryItem = () => {
               src={Image2}
               alt=""
               className="w-[320px] absolute bottom-0 right-[-3rem]"
+              onError={(e) => {
+                const target = e.currentTarget;
+                target.onerror = null; // prevent infinite loop
+                target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+              }}
             />
           </div>
           {/* third col */}
@@ -84,6 +94,11 @@ const CategoryItem = () => {
               src={Image3}
               alt=""
               className="w-[290px] absolute top-1/2 -translate-y-1/2 right-[-1rem]"
+              onError={(e) => {
+                const target = e.currentTarget;
+                target.onerror = null; // prevent infinite loop
+                target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+              }}
             />
           </div>
         </div>

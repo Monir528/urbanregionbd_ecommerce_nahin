@@ -32,6 +32,11 @@ const CategoryItem3 = () => {
               src={Image5}
               alt=""
               className="w-[246px] absolute bottom-0 right-[-5%]"
+              onError={(e) => {
+                const target = e.currentTarget;
+                target.onerror = null; // prevent infinite loop
+                target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+              }}
             />
           </div>
           
@@ -58,6 +63,11 @@ const CategoryItem3 = () => {
               src={Image6}
               alt=""
               className="w-[320px] absolute bottom-0 right-[-3rem]"
+              onError={(e) => {
+                const target = e.currentTarget;
+                target.onerror = null; // prevent infinite loop
+                target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+              }}
             />
           </div>
           {/* third col */}

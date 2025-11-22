@@ -348,6 +348,11 @@ export default function ProductUploadForm() {
                         src={URL.createObjectURL(otherLinkFile)}
                         alt="Size guide preview"
                         className="max-h-28 max-w-full object-contain"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          target.onerror = null; // prevent infinite loop
+                          target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+                        }}
                       />
                     </picture>
                     <button
@@ -412,6 +417,11 @@ export default function ProductUploadForm() {
                               src={URL.createObjectURL(file)}
                               alt={`Preview ${index}`}
                               className="w-full h-24 object-cover rounded-md"
+                              onError={(e) => {
+                                const target = e.currentTarget;
+                                target.onerror = null; // prevent infinite loop
+                                target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+                              }}
                           />
                         </picture>
                         <button

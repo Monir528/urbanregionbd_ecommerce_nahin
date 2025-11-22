@@ -47,7 +47,11 @@ export default function SizeModal() {
               >
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all relative">
                   <picture>
-                    <img src={value} alt="size" />
+                    <img src={value} alt="size" onError={(e) => {
+                      const target = e.currentTarget;
+                      target.onerror = null; // prevent infinite loop
+                      target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+                    }}/>
                   </picture>
 
                   <div className="mt-4">

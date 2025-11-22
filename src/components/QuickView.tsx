@@ -106,6 +106,11 @@ export default function QuickView() {
                             }`}
                             alt="urban region bd"
                             className="object-cover object-center"
+                            onError={(e) => {
+                              const target = e.currentTarget;
+                              target.onerror = null; // prevent infinite loop
+                              target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+                            }}
                         />
                       </picture>
 

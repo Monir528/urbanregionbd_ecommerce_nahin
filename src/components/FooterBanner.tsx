@@ -205,8 +205,8 @@ const FooterBanner = () => {
             <p className="400 mb-6 text-xl tracking-wider font-bold">FIND US</p>
             <div className="flex flex-col gap-[6px] text-sm">
               <p className="font-bold">Shop Address</p>
-              <p>Mirpur Benarashi Palli</p>
-              <p>Block: A, Lane: 8, House no: 18</p>
+              {/* <p>Mirpur Benarashi Palli</p> */}
+              <p>Sec 11/B, Kalshi road, Dhaka-1216</p>
               {/* // social icon  */}
 
               <p className="flex gap-4 text-2xl mt-4">

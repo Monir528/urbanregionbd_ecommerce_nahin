@@ -28,6 +28,11 @@ export default function SampleProduct({ data }: SampleProductProps) {
                       width={284.6}
                       unoptimized
                       className="cursor-pointer h-[180px] sm:h-[220px] w-full object-cover "
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        target.onerror = null; // prevent infinite loop
+                        target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+                      }}
                     />
                     <p className="absolute top-0 left-0 bg-red-500 px-2 py-[2px] text-sm font-semibold text-gray-100">
                       <span>Save TK : </span> 

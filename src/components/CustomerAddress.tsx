@@ -3,7 +3,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/reduxToolKit/store";
 import { useState, useEffect } from "react";
-import PhoneInput from 'react-phone-input-2';
+import PhoneInput, { CountryData } from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { events } from "@/utils/facebookPixel";
 
@@ -89,8 +89,12 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
     dispatch(setCustomerName(e.target.value));
   };
 
-  const handlePhoneChange = (value: string ) => {
-    const fullNumber = `+${value}`;
+  const handlePhoneChange = (value: string, country: CountryData) => {
+    let processedValue = value;
+    if (country.countryCode === 'bd' && value.startsWith('8800')) {
+      processedValue = '880' + value.substring(4);
+    }
+    const fullNumber = `+${processedValue}`;
     dispatch(setCustomerPhone(fullNumber));
     console.log('Full number:', fullNumber);
 
@@ -353,7 +357,7 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
                 buttonClass="country-dropdown"
                 dropdownClass="country-dropdown-list"
                 searchClass="country-search"
-                enableSearch={true}
+                enableSearch={false}
                 disableSearchIcon={false}
                 searchPlaceholder="Search country"
                 preferredCountries={['bd', 'us', 'gb', 'in']}
@@ -475,7 +479,7 @@ export default function CustomerAddress({ orderedItem, onOrderSuccess, onShowBka
                   <hr className="my-1 border-[#f8bbd0]" />
                   <p className="mb-2">সব কিছু ঠিক থাকলে BKASH থেকে একটি বার্তা পাবেন।</p>
                   <hr className="my-1 border-[#f8bbd0]" />
-                  <p>আপনার বিকাশ নম্বর ও <span className="text-pink-600 font-bold">Transaction ID</span> নিচের ফর্মে দিন।</p>
+                  <p>আপনার বিকাশ নম্বর ও <span className="text-pink-600 font-bold">Transaction ID</span> নিচের ফর্সে দিন।</p>
                 </div>
                 <div className="text-xs mt-2 text-right">
                   <a href="tel:01858124027" className="text-blue-600 underline hover:text-blue-800">Need help?</a>

@@ -1,5 +1,7 @@
 'use client';
-import OrderTable from "@/components/OrderTable/OrderTable";
+import dynamic from "next/dynamic";
+
+const OrderTable = dynamic(() => import("@/components/OrderTable/OrderTable"), { ssr: false });
 
 const OrdersPage = () => {
     return (

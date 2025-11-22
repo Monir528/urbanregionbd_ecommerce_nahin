@@ -109,6 +109,11 @@ const ViewOrder = () => {
                                         className="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg" 
                                         src={process.env.NEXT_PUBLIC_ROOT_API + item?.image} 
                                         alt={item?.name} 
+                                        onError={(e) => {
+                                            const target = e.currentTarget;
+                                            target.onerror = null; // prevent infinite loop
+                                            target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+                                        }}
                                     />
                                 </div>
                                 <h4 className="text-xs font-medium text-gray-800 text-center line-clamp-2">{item.name}</h4>

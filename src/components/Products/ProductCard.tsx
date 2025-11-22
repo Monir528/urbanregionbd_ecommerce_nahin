@@ -27,6 +27,11 @@ const ProductCard = ({ data, index }:ProductCardProps) => {
             height={180}
             alt=""
             className="h-[180px] w-[260px] object-cover rounded-md"
+            onError={(e) => {
+              const target = e.currentTarget;
+              target.onerror = null; // prevent infinite loop
+              target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+            }}
           />
           {/* hover button */}
           <div className="hidden group-hover:flex absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 h-full font-mont font-semibold w-full text-center group-hover:backdrop-blur-sm justify-center items-center duration-200 rounded-md">

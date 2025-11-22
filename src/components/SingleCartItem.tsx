@@ -52,10 +52,16 @@ const SingleCartItem = ({product} : SingleCartItemProps) => {
   return (
     <div>
       <div className="flex flex-col min-[500px]:flex-row min-[500px]:items-center gap-2 py-4 px-4 border border-gray-300 rounded-md">
-        <div className="w-full md:max-w-[126px]">
+        <div className="w-full h-32 md:max-w-[126px] overflow-hidden">
 
           <picture>
-            <img src={process.env.NEXT_PUBLIC_ROOT_API + image} alt="Urban region product image" className="mx-auto rounded-md" />
+            <img src={process.env.NEXT_PUBLIC_ROOT_API + image} alt="Urban region product image" className="mx-auto rounded-md object-fill" 
+            onError={(e) => {
+              const target = e.currentTarget;
+              target.onerror = null; // prevent infinite loop
+              target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+            }}
+            />
           </picture>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-5 w-full">

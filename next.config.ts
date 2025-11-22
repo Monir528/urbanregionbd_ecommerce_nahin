@@ -11,6 +11,18 @@ const nextConfig: NextConfig = {
     images: {
         remotePatterns: [
             {
+                protocol: "http",
+                hostname: "192.168.0.108",
+                port: "5001",
+                pathname: "/carousel_images/**",
+            },
+            {
+                protocol: "http",
+                hostname: "192.168.0.108",
+                port: "5001",
+                pathname: "/Images/**",
+            },
+            {
                 protocol: "https",
                 hostname: "backend.urbanregionbd.com",
                 pathname: "/Images/**", // ✅ Allow only images from `/Images/`
@@ -36,8 +48,8 @@ const nextConfig: NextConfig = {
                 pathname: "/**", // ✅ Allow only images from `/Images/`
             },
             {
-                protocol: "http",
-                hostname: "192.168.0.101",
+                protocol: "https",
+                hostname: "api.codeframeit.com",
                 pathname: "/**", // ✅ Allow only images from `/Images/`
             },
             {

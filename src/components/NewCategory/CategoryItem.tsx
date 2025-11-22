@@ -28,6 +28,11 @@ const CategoryItem = ({ item }: CategoryItemProps) => {
         src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${images[0]?.filename}`}
         unoptimized
         alt=""
+        onError={(e) => {
+          const target = e.currentTarget;
+          target.onerror = null; // prevent infinite loop
+          target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+        }}
       />
       <div className="flex flex-col justify-between p-2 leading-normal">
         <h5 className="mb-0 md:mb-2 text-lg font-semibold text-gray-900  font-abc ">

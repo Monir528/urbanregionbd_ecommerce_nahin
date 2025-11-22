@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useGetCategoryQuery } from "@/components/api/categoryApi";
 import { useGetSubCategoryQuery } from "@/components/api/subCategoryApi";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEditProductMutation } from "@/components/api/productApi";
 import TextArea from "@/components/TextArea";
 import { Product } from "@/types/product";
 import { SubCategory } from "@/types/SubCateogry";
 import { Category } from "@/types/cateogry";
+
 
 interface EditFormProps {
   data: Product;
@@ -54,8 +55,10 @@ export default function EditForm({ data }: EditFormProps) {
   const [extraInfo, setExtraInfo] = useState(eExtraInfo || "");
   const [brand, setBrand] = useState(eBrand || "");
   const [stock, setStock] = useState(Boolean(eStock));
+  const [images, setImages] = useState(data?.images || []);
+  const [files, setFiles] = useState<File[]>([]);
+  const [message, setMessage] = useState('');
 
-  const { id } = useParams();
   const navigate = useRouter();
 
   // Other Link File Handling
@@ -81,6 +84,26 @@ export default function EditForm({ data }: EditFormProps) {
     } else {
       setOtherLinkPreview("");
     }
+  };
+
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage('');
+    if (e.target.files) {
+        const fileList = Array.from(e.target.files);
+        const validFiles = fileList.filter(file => ["image/jpeg", "image/png", "image/gif"].includes(file.type));
+        if (validFiles.length !== fileList.length) {
+            setMessage("Only JPEG, PNG, and GIF files are accepted.");
+        }
+        setFiles(prevFiles => [...prevFiles, ...validFiles]);
+    }
+  };
+
+  const removeNewImage = (name: string) => {
+      setFiles(files.filter(file => file.name !== name));
+  };
+
+  const removeExistingImage = (filename: string) => {
+      setImages(images.filter(img => img.filename !== filename));
   };
 
   const details = {
@@ -110,38 +133,48 @@ export default function EditForm({ data }: EditFormProps) {
     }
   };
 
-  const [editProduct, { isSuccess, isLoading }] = useEditProductMutation();
+  const [editProduct, { isSuccess }] = useEditProductMutation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [uploadError, setUploadError] = useState(false);
 
   const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    // If there's a new file upload for the size guide
+    setIsSubmitting(true);
+
+    const formData = new FormData();
+
+    formData.append('details', JSON.stringify(details));
+
+    // Append new product images
+    files.forEach(file => {
+        formData.append('images', file);
+    });
+
+    // Append the new size guide image if it exists
     if (otherLinkFile) {
-      const formData = new FormData();
-      formData.append("otherLinkFile", otherLinkFile);
-      formData.append("productId", id as string);
-
-      try {
-        // Upload the file first
-        const response = await fetch(`${process.env.NEXT_PUBLIC_ROOT_API}/updateSizeGuide`, {
-          method: "POST",
-          body: formData,
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          // Update the otherLink with the new URL from the response
-          if (result.fileUrl) {
-            details.otherLink = result.fileUrl;
-          }
-        }
-      } catch (error) {
-        console.error("Error uploading size guide image:", error);
-      }
+        formData.append('otherLinkFile', otherLinkFile);
     }
 
-    // Now proceed with the product update
-    editProduct({ productId: id, productObj: { description: details, images: data?.images } });
+    // Append existing images to retain
+    const retainedImages = images.map(img => img.path);
+    retainedImages.forEach(path => {
+        formData.append('retainedImages', path);
+    });
+
+    try {
+        await editProduct({ productId: data._id, productObj: formData }).unwrap();
+        setUploadSuccess(true);
+        setTimeout(() => {
+            setUploadSuccess(false);
+        }, 3000);
+    } catch (err) {
+        console.error('Failed to update product:', err);
+        setUploadError(true);
+        setTimeout(() => setUploadError(false), 3000);
+    } finally {
+        setIsSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -381,6 +414,11 @@ export default function EditForm({ data }: EditFormProps) {
                       src={otherLinkFile ? URL.createObjectURL(otherLinkFile) : `${process.env.NEXT_PUBLIC_ROOT_API}${otherLinkPreview}`}
                       alt="Size guide preview"
                       className="max-h-28 max-w-full object-contain"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        target.onerror = null; // prevent infinite loop
+                        target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+                      }}
                     />
                   </picture>
                   <button
@@ -401,6 +439,94 @@ export default function EditForm({ data }: EditFormProps) {
             </label>
           </div>
           {otherLinkMessage && <p className="text-sm text-red-600 mt-2">{otherLinkMessage}</p>}
+        </div>
+
+        {/* Product Images */}
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
+
+          {/* Combined Image Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-4">
+            {images.map((image) => (
+              <div key={image.filename} className="relative">
+                <picture>
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${image.filename}`}
+                    alt={image.filename}
+                    className="w-full h-24 object-cover rounded-md"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      target.onerror = null; // prevent infinite loop
+                      target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+                    }}
+                  />
+                </picture>
+                <button
+                  type="button"
+                  onClick={() => removeExistingImage(image.filename)}
+                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+            {files.map((file) => (
+              <div key={file.name} className="relative">
+                <picture>
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt={file.name}
+                    className="w-full h-24 object-cover rounded-md"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      target.onerror = null; // prevent infinite loop
+                      target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+                    }}
+                  />
+                </picture>
+                <button
+                  type="button"
+                  onClick={() => removeNewImage(file.name)}
+                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* New Image Upload */}
+          <div className="flex items-center justify-center w-full">
+            <label
+              htmlFor="file-upload"
+              className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
+            >
+              <svg
+                className="w-8 h-8 text-gray-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
+              <p className="text-sm text-gray-600">Drag and drop or click to upload new images</p>
+              <input
+                id="file-upload"
+                type="file"
+                onChange={handleFile}
+                className="hidden"
+                multiple
+                accept="image/png, image/jpeg, image/gif"
+              />
+            </label>
+          </div>
+          {message && <p className="text-sm text-red-600 mt-2">{message}</p>}
         </div>
 
         {/* Extra Information */}
@@ -435,25 +561,36 @@ export default function EditForm({ data }: EditFormProps) {
             </div>
           </div>
         </div>
-
-        {/* Submit Buttons */}
-        <div className="mt-6 flex justify-end gap-4">
-          <button
-            type="button"
-            className="px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            onClick={() => navigate.push('/admin/allProducts')}
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-300"
-          >
-            {isLoading ? "Updating..." : "Update Product"}
-          </button>
-        </div>
       </div>
+
+      {/* Submit Buttons */}
+      <div className="mt-6 flex justify-end gap-4">
+        <button
+          type="button"
+          className="px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          onClick={() => navigate.push('/admin/allProducts')}
+        >
+          Cancel
+        </button>
+        <button
+            type="submit"
+            disabled={isSubmitting}
+            className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+        >
+          {isSubmitting ? 'Updating...' : 'Update Product'}
+        </button>
+      </div>
+
+      {uploadSuccess && (
+          <div className="mt-4 p-4 bg-green-100 text-green-800 rounded-md">
+            Product updated successfully!
+          </div>
+      )}
+      {uploadError && (
+          <div className="mt-4 p-4 bg-red-100 text-red-800 rounded-md">
+            Failed to update product. Please try again.
+          </div>
+      )}
     </form>
   );
 }

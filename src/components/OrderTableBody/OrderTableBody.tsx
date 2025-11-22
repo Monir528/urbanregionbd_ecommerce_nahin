@@ -3,6 +3,7 @@ import { Order } from "@/types/order";
 import DownloadInvoice from './DownloadInvoice';
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import LocalTime from "../Shared/LocalTime";
 
 export interface OrderTableBodyProps {
     item: Order
@@ -90,7 +91,21 @@ const OrderTableBody = ({ item, onDelete, checked = false, onSelect, mobileView 
                 <p>{payment?.phone}</p>
                 <p>{payment?.transId}</p>
             </td>
-            <td className="p-3 text-black bg-white border-r border-gray-300 align-middle">{date ? new Date(date).toLocaleString() : ''}</td>
+            <td className="p-3 text-black bg-white border-r border-gray-300 align-middle">
+                {date ? (
+                    (() => {
+                        try {
+                            const dateObj = new Date(date);
+                            if (isNaN(dateObj.getTime())) {
+                                return ''; // Invalid date
+                            }
+                            return <LocalTime utcDate={dateObj.toISOString()} dateStyle="medium" timeStyle="medium" />;
+                        } catch {
+                            return ''; // Error creating date
+                        }
+                    })()
+                ) : ''}
+            </td>
             <td className="p-3 text-black bg-white border-r border-gray-300 align-middle">
                 <span
                     className={`font-bold px-2 py-1 rounded-md 

@@ -19,6 +19,8 @@ import { confirmOrder } from "@/components/api/confirmOrder/confirmOrder";
 import authReducer from "@/reduxToolKit/authSlice";
 import carouselImagesReducer from "@/reduxToolKit/carouselImagesSlice";
 import customerReducer from "@/components/api/customerSlice";
+import customerAuthReducer from "@/reduxToolKit/customerAuthSlice";
+import { customerAuthApi } from "@/components/api/authApi";
 
 export const store = configureStore({
     reducer: {
@@ -28,6 +30,7 @@ export const store = configureStore({
         [categoryApi.reducerPath]: categoryApi.reducer,
         [subCategoryApi.reducerPath]: subCategoryApi.reducer, 
         [confirmOrder.reducerPath]: confirmOrder.reducer,
+        [customerAuthApi.reducerPath]: customerAuthApi.reducer,
         auth: authReducer,
         cardOrder: cardOrderSlice,
         order: orderProductSlice,
@@ -40,6 +43,7 @@ export const store = configureStore({
         totalCount,
         carouselImages: carouselImagesReducer,
         customer: customerReducer,
+        customerAuth: customerAuthReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware()
@@ -47,7 +51,8 @@ export const store = configureStore({
             .concat(productApi.middleware)
             .concat(categoryApi.middleware)
             .concat(subCategoryApi.middleware) 
-            .concat(confirmOrder.middleware),
+            .concat(confirmOrder.middleware)
+            .concat(customerAuthApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

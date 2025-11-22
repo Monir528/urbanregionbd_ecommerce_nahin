@@ -13,6 +13,8 @@ import { FaFacebookSquare, FaInstagramSquare } from "react-icons/fa";
 import { useNavBarContext } from "@/context/NavBarContext";
 import { RootState } from "@/reduxToolKit/store";
 import { CartBadge } from "@/components/CartBadge";
+import { logout as customerLogout } from "@/reduxToolKit/customerAuthSlice";
+
 
 // Navigation configuration (unchanged)
 const navigation = {
@@ -82,7 +84,10 @@ const Navbar: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const cart = useSelector((state: RootState) => state.cart);
+  const customerAuth = useSelector((state: RootState) => state.customerAuth);
   const [mounted, setMounted] = useState(false);
+  const [showLoginDropdown, setShowLoginDropdown] = useState(false);
+  
 
   useEffect(() => {
     dispatch(getTotals());
@@ -102,6 +107,21 @@ const Navbar: React.FC = () => {
       window.removeEventListener("scroll", stickNavbar);
     };
   }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (showLoginDropdown && !target.closest('.login-dropdown-container')) {
+        setShowLoginDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showLoginDropdown]);
 
   const stickNavbar = () => {
     if (typeof window !== "undefined") {
@@ -369,6 +389,90 @@ const Navbar: React.FC = () => {
                           <PiPhoneCallLight className="mb-1 text-gray-400 text-3xl ml-3" />
                           <span className="text-gray-400 font-abc hidden md:block">+88 01648141727</span>
                         </a>
+                      </div>
+
+                      {/* Customer Login/Account */}
+                      <div className="relative ml-4 lg:ml-6 login-dropdown-container">
+                        {customerAuth.isAuthenticated ? (
+                          <div className="relative">
+                            <button
+                              onClick={() => setShowLoginDropdown(!showLoginDropdown)}
+                              className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 font-medium"
+                            >
+                              <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                                {customerAuth.customer?.name?.charAt(0).toUpperCase() || 'U'}
+                              </div>
+                              <span className="hidden lg:block">{customerAuth.customer?.name}</span>
+                              <ChevronDownIcon className={`h-4 w-4 transition-transform ${showLoginDropdown ? 'rotate-180' : ''}`} />
+                            </button>
+                            
+                            {showLoginDropdown && (
+                              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border">
+                                <Link
+                                  href="/customer/dashboard"
+                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                  onClick={() => setShowLoginDropdown(false)}
+                                >
+                                  My Dashboard
+                                </Link>
+                                <Link
+                                  href="/order-tracking"
+                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                  onClick={() => setShowLoginDropdown(false)}
+                                >
+                                  Track Orders
+                                </Link>
+                                <button
+                                  onClick={() => {
+                                    dispatch(customerLogout());
+                                    router.push('/');
+                                    setShowLoginDropdown(false);
+                                  }}
+                                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                >
+                                  Logout
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="relative">
+                            <button
+                              onClick={() => setShowLoginDropdown(!showLoginDropdown)}
+                              className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 font-medium"
+                            >
+                              <span>Login</span>
+                              <ChevronDownIcon className={`h-4 w-4 transition-transform ${showLoginDropdown ? 'rotate-180' : ''}`} />
+                            </button>
+                            
+                            {showLoginDropdown && (
+                              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border">
+                                <Link
+                                  href="/customer/login"
+                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                  onClick={() => setShowLoginDropdown(false)}
+                                >
+                                  Login
+                                </Link>
+                                <Link
+                                  href="/customer/register"
+                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                  onClick={() => setShowLoginDropdown(false)}
+                                >
+                                  Register
+                                </Link>
+                                <div className="border-t border-gray-200 my-1"></div>
+                                <Link
+                                  href="/order-tracking"
+                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                  onClick={() => setShowLoginDropdown(false)}
+                                >
+                                  Track Order
+                                </Link>
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
 
                       {/* Cart */}

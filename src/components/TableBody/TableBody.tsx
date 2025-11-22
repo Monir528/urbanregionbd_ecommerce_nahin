@@ -80,6 +80,11 @@ const TableBody = ({ data }: TableBodyProps) => {
                 className="max-w-20"
                 src={`${process.env.NEXT_PUBLIC_ROOT_API}/Images/${images[0]?.filename}`}
                 alt=""
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  target.onerror = null; // prevent infinite loop
+                  target.src = process.env.DEFAULT_IMAGE_URL || '/assets/default-ui-image.jpg'; // set fallback image with default
+                }}
             />
         </picture>
       </td>

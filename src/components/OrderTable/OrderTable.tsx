@@ -6,38 +6,7 @@ import {Order} from "@/types/order";
 import {useSearchParams} from "next/navigation";
 import Link from "next/link";
 
-// Hybrid parser: handles dd/mm/yyyy, mm/dd/yyyy, and ambiguous cases
-function parseOrderDate(dateString: string): Date {
-    if (!dateString) return new Date('');
-    // Remove time part (after comma or space)
-    let datePart = dateString.split(',')[0].trim();
-    if (datePart.match(/\d{1,2}\/\d{1,2}\/\d{4}/) && datePart.includes(' ')) {
-        datePart = datePart.split(' ')[0];
-    }
-    // Try ISO or dash-separated first
-    if (datePart.includes('-')) {
-        const d = new Date(datePart);
-        if (!isNaN(d.getTime())) return d;
-    }
-    // Hybrid heuristic for slash-separated
-    if (datePart.includes('/')) {
-        const parts = datePart.split('/').map(Number);
-        if (parts.length === 3) {
-            if (dateString.includes(',')) {
-                // If the date string contains a comma (time part), treat as mm/dd/yyyy (US-style)
-                const month = parts[0], day = parts[1], year = parts[2];
-                return new Date(year, month - 1, day);
-            } else {
-                // Otherwise, treat as dd/mm/yyyy
-                const day = parts[0], month = parts[1], year = parts[2];
-                return new Date(year, month - 1, day);
-            }
-        }
-    }
-    // Fallback
-    const fallback = new Date(dateString);
-    return fallback;
-}
+
 
 const OrderTable = () => {
     const searchParams = useSearchParams();
@@ -76,44 +45,45 @@ const OrderTable = () => {
         setEndDate("");
     };
 
-    // Filtering logic for date range
-    function normalizeDate(d: Date) {
-        return new Date(d.getFullYear(), d.getMonth(), d.getDate());
-    }
-
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 100; // Show 100 items per page as requested
     
     const filterByDateRange = (order: Order) => {
-        if (!startDate && !endDate) return true;
-        const orderDate = parseOrderDate(order.date instanceof Date ? order.date.toString() : order.date || "");
-        if (isNaN(orderDate.getTime())) return false;
-
-        // If both dates are set and are the same, match only that day
-        if (startDate && endDate && startDate === endDate) {
-            const target = normalizeDate(new Date(startDate));
-            const normalizedOrderDate = normalizeDate(orderDate);
-            return normalizedOrderDate.getTime() === target.getTime();
+        // If no date range is selected, show all orders
+        if (!startDate && !endDate) {
+            return true;
         }
 
-        // Range logic (inclusive)
-        if (startDate && endDate) {
-            const from = normalizeDate(new Date(startDate));
-            const to = normalizeDate(new Date(endDate));
-            const normalizedOrderDate = normalizeDate(orderDate);
-            return normalizedOrderDate >= from && normalizedOrderDate <= to;
+        const orderDate = new Date(order.date);
+        // If the order date is invalid, don't show it in date-filtered results
+        if (isNaN(orderDate.getTime())) {
+            return false;
         }
+
+        // Case 1: Only start date is selected
+        // Show orders on or after the start date
         if (startDate && !endDate) {
-            const from = normalizeDate(new Date(startDate));
-            const normalizedOrderDate = normalizeDate(orderDate);
-            return normalizedOrderDate >= from;
+            const fromDate = new Date(startDate + 'T00:00:00');
+            return orderDate >= fromDate;
         }
+
+        // Case 2: Only end date is selected
+        // Show orders on or before the end date
         if (!startDate && endDate) {
-            const to = normalizeDate(new Date(endDate));
-            const normalizedOrderDate = normalizeDate(orderDate);
-            return normalizedOrderDate <= to;
+            const toDate = new Date(endDate + 'T23:59:59.999');
+            return orderDate <= toDate;
         }
+
+        // Case 3: Both start and end dates are selected
+        // Show orders within the inclusive range
+        if (startDate && endDate) {
+            const fromDate = new Date(startDate + 'T00:00:00');
+            const toDate = new Date(endDate + 'T23:59:59.999');
+            return orderDate >= fromDate && orderDate <= toDate;
+        }
+
+        // Should not be reached if logic is correct, but as a fallback:
         return true;
     };
 
