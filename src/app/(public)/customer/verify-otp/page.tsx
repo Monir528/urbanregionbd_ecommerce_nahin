@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import React, { useState, useEffect, Suspense } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -13,14 +13,12 @@ import { handleOtpVerificationSuccess, setError, selectCustomerError } from "@/r
 
 export default function CustomerVerifyOtpPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const dispatch = useDispatch<AppDispatch>();
   
-  // Get query parameters
-  const phone = searchParams.get('phone') || '';
-  const type = searchParams.get('type') || 'login';
-  const name = searchParams.get('name') || '';
-  const email = searchParams.get('email') || '';
+  const [phone, setPhone] = useState('');
+  const [type, setType] = useState('login');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   
   // Redux state
   const error = useSelector(selectCustomerError);
@@ -34,6 +32,15 @@ export default function CustomerVerifyOtpPage() {
   // RTK Query hooks
   const [verifyOtp, { isLoading }] = useVerifyOtpMutation();
   
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const sp = new URLSearchParams(window.location.search);
+    setPhone(sp.get('phone') || '');
+    setType(sp.get('type') || 'login');
+    setName(sp.get('name') || '');
+    setEmail(sp.get('email') || '');
+  }, []);
+
   // Timer for resend OTP
   useEffect(() => {
     if (resendTimer > 0) {
@@ -138,6 +145,13 @@ export default function CustomerVerifyOtpPage() {
   };
   
   return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center text-gray-700">Loading...</div>
+        </div>
+      }
+    >
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
@@ -259,5 +273,6 @@ export default function CustomerVerifyOtpPage() {
         </div>
       </div>
     </div>
+    </Suspense>
   );
 }
